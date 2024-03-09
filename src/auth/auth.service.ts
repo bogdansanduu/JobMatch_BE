@@ -4,8 +4,8 @@ import { inject, injectable } from 'inversify';
 import { StatusCodes } from 'http-status-codes';
 
 import UserService from '../user/user.service';
-import { NotFoundException } from '../common/errors/notFound.exception';
-import { HttpException } from '../common/errors/http.exception';
+import { NotFoundException } from '../common/exceptions/notFound.exception';
+import { HttpException } from '../common/exceptions/http.exception';
 import { USER_INV } from '../common/utils/inversifyConstants';
 
 @injectable()
