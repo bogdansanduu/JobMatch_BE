@@ -2,16 +2,19 @@ import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { inject, injectable } from 'inversify';
 
-import { USER_INV } from '../common/utils/appConst';
+import { USER_INV } from '../common/utils/inversifyConstants';
 
 import { User } from './entities/user.entity';
 import UserService from './user.service';
 
 @injectable()
 export class UserController {
-  private userService: UserService;
+  private readonly userService: UserService;
 
-  constructor(@inject(USER_INV.UserService) userService: UserService) {
+  constructor(
+    @inject(USER_INV.UserService)
+    userService: UserService
+  ) {
     this.userService = userService;
   }
 

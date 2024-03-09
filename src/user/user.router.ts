@@ -1,7 +1,7 @@
 import express from 'express';
 import { Container } from 'inversify';
 
-import { USER_INV } from '../common/utils/appConst';
+import { USER_INV } from '../common/utils/inversifyConstants';
 import { UserRepositoryInterface } from './interfaces/user-repository.interface';
 import { UserServiceInterface } from './interfaces/user-service.interface';
 import UserRepository from './user.repository';

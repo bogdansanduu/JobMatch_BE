@@ -7,7 +7,7 @@ import { dataSource } from '../database/dataSource';
 
 @injectable()
 export class UserRepository implements UserRepositoryInterface {
-  private userRepo: Repository<User>;
+  private readonly userRepo: Repository<User>;
 
   constructor() {
     this.userRepo = dataSource.getRepository(User);
@@ -41,6 +41,14 @@ export class UserRepository implements UserRepositoryInterface {
     return this.userRepo.findOne({
       where: {
         id,
+      },
+    });
+  }
+
+  getUserByEmail(email: string) {
+    return this.userRepo.findOne({
+      where: {
+        email,
       },
     });
   }

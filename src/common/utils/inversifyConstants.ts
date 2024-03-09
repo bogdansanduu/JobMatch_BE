@@ -4,3 +4,9 @@ export const USER_INV = {
   UserInteractor: Symbol.for('UserInteractor'),
   UserController: Symbol.for('UserController'),
 };
+
+export const AUTH_INV = {
+  AuthService: Symbol.for('AuthService'),
+  AuthInteractor: Symbol.for('AuthInteractor'),
+  AuthController: Symbol.for('AuthController'),
+};

@@ -1,13 +1,13 @@
 import { inject, injectable } from 'inversify';
 
-import { USER_INV } from '../common/utils/appConst';
+import { USER_INV } from '../common/utils/inversifyConstants';
 
 import { UserServiceInterface } from './interfaces/user-service.interface';
 import UserRepository from './user.repository';
 
 @injectable()
 class UserService implements UserServiceInterface {
-  private userRepository: UserRepository;
+  private readonly userRepository: UserRepository;
 
   constructor(@inject(USER_INV.UserRepository) userRepository: UserRepository) {
     this.userRepository = userRepository;
@@ -27,6 +27,10 @@ class UserService implements UserServiceInterface {
 
   getUser(id: number): any {
     return this.userRepository.getUser(id);
+  }
+
+  getUserByEmail(email: string): any {
+    return this.userRepository.getUserByEmail(email);
   }
 
   updateUser(id: number, user: any): any {
