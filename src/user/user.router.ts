@@ -1,5 +1,5 @@
 import express from 'express';
-import { Container } from 'inversify';
+import { Container, ContainerModule } from 'inversify';
 
 import { USER_INV } from '../common/utils/inversifyConstants';
 import { UserRepositoryInterface } from './interfaces/user-repository.interface';
@@ -9,19 +9,22 @@ import UserService from './user.service';
 import UserController from './user.controller';
 
 const container = new Container();
+const userContainerModule = new ContainerModule((bind) => {
+  bind<UserRepositoryInterface>(USER_INV.UserRepository).to(UserRepository);
+  bind<UserServiceInterface>(USER_INV.UserService).to(UserService);
+  bind(USER_INV.UserController).to(UserController);
+});
 
-container.bind<UserRepositoryInterface>(USER_INV.UserRepository).to(UserRepository);
-container.bind<UserServiceInterface>(USER_INV.UserService).to(UserService);
-container.bind(USER_INV.UserController).to(UserController);
+container.load(userContainerModule);
 
-const router = express.Router();
+const userRouter = express.Router();
 
 const controller = container.get<UserController>(USER_INV.UserController);
 
-router.get('/', controller.getAllUsers.bind(controller));
-router.get('/:id', controller.getUser.bind(controller));
-router.patch('/:id', controller.updateUser.bind(controller));
-router.post('/', controller.createUser.bind(controller));
-router.delete('/:id', controller.deleteUser.bind(controller));
+userRouter.get('/', controller.getAllUsers.bind(controller));
+userRouter.get('/:id', controller.getUser.bind(controller));
+userRouter.patch('/:id', controller.updateUser.bind(controller));
+userRouter.post('/', controller.createUser.bind(controller));
+userRouter.delete('/:id', controller.deleteUser.bind(controller));
 
-export default router;
+export { userRouter, userContainerModule };

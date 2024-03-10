@@ -8,6 +8,8 @@ import { NotFoundException } from '../common/exceptions/notFound.exception';
 import { HttpException } from '../common/exceptions/http.exception';
 import { USER_INV } from '../common/utils/inversifyConstants';
 
+//TODO add DTOS
+
 @injectable()
 class AuthService {
   private userService: UserService;
@@ -19,7 +21,7 @@ class AuthService {
     this.userService = userService;
   }
 
-  async signIn(email: string, password: string) {
+  async login(email: string, password: string) {
     const user = await this.userService.getUserByEmail(email);
 
     if (!user) {
@@ -47,6 +49,26 @@ class AuthService {
       access_token: jwt.sign(payload, process.env.SECRET_KEY || 'secret'),
       user,
     };
+  }
+  async register(firstName: string, lastName: string, email: string, password: string) {
+    const user = await this.userService.getUserByEmail(email);
+
+    if (user) {
+      throw new HttpException('User already exists', StatusCodes.CONFLICT);
+    }
+
+    const saltRounds = 10;
+    const salt = await bcrypt.genSalt(saltRounds);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const newUser = {
+      firstName,
+      lastName,
+      email,
+      password: hashedPassword,
+    };
+
+    return await this.userService.createUser(newUser);
   }
 }
 

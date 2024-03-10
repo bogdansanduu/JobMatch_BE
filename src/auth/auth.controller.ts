@@ -15,13 +15,23 @@ export class AuthController {
     this.authService = authService;
   }
 
-  async signIn(req: Request, res: Response, next: NextFunction) {
+  async login(req: Request, res: Response, next: NextFunction) {
     const { email, password } = req.body; // Assuming email and pass are sent in the request body
 
     //validate logic
 
-    const response = await this.authService.signIn(email, password);
+    const response = await this.authService.login(email, password);
 
     res.status(StatusCodes.OK).json(response);
+  }
+
+  async register(req: Request, res: Response, next: NextFunction) {
+    const { firstName, lastName, email, password } = req.body; // Assuming email and pass are sent in the request body
+
+    //validate logic
+
+    const response = await this.authService.register(firstName, lastName, email, password);
+
+    res.status(StatusCodes.CREATED).json(response);
   }
 }

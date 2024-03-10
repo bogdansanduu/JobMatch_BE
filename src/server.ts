@@ -3,11 +3,13 @@ import 'reflect-metadata';
 import path from 'path';
 import { pino } from 'pino';
 import dotenv from 'dotenv';
+import './auth/passport';
 
 import { dataSource } from './database/dataSource';
 import errorHandler from './common/middleware/errorHandler';
 
-import userRouter from './user/user.router';
+import { userRouter } from './user/user.router';
+import { authRouter } from './auth/auth.router';
 
 const logger = pino({ name: 'server start' });
 
@@ -39,6 +41,7 @@ app.get('/helloWorld', (req: Request, res: Response) => {
 });
 
 app.use('/users', userRouter);
+app.use('/auth', authRouter);
 
 // Error handlers
 app.use(errorHandler());
