@@ -6,6 +6,7 @@ import { USER_INV } from '../common/utils/inversifyConstants';
 
 import { User } from './entities/user.entity';
 import UserService from './user.service';
+import { JwtAuth } from '../common/decorators/jwtAuth.decorator';
 
 @injectable()
 export class UserController {
@@ -55,6 +56,8 @@ export class UserController {
 
     return res.status(StatusCodes.NO_CONTENT).send();
   }
+
+  @JwtAuth()
   async getAllUsers(req: Request, res: Response, next: NextFunction) {
     const data = await this.userService.getAllUsers();
 
