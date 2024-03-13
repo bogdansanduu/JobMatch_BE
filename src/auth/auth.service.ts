@@ -10,6 +10,8 @@ import { USER_INV } from '../common/utils/inversifyConstants';
 
 //TODO add DTOS
 
+const EXPIRES_IN = 60 * 60 * 24;
+
 @injectable()
 class AuthService {
   private userService: UserService;
@@ -19,6 +21,16 @@ class AuthService {
     userService: UserService
   ) {
     this.userService = userService;
+  }
+
+  private generateAccessToken(user: any) {
+    const payload = {
+      sub: user.id,
+      username: user.email,
+      exp: Math.floor(Date.now() / 1000) + EXPIRES_IN,
+    };
+
+    return jwt.sign(payload, process.env.SECRET_KEY || 'secret');
   }
 
   async login(email: string, password: string) {
@@ -34,26 +46,20 @@ class AuthService {
       throw new HttpException('Invalid credentials', StatusCodes.UNAUTHORIZED);
     }
 
-    const expiresIn = 60 * 60 * 24;
+    //TODO use interceptors to transform the repsonse object
 
+    const jwtToken = this.generateAccessToken(user);
     delete user.password;
 
-    const payload = {
-      sub: user.id,
-      username: user.email,
-      roles: user.roles,
-      exp: Math.floor(Date.now() / 1000) + expiresIn,
-    };
-
     return {
-      access_token: jwt.sign(payload, process.env.SECRET_KEY || 'secret'),
+      access_token: jwtToken,
       user,
     };
   }
   async register(firstName: string, lastName: string, email: string, password: string) {
-    const user = await this.userService.getUserByEmail(email);
+    const existingUser = await this.userService.getUserByEmail(email);
 
-    if (user) {
+    if (existingUser) {
       throw new HttpException('User already exists', StatusCodes.CONFLICT);
     }
 
@@ -61,14 +67,22 @@ class AuthService {
     const salt = await bcrypt.genSalt(saltRounds);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const newUser = {
+    const newUserData = {
       firstName,
       lastName,
       email,
       password: hashedPassword,
     };
 
-    return await this.userService.createUser(newUser);
+    const newUser: any = await this.userService.createUser(newUserData);
+
+    const jwtToken = this.generateAccessToken(newUser);
+    delete newUser.password;
+
+    return {
+      access_token: jwtToken,
+      user: newUser,
+    };
   }
 }
 
