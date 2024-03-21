@@ -15,20 +15,20 @@ passport.use(
   new Strategy(
     {
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: process.env.ACCESS_TOKEN_SECRET || 'secret',
+      secretOrKey: process.env.ACCESS_TOKEN_SECRET || 'access',
     },
     async (payload, done) => {
       const user = await userRepo.findOne({
         where: {
-          id: payload.id,
+          id: payload.userId,
         },
       });
 
-      if (user) {
-        return done(null, user);
+      if (!user) {
+        return done(new Error('User not found'), null);
       }
 
-      return done(null, false);
+      return done(null, user);
     }
   )
 );

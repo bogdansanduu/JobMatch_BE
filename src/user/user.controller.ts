@@ -6,7 +6,7 @@ import { USER_INV } from '../common/utils/inversifyConstants';
 
 import { User } from './entities/user.entity';
 import UserService from './user.service';
-import { JwtAuth } from '../common/decorators/jwtAuth.decorator';
+import { JwtAuth } from '../common/decorators/jwt-auth.decorator';
 
 @injectable()
 export class UserController {

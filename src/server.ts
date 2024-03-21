@@ -4,9 +4,12 @@ import path from 'path';
 import { pino } from 'pino';
 import dotenv from 'dotenv';
 import './auth/passport';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
+// import bodyParser from 'body-parser';
 
 import { dataSource } from './database/dataSource';
-import errorHandler from './common/middleware/errorHandler';
+import errorHandler from './common/middleware/error-handler.middleware';
 
 import { userRouter } from './user/user.router';
 import { authRouter } from './auth/auth.router';
@@ -29,15 +32,22 @@ dataSource
 const app: Express = express();
 
 //allow cors
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  next();
-});
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  credentials: true, //access-control-allow-credentials:true
+  optionSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
+
+//UNCOMMENT IN CASE NOT READING LOG PASSPORT STRATEGY
+// app.use(bodyParser.urlencoded({ extended: false })); // parse application/x-www-form-urlencoded
+// app.use(bodyParser.json()); // parse application/json
 
 //puts the parsed request body in req.body
 app.use(express.json());
+
+//middleware for parsing cookies
+app.use(cookieParser());
 
 // Request logging
 //app.use(requestLogger());
