@@ -58,7 +58,7 @@ app.get('/helloWorld', (req: Request, res: Response) => {
   res.send('Hello World :p');
 });
 
-app.use('/users', userRouter);
+app.use('/user', userRouter);
 app.use('/auth', authRouter);
 
 // Error handlers

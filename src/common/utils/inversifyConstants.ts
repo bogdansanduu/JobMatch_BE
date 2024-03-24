@@ -6,6 +6,7 @@ export const USER_INV = {
 };
 
 export const AUTH_INV = {
+  TokenRepository: Symbol.for('TokenRepository'),
   AuthService: Symbol.for('AuthService'),
   AuthInteractor: Symbol.for('AuthInteractor'),
   AuthController: Symbol.for('AuthController'),

@@ -3,6 +3,8 @@ import { Request, Response, NextFunction } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { inject, injectable } from 'inversify';
 import { AUTH_INV } from '../common/utils/inversifyConstants';
+import { plainToInstance } from 'class-transformer';
+import { UserDto } from '../user/dtos/user.dto';
 
 @injectable()
 export class AuthController {
@@ -20,9 +22,16 @@ export class AuthController {
 
     //validate logic
 
-    const response = await this.authService.register(firstName, lastName, email, password);
+    const { user, accessToken } = await this.authService.register(firstName, lastName, email, password);
 
-    res.status(StatusCodes.CREATED).json(response);
+    //response logic
+
+    const userDto = plainToInstance(UserDto, user, { excludeExtraneousValues: true });
+
+    res.status(StatusCodes.CREATED).json({
+      user: userDto,
+      accessToken,
+    });
   }
 
   async login(req: Request, res: Response, next: NextFunction) {
@@ -32,6 +41,10 @@ export class AuthController {
 
     const { user, accessToken, refreshToken } = await this.authService.login(email, password);
 
+    //response logic
+
+    const userDto = plainToInstance(UserDto, user, { excludeExtraneousValues: true });
+
     res.cookie('refreshToken', refreshToken, {
       httpOnly: false,
       secure: true,
@@ -39,7 +52,7 @@ export class AuthController {
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
     });
     return res.status(StatusCodes.OK).json({
-      user,
+      user: userDto,
       accessToken,
     });
   }
@@ -65,14 +78,20 @@ export class AuthController {
   async refreshAccessToken(req: Request, res: Response, next: NextFunction) {
     const { refreshToken } = req.cookies;
 
+    //validate logic
+
     if (!refreshToken) {
       return res.status(StatusCodes.UNAUTHORIZED).send();
     }
 
     const { user, accessToken } = await this.authService.refreshAccessToken(refreshToken);
 
+    //response logic
+
+    const userDto = plainToInstance(UserDto, user, { excludeExtraneousValues: true });
+
     return res.status(StatusCodes.OK).json({
-      user,
+      user: userDto,
       accessToken,
     });
   }

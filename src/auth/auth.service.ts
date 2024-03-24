@@ -2,35 +2,33 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { inject, injectable } from 'inversify';
 import { StatusCodes } from 'http-status-codes';
-import { Repository } from 'typeorm';
 
 import UserService from '../user/user.service';
 import { NotFoundException } from '../common/exceptions/not-found.exception';
 import { HttpException } from '../common/exceptions/http.exception';
-import { USER_INV } from '../common/utils/inversifyConstants';
-import { Token } from './entities/token.entity';
-import { dataSource } from '../database/dataSource';
+import { AUTH_INV, USER_INV } from '../common/utils/inversifyConstants';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
-
-//TODO add DTOS
+import { User } from '../user/entities/user.entity';
+import { TokenRepository } from './token.repo';
+import { AuthServiceInterface } from './interfaces/auth-service.interface';
 
 //seconds
-const EXPIRES_IN_ACCESS = 60 * 15;
+const EXPIRES_IN_ACCESS = 60 * 30;
 const EXPIRES_IN_REFRESH = 60 * 60 * 24;
 
 @injectable()
-class AuthService {
+class AuthService implements AuthServiceInterface {
   private userService: UserService;
-
-  //TODO move to repository
-  private readonly tokenRepo: Repository<Token>;
+  private tokenRepo: TokenRepository;
 
   constructor(
     @inject(USER_INV.UserService)
-    userService: UserService
+    userService: UserService,
+    @inject(AUTH_INV.TokenRepository)
+    tokenRepository: TokenRepository
   ) {
     this.userService = userService;
-    this.tokenRepo = dataSource.getRepository(Token);
+    this.tokenRepo = tokenRepository;
   }
 
   async register(firstName: string, lastName: string, email: string, password: string) {
@@ -51,13 +49,11 @@ class AuthService {
       password: hashedPassword,
     };
 
-    const newUser: any = await this.userService.createUser(newUserData);
-
-    const jwtToken = this.generateAccessToken(newUser);
-    delete newUser.password;
+    const newUser = await this.userService.createUser(newUserData);
+    const accessToken = this.generateAccessToken(newUser);
 
     return {
-      access_token: jwtToken,
+      accessToken: accessToken,
       user: newUser,
     };
   }
@@ -75,52 +71,38 @@ class AuthService {
       throw new HttpException('Invalid credentials', StatusCodes.UNAUTHORIZED);
     }
 
-    //Delete all refresh tokens for the user
-    //Generate a new refresh token and add it tgo the database
+    //delete all refresh tokens for the user
+    //generate a new refresh token and add it tgo the database
 
-    await this.tokenRepo.delete({
-      user,
-    });
+    await this.tokenRepo.deleteTokensByUser(user);
 
     const refreshToken = this.generateRefreshToken(user);
-    const tokenEntry = this.tokenRepo.create({
+    const refreshTokenEntry = await this.tokenRepo.createToken({
       refreshToken,
       user,
     });
 
-    await this.tokenRepo.save(tokenEntry);
-
-    //TODO use interceptors to transform the response object
     const accessToken = this.generateAccessToken(user);
-    delete user.password;
 
     return {
       accessToken: accessToken,
-      refreshToken: refreshToken,
+      refreshToken: refreshTokenEntry.refreshToken,
       user,
     };
   }
 
   async logout(refreshToken: string) {
-    await this.tokenRepo.delete({
-      refreshToken,
-    });
+    await this.tokenRepo.deleteTokenByName(refreshToken);
   }
 
   async refreshAccessToken(refreshToken: string) {
-    const refreshTokenDb = await this.tokenRepo.findOne({
-      where: {
-        refreshToken,
-      },
-      relations: ['user'],
-    });
+    const refreshTokenDb = await this.tokenRepo.getTokenByName(refreshToken);
 
     if (!refreshTokenDb) {
       throw new NotFoundException('Token not found');
     }
 
     const { userId } = <JwtPayload>jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET || 'refresh');
-
     const user = refreshTokenDb.user;
 
     if (user.id !== userId) {
@@ -128,6 +110,7 @@ class AuthService {
     }
 
     const accessToken = this.generateAccessToken(user);
+
     return {
       user,
       accessToken,
@@ -136,7 +119,7 @@ class AuthService {
 
   //---UTILS---
 
-  private generateAccessToken(user: any) {
+  private generateAccessToken(user: User) {
     const payload = {
       userId: user.id,
       email: user.email,
@@ -147,7 +130,7 @@ class AuthService {
     });
   }
 
-  private generateRefreshToken(user: any) {
+  private generateRefreshToken(user: User) {
     const payload = {
       userId: user.id,
       email: user.email,

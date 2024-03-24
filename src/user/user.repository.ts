@@ -24,20 +24,18 @@ export class UserRepository implements UserRepositoryInterface {
   async createUser(userData: { firstName: string; lastName: string; password: string; email: string }) {
     const user = this.userRepo.create(userData);
 
-    return await this.userRepo.save(user);
+    return this.userRepo.save(user);
   }
 
-  async deleteUser(id: number) {
-    const deleteResult = await this.userRepo.delete(id);
-
-    console.log(deleteResult);
+  deleteUser(id: number) {
+    return this.userRepo.delete(id);
   }
 
   getAllUsers() {
     return this.userRepo.find();
   }
 
-  getUser(id: number) {
+  getUserById(id: number) {
     return this.userRepo.findOne({
       where: {
         id,

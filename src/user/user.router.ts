@@ -7,6 +7,7 @@ import { UserServiceInterface } from './interfaces/user-service.interface';
 import UserRepository from './user.repository';
 import UserService from './user.service';
 import UserController from './user.controller';
+import catchErrors from '../common/utils/catchErrors';
 
 const container = new Container();
 const userContainerModule = new ContainerModule((bind) => {
@@ -21,10 +22,10 @@ const userRouter = express.Router();
 
 const controller = container.get<UserController>(USER_INV.UserController);
 
-userRouter.get('/', controller.getAllUsers.bind(controller));
-userRouter.get('/:id', controller.getUser.bind(controller));
-userRouter.patch('/:id', controller.updateUser.bind(controller));
-userRouter.post('/', controller.createUser.bind(controller));
-userRouter.delete('/:id', controller.deleteUser.bind(controller));
+userRouter.get('/all', catchErrors(controller.getAllUsers.bind(controller)));
+userRouter.get('/:id', catchErrors(controller.getUser.bind(controller)));
+userRouter.patch('/:id', catchErrors(controller.updateUser.bind(controller)));
+userRouter.post('/', catchErrors(controller.createUser.bind(controller)));
+userRouter.delete('/:id', catchErrors(controller.deleteUser.bind(controller)));
 
 export { userRouter, userContainerModule };

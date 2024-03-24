@@ -4,7 +4,6 @@ import { inject, injectable } from 'inversify';
 
 import { USER_INV } from '../common/utils/inversifyConstants';
 
-import { User } from './entities/user.entity';
 import UserService from './user.service';
 import { JwtAuth } from '../common/decorators/jwt-auth.decorator';
 
@@ -29,11 +28,13 @@ export class UserController {
     return res.status(StatusCodes.CREATED).json(data);
   }
   async getUser(req: Request, res: Response, next: NextFunction) {
-    const body = req.body;
+    const body = parseInt(req.params.id || '-1');
+
+    console.log(body);
 
     //validate logic
 
-    const data: User = await this.userService.getUser(body);
+    const data = await this.userService.getUser(body);
 
     return res.status(StatusCodes.OK).json(data);
   }

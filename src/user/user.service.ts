@@ -4,10 +4,11 @@ import { USER_INV } from '../common/utils/inversifyConstants';
 
 import { UserServiceInterface } from './interfaces/user-service.interface';
 import UserRepository from './user.repository';
+import { NotFoundException } from '../common/exceptions/not-found.exception';
 
 @injectable()
 class UserService implements UserServiceInterface {
-  private readonly userRepository: UserRepository;
+  private userRepository: UserRepository;
 
   constructor(@inject(USER_INV.UserRepository) userRepository: UserRepository) {
     this.userRepository = userRepository;
@@ -17,23 +18,29 @@ class UserService implements UserServiceInterface {
     return this.userRepository.createUser(user);
   }
 
-  deleteUser(id: number): any {
+  deleteUser(id: number) {
     return this.userRepository.deleteUser(id);
   }
 
-  getAllUsers(): any {
+  getAllUsers() {
     return this.userRepository.getAllUsers();
   }
 
-  getUser(id: number): any {
-    return this.userRepository.getUser(id);
+  async getUser(id: number) {
+    const foundUser = await this.userRepository.getUserById(id);
+
+    if (!foundUser) {
+      throw new NotFoundException('User not found');
+    }
+
+    return foundUser;
   }
 
-  getUserByEmail(email: string): any {
+  getUserByEmail(email: string) {
     return this.userRepository.getUserByEmail(email);
   }
 
-  updateUser(id: number, user: any): any {
+  updateUser(id: number, user: any) {
     return this.userRepository.updateUser(id, user);
   }
 }

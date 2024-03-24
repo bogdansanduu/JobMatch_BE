@@ -1,5 +1,3 @@
-//TODO
-//add DTOs
 export interface UserServiceInterface {
   getAllUsers();
   getUser(id: number);
