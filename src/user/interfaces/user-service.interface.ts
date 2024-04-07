@@ -1,6 +1,6 @@
 export interface UserServiceInterface {
   getAllUsers();
-  getUser(id: number);
+  findOneById(id: number);
   getUserByEmail(email: string);
   createUser(input: any);
   updateUser(id: number, user: any);

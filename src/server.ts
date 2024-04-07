@@ -6,7 +6,9 @@ import dotenv from 'dotenv';
 import './auth/passport';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-// import bodyParser from 'body-parser';
+
+import './chat/message/message.gateway';
+import './chat/room/room.gateway';
 
 import { dataSource } from './database/dataSource';
 import errorHandler from './common/middleware/error-handler.middleware';
@@ -29,6 +31,7 @@ dataSource
     logger.error(error);
   });
 
+//create express app
 const app: Express = express();
 
 //allow cors

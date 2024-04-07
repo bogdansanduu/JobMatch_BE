@@ -1,6 +1,7 @@
 import { inject, injectable } from 'inversify';
 
 import { USER_INV } from '../common/utils/inversifyConstants';
+import { DEFUALT_PROFILE_PICTURE } from '../common/constants/user.constants';
 
 import { UserServiceInterface } from './interfaces/user-service.interface';
 import UserRepository from './user.repository';
@@ -14,7 +15,15 @@ class UserService implements UserServiceInterface {
     this.userRepository = userRepository;
   }
 
-  async createUser(user: { firstName: string; lastName: string; password: string; email: string }) {
+  async createUser(user: {
+    firstName: string;
+    lastName: string;
+    password: string;
+    email: string;
+    profilePicture?: string;
+  }) {
+    user.profilePicture = user.profilePicture || DEFUALT_PROFILE_PICTURE;
+
     return this.userRepository.createUser(user);
   }
 
@@ -26,7 +35,7 @@ class UserService implements UserServiceInterface {
     return this.userRepository.getAllUsers();
   }
 
-  async getUser(id: number) {
+  async findOneById(id: number) {
     const foundUser = await this.userRepository.getUserById(id);
 
     if (!foundUser) {

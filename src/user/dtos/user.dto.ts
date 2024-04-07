@@ -15,4 +15,10 @@ export class UserDto {
 
   @Expose()
   lastName: string;
+
+  @Expose()
+  profilePicture: string;
+
+  @Expose()
+  socketId: string;
 }

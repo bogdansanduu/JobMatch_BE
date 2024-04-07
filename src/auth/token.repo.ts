@@ -37,7 +37,9 @@ export class TokenRepository implements TokenRepositoryInterface {
       where: {
         refreshToken,
       },
-      relations: ['user'],
+      relations: {
+        user: true,
+      },
     });
   }
 }

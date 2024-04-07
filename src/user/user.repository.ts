@@ -21,7 +21,13 @@ export class UserRepository implements UserRepositoryInterface {
     });
   }
 
-  async createUser(userData: { firstName: string; lastName: string; password: string; email: string }) {
+  async createUser(userData: {
+    firstName: string;
+    lastName: string;
+    password: string;
+    email: string;
+    profilePicture?: string;
+  }) {
     const user = this.userRepo.create(userData);
 
     return this.userRepo.save(user);

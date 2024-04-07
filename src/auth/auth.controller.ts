@@ -22,16 +22,15 @@ export class AuthController {
 
     //validate logic
 
-    const { user, accessToken } = await this.authService.register(firstName, lastName, email, password);
+    const user = await this.authService.register(firstName, lastName, email, password);
 
     //response logic
 
-    const userDto = plainToInstance(UserDto, user, { excludeExtraneousValues: true });
+    if (!user) {
+      return res.status(StatusCodes.CONFLICT).send();
+    }
 
-    res.status(StatusCodes.CREATED).json({
-      user: userDto,
-      accessToken,
-    });
+    return res.status(StatusCodes.CREATED).send();
   }
 
   async login(req: Request, res: Response, next: NextFunction) {
@@ -51,6 +50,7 @@ export class AuthController {
       sameSite: 'none',
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
     });
+
     return res.status(StatusCodes.OK).json({
       user: userDto,
       accessToken,

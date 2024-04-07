@@ -30,11 +30,9 @@ export class UserController {
   async getUser(req: Request, res: Response, next: NextFunction) {
     const body = parseInt(req.params.id || '-1');
 
-    console.log(body);
-
     //validate logic
 
-    const data = await this.userService.getUser(body);
+    const data = await this.userService.findOneById(body);
 
     return res.status(StatusCodes.OK).json(data);
   }

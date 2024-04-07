@@ -1,9 +1,13 @@
 import 'reflect-metadata';
 
 import { app, logger } from './server';
+import ioSocket from './common/socket/socket-io';
 
-const port = process.env.APP_PORT || 3000;
+const appPort = parseInt(process.env.APP_PORT || '3000');
+const socketPort = parseInt(process.env.SOCKET_PORT || '3001');
 
-app.listen(port, () => {
-  logger.info(`Server is running on port ${port}`);
+app.listen(appPort, () => {
+  logger.info(`Server is running on port ${appPort}`);
 });
+
+ioSocket.listen(socketPort);

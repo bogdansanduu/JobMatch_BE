@@ -2,8 +2,9 @@ import { DataSource } from 'typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import dotenv from 'dotenv';
 
-import { ENTITIES } from './entities';
+// import { ENTITIES } from './entities';
 import * as process from 'process';
+import { ENTITIES } from './entities';
 
 //FIGURE OUT WHY NEEDED
 dotenv.config();
@@ -28,3 +29,5 @@ export const dataSource = new DataSource({
   logging: false,
   namingStrategy: new SnakeNamingStrategy(),
 });
+
+console.log(__dirname);

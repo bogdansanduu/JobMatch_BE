@@ -49,13 +49,7 @@ class AuthService implements AuthServiceInterface {
       password: hashedPassword,
     };
 
-    const newUser = await this.userService.createUser(newUserData);
-    const accessToken = this.generateAccessToken(newUser);
-
-    return {
-      accessToken: accessToken,
-      user: newUser,
-    };
+    return await this.userService.createUser(newUserData);
   }
 
   async login(email: string, password: string) {
