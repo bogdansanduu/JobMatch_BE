@@ -46,6 +46,8 @@ ioSocket.on('connection', (socket) => {
       return;
     }
 
+    socket.join(room.name);
+
     room.userToRooms.forEach((userToRoom) => {
       const user = userToRoom.user;
 
@@ -53,6 +55,8 @@ ioSocket.on('connection', (socket) => {
         ioSocket.to(user.socketId).emit(SocketEventsServer.CREATED_ONE_ON_ONE_ROOM, room);
       }
     });
+
+    socket.to(room.name).emit(SocketEventsServer.JOINED_ROOM, room);
   });
 
   socket.on(SocketEventsClient.GET_ALL_ROOMS_FOR_USER, async ({ userId }: { userId: number }) => {
