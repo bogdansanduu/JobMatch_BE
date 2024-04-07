@@ -35,11 +35,20 @@ export class RoomService {
         userToRooms: {
           user: true,
         },
+        host: true,
       },
       select: {
         id: true,
         name: true,
         oneOnOne: true,
+        host: {
+          id: true,
+          email: true,
+          firstName: true,
+          lastName: true,
+          profilePicture: true,
+          socketId: true,
+        },
         userToRooms: {
           id: true,
           roomId: true,
