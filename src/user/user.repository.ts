@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { injectable } from 'inversify';
 
 import { UserRepositoryInterface } from './interfaces/user-repository.interface';
@@ -18,6 +18,10 @@ export class UserRepository implements UserRepositoryInterface {
       where: {
         id,
       },
+      relations: {
+        followers: true,
+        following: true,
+      },
     });
   }
 
@@ -33,18 +37,31 @@ export class UserRepository implements UserRepositoryInterface {
     return this.userRepo.save(user);
   }
 
+  async saveUser(user: User) {
+    return this.userRepo.save(user);
+  }
+
   deleteUser(id: number) {
     return this.userRepo.delete(id);
   }
 
   getAllUsers() {
-    return this.userRepo.find();
+    return this.userRepo.find({
+      relations: {
+        followers: true,
+        following: true,
+      },
+    });
   }
 
   getUserById(id: number) {
     return this.userRepo.findOne({
       where: {
         id,
+      },
+      relations: {
+        followers: true,
+        following: true,
       },
     });
   }
@@ -54,6 +71,30 @@ export class UserRepository implements UserRepositoryInterface {
       where: {
         email,
       },
+      relations: {
+        followers: true,
+        following: true,
+      },
+    });
+  }
+
+  async searchByNameAndEmail(searchTerms: string[]): Promise<User[]> {
+    const whereConditions = searchTerms.map((searchTerm) => ({
+      where: [
+        { firstName: ILike(`%${searchTerm}%`) },
+        { lastName: ILike(`%${searchTerm}%`) },
+        { email: ILike(`%${searchTerm}%`) },
+      ],
+    }));
+
+    // Combine where conditions using OR logic
+    const combinedConditions = whereConditions.reduce((acc: { [key: string]: any }[], condition) => {
+      acc.push(...condition.where);
+      return acc;
+    }, []);
+
+    return this.userRepo.find({
+      where: combinedConditions,
     });
   }
 

@@ -1,8 +1,10 @@
 export interface UserServiceInterface {
+  createUser(input: any);
+  deleteUser(id: number);
   getAllUsers();
   findOneById(id: number);
   getUserByEmail(email: string);
-  createUser(input: any);
   updateUser(id: number, user: any);
-  deleteUser(id: number);
+  searchByNameAndEmail(searchTerms: string[]);
+  addContact({ userId, contactId }: { userId: number; contactId: number });
 }

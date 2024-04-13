@@ -42,7 +42,7 @@ export class AuthController {
 
     //response logic
 
-    const userDto = plainToInstance(UserDto, user, { excludeExtraneousValues: true });
+    const userDto = plainToInstance(UserDto, user);
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: false,

@@ -5,7 +5,10 @@ import { inject, injectable } from 'inversify';
 import { USER_INV } from '../common/utils/inversifyConstants';
 
 import UserService from './user.service';
-import { JwtAuth } from '../common/decorators/jwt-auth.decorator';
+import { AddContactValidation } from './dtos/add-contact.validation';
+import { validateBody } from '../common/utils/validateBody';
+import { RemoveContactValidation } from './dtos/remove-contact.validation';
+// import { JwtAuth } from '../common/decorators/jwt-auth.decorator';
 
 @injectable()
 export class UserController {
@@ -56,9 +59,44 @@ export class UserController {
     return res.status(StatusCodes.NO_CONTENT).send();
   }
 
-  @JwtAuth()
+  // @JwtAuth()
   async getAllUsers(req: Request, res: Response, next: NextFunction) {
     const data = await this.userService.getAllUsers();
+
+    return res.status(StatusCodes.OK).json(data);
+  }
+
+  async addContact(req: Request, res: Response, next: NextFunction) {
+    const body = req.body;
+
+    //validate logic
+
+    await validateBody(req.body, AddContactValidation);
+
+    const data = await this.userService.addContact(body);
+
+    return res.status(StatusCodes.OK).json(data);
+  }
+
+  async removeContact(req: Request, res: Response, next: NextFunction) {
+    const body = req.body;
+
+    //validate logic
+
+    await validateBody(req.body, RemoveContactValidation);
+
+    const data = await this.userService.removeContact(body);
+
+    return res.status(StatusCodes.OK).json(data);
+  }
+
+  async searchByNameAndEmail(req: Request, res: Response, next: NextFunction) {
+    const encodedSearchTerm = req.query.searchTerm as string;
+    const searchTerms = decodeURIComponent(encodedSearchTerm).split(' ');
+
+    //validate logic
+
+    const data = await this.userService.searchByNameAndEmail(searchTerms);
 
     return res.status(StatusCodes.OK).json(data);
   }

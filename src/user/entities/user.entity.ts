@@ -1,4 +1,5 @@
-import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+
 import { UserToRoom } from '../../chat/room/entities/user-to-room.entity';
 import { Room } from '../../chat/room/entities/room.entity';
 import { Message } from '../../chat/message/entity/message.entity';
@@ -34,4 +35,11 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Message, (message) => message.author)
   messages: Message[];
+
+  @ManyToMany((type) => User, (user) => user.following)
+  @JoinTable()
+  followers: User[];
+
+  @ManyToMany((type) => User, (user) => user.followers)
+  following: User[];
 }

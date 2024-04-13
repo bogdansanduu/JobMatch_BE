@@ -21,4 +21,10 @@ export class UserDto {
 
   @Expose()
   socketId: string;
+
+  @Expose()
+  followers: UserDto[];
+
+  @Expose()
+  following: UserDto[];
 }

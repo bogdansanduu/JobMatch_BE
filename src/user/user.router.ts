@@ -22,10 +22,17 @@ const userRouter = express.Router();
 
 const controller = container.get<UserController>(USER_INV.UserController);
 
+userRouter.get('/search', catchErrors(controller.searchByNameAndEmail.bind(controller)));
 userRouter.get('/all', catchErrors(controller.getAllUsers.bind(controller)));
 userRouter.get('/:id', catchErrors(controller.getUser.bind(controller)));
+
 userRouter.patch('/:id', catchErrors(controller.updateUser.bind(controller)));
+
 userRouter.post('/', catchErrors(controller.createUser.bind(controller)));
+
 userRouter.delete('/:id', catchErrors(controller.deleteUser.bind(controller)));
+
+userRouter.put('/add-contact', catchErrors(controller.addContact.bind(controller)));
+userRouter.put('/remove-contact', catchErrors(controller.removeContact.bind(controller)));
 
 export { userRouter, userContainerModule };
