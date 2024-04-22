@@ -12,9 +12,9 @@ import { dataSource } from '../../database/dataSource';
 
 @injectable()
 class MessageService {
-  private messageRepo: Repository<Message>;
-  private userService: UserService;
-  private roomService: RoomService;
+  private readonly messageRepo: Repository<Message>;
+  private readonly userService: UserService;
+  private readonly roomService: RoomService;
 
   //TODO make repos
   constructor(

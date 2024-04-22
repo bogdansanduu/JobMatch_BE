@@ -4,7 +4,9 @@ import { StatusCodes } from 'http-status-codes';
 import { inject, injectable } from 'inversify';
 import { AUTH_INV } from '../common/utils/inversifyConstants';
 import { plainToInstance } from 'class-transformer';
-import { UserDto } from '../user/dtos/user.dto';
+import { UserResponseDto } from '../user/dtos/user-response.dto';
+import { validateBody } from '../common/utils/validateBody';
+import { RegisterValidation } from './dtos/register.validation';
 
 @injectable()
 export class AuthController {
@@ -18,11 +20,13 @@ export class AuthController {
   }
 
   async register(req: Request, res: Response, next: NextFunction) {
-    const { firstName, lastName, email, password } = req.body; // Assuming email and pass are sent in the request body
+    const body = req.body;
 
     //validate logic
 
-    const user = await this.authService.register(firstName, lastName, email, password);
+    await validateBody(body, RegisterValidation);
+
+    const user = await this.authService.register(body);
 
     //response logic
 
@@ -42,7 +46,7 @@ export class AuthController {
 
     //response logic
 
-    const userDto = plainToInstance(UserDto, user);
+    const userDto = plainToInstance(UserResponseDto, user);
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: false,
@@ -88,7 +92,7 @@ export class AuthController {
 
     //response logic
 
-    const userDto = plainToInstance(UserDto, user, { excludeExtraneousValues: true });
+    const userDto = plainToInstance(UserResponseDto, user, { excludeExtraneousValues: true });
 
     return res.status(StatusCodes.OK).json({
       user: userDto,

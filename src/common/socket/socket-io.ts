@@ -5,6 +5,7 @@ import passport from 'passport';
 import { app } from '../../server';
 import { dataSource } from '../../database/dataSource';
 import { User } from '../../user/entities/user.entity';
+import { HttpException } from '../exceptions/http.exception';
 
 const ioSocket = new Server(http.createServer(app), {
   cors: {
@@ -18,7 +19,7 @@ ioSocket.use((socket, next) => {
   if (socket.request.headers.authorization) {
     passport.authenticate('jwt', { session: false }, (err, payload) => {
       if (err || !payload) {
-        return next(new Error('Authentication error'));
+        return next(new HttpException('Authentication error', 401));
       }
 
       next();
@@ -27,7 +28,7 @@ ioSocket.use((socket, next) => {
     return;
   }
 
-  next(new Error('Authentication error'));
+  next(new HttpException('Authentication error', 401));
 });
 
 //updates the socket id of the user in the database

@@ -1,7 +1,7 @@
-import { Exclude, Expose } from 'class-transformer';
+import { Exclude, Expose, Type } from 'class-transformer';
 
 @Exclude()
-export class UserDto {
+export class UserResponseDto {
   @Expose()
   id: number;
 
@@ -23,8 +23,10 @@ export class UserDto {
   socketId: string;
 
   @Expose()
-  followers: UserDto[];
+  @Type(() => UserResponseDto)
+  followers: UserResponseDto[];
 
   @Expose()
-  following: UserDto[];
+  @Type(() => UserResponseDto)
+  following: UserResponseDto[];
 }

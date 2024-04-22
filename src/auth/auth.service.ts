@@ -11,6 +11,7 @@ import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { User } from '../user/entities/user.entity';
 import { TokenRepository } from './token.repo';
 import { AuthServiceInterface } from './interfaces/auth-service.interface';
+import { RegisterValidation } from './dtos/register.validation';
 
 //seconds
 const EXPIRES_IN_ACCESS = 60 * 30;
@@ -31,7 +32,9 @@ class AuthService implements AuthServiceInterface {
     this.tokenRepo = tokenRepository;
   }
 
-  async register(firstName: string, lastName: string, email: string, password: string) {
+  async register(data: RegisterValidation) {
+    const { firstName, lastName, email, password, country, city, state } = data;
+
     const existingUser = await this.userService.getUserByEmail(email);
 
     if (existingUser) {
@@ -47,6 +50,9 @@ class AuthService implements AuthServiceInterface {
       lastName,
       email,
       password: hashedPassword,
+      country,
+      city,
+      state,
     };
 
     return await this.userService.createUser(newUserData);

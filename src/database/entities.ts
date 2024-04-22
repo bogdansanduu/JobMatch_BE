@@ -4,5 +4,17 @@ import { Token } from '../auth/entities/token.entity';
 import { Message } from '../chat/message/entity/message.entity';
 import { Room } from '../chat/room/entities/room.entity';
 import { UserToRoom } from '../chat/room/entities/user-to-room.entity';
+import { Post } from '../posts/entities/post.entity';
+import { Comment } from '../comment/entities/comment.entity';
+import { Like } from '../like/entities/like.entity';
 
-export const ENTITIES: MixedList<string | Function | EntitySchema<any>> = [User, Token, Message, Room, UserToRoom];
+export const ENTITIES: MixedList<string | Function | EntitySchema<any>> = [
+  User,
+  Token,
+  Message,
+  Room,
+  UserToRoom,
+  Post,
+  Comment,
+  Like,
+];

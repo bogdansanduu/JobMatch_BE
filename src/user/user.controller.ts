@@ -83,7 +83,7 @@ export class UserController {
 
     //validate logic
 
-    await validateBody(req.body, RemoveContactValidation);
+    await validateBody(body, RemoveContactValidation);
 
     const data = await this.userService.removeContact(body);
 

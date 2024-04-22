@@ -21,3 +21,15 @@ export const ROOM_INV = {
   RoomService: Symbol.for('RoomService'),
   RoomGateway: Symbol.for('RoomGateway'),
 };
+
+export const POST_INV = {
+  PostRepository: Symbol.for('PostRepository'),
+  PostService: Symbol.for('PostService'),
+  PostController: Symbol.for('PostController'),
+};
+
+export const LIKE_INV = {
+  LikeRepository: Symbol.for('LikeRepository'),
+  LikeService: Symbol.for('LikeService'),
+  LikeController: Symbol.for('LikeController'),
+};
