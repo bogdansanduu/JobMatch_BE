@@ -3,6 +3,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -28,6 +29,7 @@ export class Post extends BaseEntity {
   picture: string;
 
   @ManyToOne(() => User, (user) => user.posts, { onDelete: 'CASCADE' })
+  @JoinColumn()
   author: User;
 
   @OneToMany(() => Like, (like) => like.post, { onDelete: 'CASCADE' })

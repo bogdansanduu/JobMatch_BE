@@ -19,6 +19,10 @@ export class LikeRepository implements LikeRepositoryInterfaces {
     return this.likeRepo.save(like);
   }
 
+  async delete(id: number) {
+    await this.likeRepo.delete(id);
+  }
+
   async findOne(id: number) {
     return this.likeRepo.findOne({
       where: {

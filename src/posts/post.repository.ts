@@ -19,7 +19,9 @@ export class PostRepository implements PostRepositoryInterface {
         id,
       },
       relations: {
-        likes: true,
+        likes: {
+          author: true,
+        },
         comments: true,
         author: true,
       },
@@ -29,7 +31,9 @@ export class PostRepository implements PostRepositoryInterface {
   async findAll() {
     return this.postRepo.find({
       relations: {
-        likes: true,
+        likes: {
+          author: true,
+        },
         comments: true,
         author: true,
       },

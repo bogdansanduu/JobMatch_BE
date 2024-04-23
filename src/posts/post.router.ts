@@ -32,5 +32,6 @@ postRouter.get('/all', catchErrors(controller.getAllPosts.bind(controller)));
 
 postRouter.post('/:userId', catchErrors(controller.createPost.bind(controller)));
 postRouter.post('/like/:postId/:userId', catchErrors(controller.likePost.bind(controller)));
+postRouter.post('/unlike/:postId/:userId', catchErrors(controller.unlikePost.bind(controller)));
 
 export { postRouter, postContainerModule };

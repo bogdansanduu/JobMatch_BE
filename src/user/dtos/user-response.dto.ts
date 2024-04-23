@@ -30,3 +30,27 @@ export class UserResponseDto {
   @Type(() => UserResponseDto)
   following: UserResponseDto[];
 }
+
+@Exclude()
+export class UserSimpleResponseDto {
+  @Expose()
+  id: number;
+
+  email: string;
+
+  password: string;
+
+  @Expose()
+  firstName: string;
+
+  @Expose()
+  lastName: string;
+
+  profilePicture: string;
+
+  socketId: string;
+
+  followers: UserResponseDto[];
+
+  following: UserResponseDto[];
+}

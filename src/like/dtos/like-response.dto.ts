@@ -1,4 +1,5 @@
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
+import { UserSimpleResponseDto } from '../../user/dtos/user-response.dto';
 // import { PostResponseDto } from '../../posts/dtos/post-response.dto';
 // import { UserResponseDto } from '../../user/dtos/user-response.dto';
 
@@ -10,8 +11,8 @@ export class LikeResponseDto {
   // @Expose()
   // @Type(() => PostResponseDto)
   // post: PostResponseDto;
-  //
-  // @Expose()
-  // @Type(() => UserResponseDto)
-  // author: UserResponseDto;
+
+  @Expose()
+  @Type(() => UserSimpleResponseDto)
+  author: UserSimpleResponseDto;
 }

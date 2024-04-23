@@ -59,15 +59,33 @@ export class PostService implements PostServiceInterface {
     const alreadyLiked = await this.likeRepository.findOneByPostAndUser(postId, userId);
 
     if (alreadyLiked) {
-      return post;
+      return this.getPostById(postId);
     }
 
-    const like = await this.likeRepository.create({
+    await this.likeRepository.create({
       post,
       author: user,
     });
-    post.likes.push(like);
 
-    return this.postRepository.update(post.id, post);
+    return this.postRepository.findOne(postId);
+  }
+
+  async unlikePost(postId: number, userId: number) {
+    const post = await this.getPostById(postId);
+    const user = await this.userService.findOneById(userId);
+
+    if (!post || !user) {
+      throw new NotFoundException('User or post not found');
+    }
+
+    const alreadyLiked = await this.likeRepository.findOneByPostAndUser(postId, userId);
+
+    if (!alreadyLiked) {
+      return this.getPostById(postId);
+    }
+
+    await this.likeRepository.delete(alreadyLiked.id);
+
+    return this.postRepository.findOne(postId);
   }
 }

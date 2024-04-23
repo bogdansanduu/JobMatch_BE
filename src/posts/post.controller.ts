@@ -26,6 +26,8 @@ export class PostController {
 
     const responseData = plainToInstance(PostResponseDto, data, { excludeExtraneousValues: true });
 
+    // console.log(responseData[0] && responseData[0].likes);
+
     return res.status(StatusCodes.OK).json(responseData);
   }
 
@@ -57,6 +59,21 @@ export class PostController {
     }
 
     const data = await this.postService.likePost(postId, userId);
+
+    const responseData = plainToInstance(PostResponseDto, data, { excludeExtraneousValues: true });
+
+    return res.status(StatusCodes.OK).json(responseData);
+  }
+
+  async unlikePost(req: Request, res: Response, next: NextFunction) {
+    const postId = Number(req.params.postId);
+    const userId = Number(req.params.userId);
+
+    if (!postId || !userId) {
+      throw new NotFoundException('User or post not found');
+    }
+
+    const data = await this.postService.unlikePost(postId, userId);
 
     const responseData = plainToInstance(PostResponseDto, data, { excludeExtraneousValues: true });
 
