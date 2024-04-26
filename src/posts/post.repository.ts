@@ -28,7 +28,7 @@ export class PostRepository implements PostRepositoryInterface {
     });
   }
 
-  async findAll() {
+  findAll() {
     return this.postRepo.find({
       relations: {
         likes: {

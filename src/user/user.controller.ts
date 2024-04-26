@@ -35,7 +35,7 @@ export class UserController {
 
     //validate logic
 
-    const data = await this.userService.findOneById(body);
+    const data = await this.userService.getUserById(body);
 
     return res.status(StatusCodes.OK).json(data);
   }

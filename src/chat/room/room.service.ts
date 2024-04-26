@@ -140,7 +140,7 @@ export class RoomService {
 
   async createRoom(createRoomDto: CreateRoomDto): Promise<Room | null> {
     const { hostId, oneOnOne, recipientId, roomName } = createRoomDto;
-    const hostUser = await this.userService.findOneById(hostId);
+    const hostUser = await this.userService.getUserById(hostId);
 
     if (!hostUser) {
       throw new NotFoundException('User not found');
@@ -175,7 +175,7 @@ export class RoomService {
       return room; // User already in the room
     }
 
-    const user = await this.userService.findOneById(userId);
+    const user = await this.userService.getUserById(userId);
 
     if (!user) {
       throw new NotFoundException('User not found');

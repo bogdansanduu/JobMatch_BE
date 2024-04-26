@@ -33,3 +33,9 @@ export const LIKE_INV = {
   LikeService: Symbol.for('LikeService'),
   LikeController: Symbol.for('LikeController'),
 };
+
+export const COMMENT_INV = {
+  CommentRepository: Symbol.for('CommentRepository'),
+  CommentService: Symbol.for('CommentService'),
+  CommentController: Symbol.for('CommentController'),
+};

@@ -36,7 +36,7 @@ class UserService implements UserServiceInterface {
     return this.userRepository.getAllUsers();
   }
 
-  async findOneById(id: number) {
+  async getUserById(id: number) {
     const foundUser = await this.userRepository.getUserById(id);
 
     if (!foundUser) {

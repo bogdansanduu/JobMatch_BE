@@ -10,6 +10,8 @@ import { CreatePostValidation } from './dtos/create-post.validation';
 import { NotFoundException } from '../common/exceptions/not-found.exception';
 import { plainToInstance } from 'class-transformer';
 import { PostResponseDto } from './dtos/post-response.dto';
+import { validate } from 'class-validator';
+import { CreateCommentValidation } from '../comment/dtos/create-comment.validation';
 
 @injectable()
 export class PostController {
@@ -25,8 +27,6 @@ export class PostController {
     const data = await this.postService.getAllPosts();
 
     const responseData = plainToInstance(PostResponseDto, data, { excludeExtraneousValues: true });
-
-    // console.log(responseData[0] && responseData[0].likes);
 
     return res.status(StatusCodes.OK).json(responseData);
   }
@@ -78,5 +78,25 @@ export class PostController {
     const responseData = plainToInstance(PostResponseDto, data, { excludeExtraneousValues: true });
 
     return res.status(StatusCodes.OK).json(responseData);
+  }
+
+  async commentPost(req: Request, res: Response, next: NextFunction) {
+    const body = req.body;
+    const userId = Number(req.params.userId);
+    const postId = Number(req.params.postId);
+
+    //validate logic
+
+    if (!userId || !postId) {
+      throw new NotFoundException('User or post not found');
+    }
+
+    await validate(body, CreateCommentValidation);
+
+    const data = await this.postService.commentPost(userId, postId, body);
+
+    const responseData = plainToInstance(PostResponseDto, data, { excludeExtraneousValues: true });
+
+    return res.status(StatusCodes.CREATED).json(responseData);
   }
 }

@@ -32,7 +32,7 @@ class MessageService {
     const { userId, text, roomId } = createMessageDto;
 
     const room = await this.roomService.findOneById(roomId);
-    const user = await this.userService.findOneById(userId);
+    const user = await this.userService.getUserById(userId);
 
     if (!room || !user) {
       throw new NotFoundException('User or room not found');
