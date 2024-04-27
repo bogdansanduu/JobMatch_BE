@@ -4,9 +4,9 @@ import { StatusCodes } from 'http-status-codes';
 
 import { CommentService } from './comment.service';
 import { COMMENT_INV } from '../common/utils/inversifyConstants';
-// import { NotFoundException } from '../common/exceptions/not-found.exception';
-// import { validate } from 'class-validator';
-// import { CreateCommentValidation } from './dtos/create-comment.validation';
+import { NotFoundException } from '../common/exceptions/not-found.exception';
+import { plainToInstance } from 'class-transformer';
+import { CommentResponseDto } from './dtos/comment-response.dto';
 
 @injectable()
 export class CommentController {
@@ -27,25 +27,41 @@ export class CommentController {
     return res.status(StatusCodes.OK).json(data);
   }
 
-  // async createComment(req: Request, res: Response, next: NextFunction) {
-  //   const body = req.body;
-  //   const userId = Number(req.params.userId);
-  //   const postId = Number(req.params.postId);
-  //
-  //   //validate logic
-  //
-  //   if (!userId || !postId) {
-  //     throw new NotFoundException('User or post not found');
-  //   }
-  //
-  //   await validate(body, CreateCommentValidation);
-  //
-  //   const data = await this.commentService.createComment(userId, postId, body);
-  //
-  //   //response logic
-  //
-  //   //TODO
-  //
-  //   return res.status(StatusCodes.CREATED).json(data);
-  // }
+  async likeComment(req: Request, res: Response, next: NextFunction) {
+    const commentId = Number(req.params.commentId);
+    const userId = Number(req.params.userId);
+
+    //validate logic
+
+    if (!commentId || !userId) {
+      throw new NotFoundException('User or comment not found');
+    }
+
+    const data = await this.commentService.likeComment(commentId, userId);
+
+    //response logic
+
+    const responseData = plainToInstance(CommentResponseDto, data, { excludeExtraneousValues: true });
+
+    return res.status(StatusCodes.OK).json(responseData);
+  }
+
+  async unlikeComment(req: Request, res: Response, next: NextFunction) {
+    const commentId = Number(req.params.commentId);
+    const userId = Number(req.params.userId);
+
+    //validate logic
+
+    if (!commentId || !userId) {
+      throw new NotFoundException('User or comment not found');
+    }
+
+    const data = await this.commentService.unlikeComment(commentId, userId);
+
+    //response logic
+
+    const responseData = plainToInstance(CommentResponseDto, data, { excludeExtraneousValues: true });
+
+    return res.status(StatusCodes.OK).json(responseData);
+  }
 }

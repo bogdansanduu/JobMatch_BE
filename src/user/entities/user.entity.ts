@@ -16,6 +16,11 @@ import { Message } from '../../chat/message/entity/message.entity';
 import { Post } from '../../posts/entities/post.entity';
 import { Like } from '../../like/entities/like.entity';
 
+export enum Roles {
+  ADMIN = 'admin',
+  USER = 'user',
+}
+
 @Entity()
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
@@ -79,6 +84,9 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Like, (like) => like.author, { onDelete: 'CASCADE' })
   likes: Like[];
+
+  @Column({ type: 'enum', enum: Roles, default: Roles.USER })
+  role: string;
 
   @CreateDateColumn()
   createdAt: Date;

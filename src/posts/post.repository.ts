@@ -22,7 +22,13 @@ export class PostRepository implements PostRepositoryInterface {
         likes: {
           author: true,
         },
-        comments: true,
+        comments: {
+          author: true,
+          likes: {
+            author: true,
+          },
+          post: true,
+        },
         author: true,
       },
     });
@@ -34,7 +40,13 @@ export class PostRepository implements PostRepositoryInterface {
         likes: {
           author: true,
         },
-        comments: true,
+        comments: {
+          author: true,
+          likes: {
+            author: true,
+          },
+          post: true,
+        },
         author: true,
       },
     });

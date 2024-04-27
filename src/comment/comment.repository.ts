@@ -12,9 +12,28 @@ export class CommentRepository {
     this.commentRepo = dataSource.getRepository<Comment>(Comment);
   }
 
+  findOne(id: number) {
+    return this.commentRepo.findOne({
+      where: {
+        id,
+      },
+      relations: {
+        likes: {
+          author: true,
+        },
+        post: true,
+        author: true,
+      },
+    });
+  }
+
   findAll() {
     return this.commentRepo.find({
       relations: {
+        likes: {
+          author: true,
+        },
+        post: true,
         author: true,
       },
     });

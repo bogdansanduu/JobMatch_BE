@@ -12,6 +12,8 @@ export function JwtAuth() {
           return res.status(StatusCodes.UNAUTHORIZED).send();
         }
 
+        req.user = payload;
+
         return originalMethod.apply(this, arguments);
       })(req, res, next);
     };

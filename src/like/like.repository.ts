@@ -43,4 +43,17 @@ export class LikeRepository implements LikeRepositoryInterfaces {
       },
     });
   }
+
+  async findOneByCommentAndUser(commentId: number, userId: number) {
+    return this.likeRepo.findOne({
+      where: {
+        comment: {
+          id: commentId,
+        },
+        author: {
+          id: userId,
+        },
+      },
+    });
+  }
 }

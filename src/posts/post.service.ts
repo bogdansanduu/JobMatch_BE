@@ -5,17 +5,17 @@ import { COMMENT_INV, LIKE_INV, POST_INV, USER_INV } from '../common/utils/inver
 import UserService from '../user/user.service';
 import { NotFoundException } from '../common/exceptions/not-found.exception';
 import { PostRepository } from './post.repository';
-import { LikeRepository } from '../like/like.repository';
 import { PostServiceInterface } from './interfaces/post-service.interface';
 import { CreateCommentDto } from '../comment/dtos/create-comment.dto';
 import { CommentService } from '../comment/comment.service';
+import { LikeService } from '../like/like.service';
 
 @injectable()
 export class PostService implements PostServiceInterface {
   private readonly userService: UserService;
   private readonly commentService: CommentService;
+  private readonly likeService: LikeService;
   private readonly postRepository: PostRepository;
-  private readonly likeRepository: LikeRepository;
 
   constructor(
     @inject(USER_INV.UserService)
@@ -24,13 +24,13 @@ export class PostService implements PostServiceInterface {
     commentService: CommentService,
     @inject(POST_INV.PostRepository)
     postRepository: PostRepository,
-    @inject(LIKE_INV.LikeRepository)
-    likeRepository: LikeRepository
+    @inject(LIKE_INV.LikeService)
+    likeService: LikeService
   ) {
     this.postRepository = postRepository;
     this.userService = userService;
     this.commentService = commentService;
-    this.likeRepository = likeRepository;
+    this.likeService = likeService;
   }
 
   getPostById(id: number) {
@@ -62,16 +62,13 @@ export class PostService implements PostServiceInterface {
       throw new NotFoundException('User or post not found');
     }
 
-    const alreadyLiked = await this.likeRepository.findOneByPostAndUser(postId, userId);
+    const alreadyLiked = await this.likeService.findOneByPostIdAndUserId(postId, userId);
 
     if (alreadyLiked) {
       return this.getPostById(postId);
     }
 
-    await this.likeRepository.create({
-      post,
-      author: user,
-    });
+    await this.likeService.createLikePost(post, user);
 
     return this.postRepository.findOne(postId);
   }
@@ -84,18 +81,25 @@ export class PostService implements PostServiceInterface {
       throw new NotFoundException('User or post not found');
     }
 
-    const alreadyLiked = await this.likeRepository.findOneByPostAndUser(postId, userId);
+    const alreadyLiked = await this.likeService.findOneByPostIdAndUserId(postId, userId);
 
     if (!alreadyLiked) {
       return this.getPostById(postId);
     }
 
-    await this.likeRepository.delete(alreadyLiked.id);
+    await this.likeService.delete(alreadyLiked.id);
 
     return this.postRepository.findOne(postId);
   }
 
   async commentPost(userId, postId, commentDto: CreateCommentDto) {
+    const user = await this.userService.getUserById(userId);
+    const post = await this.getPostById(postId);
+
+    if (!user || !post) {
+      throw new NotFoundException('User or post not found');
+    }
+
     await this.commentService.createComment(userId, postId, commentDto);
 
     return this.postRepository.findOne(postId);

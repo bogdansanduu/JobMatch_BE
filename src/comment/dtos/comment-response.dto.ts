@@ -1,16 +1,25 @@
 import { Exclude, Expose, Type } from 'class-transformer';
-import { UserResponseDto } from '../../user/dtos/user-response.dto';
+import { UserSimpleResponseDto } from '../../user/dtos/user-response.dto';
+import { LikeResponseDto } from '../../like/dtos/like-response.dto';
+import { PostSimpleResponseDto } from '../../posts/dtos/post-response.dto';
 
 @Exclude()
 export class CommentResponseDto {
   @Expose()
   id: number;
 
-  // @Expose()
-  // @Type(() => PostResponseDto)
-  // post: PostResponseDto;
+  @Expose()
+  content: string;
 
   @Expose()
-  @Type(() => UserResponseDto)
-  author: UserResponseDto;
+  @Type(() => PostSimpleResponseDto)
+  post: PostSimpleResponseDto;
+
+  @Expose()
+  @Type(() => LikeResponseDto)
+  likes: LikeResponseDto[];
+
+  @Expose()
+  @Type(() => UserSimpleResponseDto)
+  author: UserSimpleResponseDto;
 }

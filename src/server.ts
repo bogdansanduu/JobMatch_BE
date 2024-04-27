@@ -16,6 +16,7 @@ import errorHandler from './common/middleware/error-handler.middleware';
 import { userRouter } from './user/user.router';
 import { authRouter } from './auth/auth.router';
 import { postRouter } from './posts/post.router';
+import { commentRouter } from './comment/comment.router';
 import { likeRouter } from './like/like.router';
 
 const logger = pino({ name: 'server start' });
@@ -66,6 +67,7 @@ app.get('/helloWorld', (req: Request, res: Response) => {
 app.use('/user', userRouter);
 app.use('/auth', authRouter);
 app.use('/post', postRouter);
+app.use('/comment', commentRouter);
 app.use('/like', likeRouter);
 
 // Error handlers
