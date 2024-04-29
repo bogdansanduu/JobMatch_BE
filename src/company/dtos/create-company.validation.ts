@@ -1,18 +1,13 @@
-import { IsDefined, IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsDefined, IsEmail, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
-export class RegisterValidation {
+export class CreateCompanyValidation {
   @IsDefined()
   @IsString()
   @IsNotEmpty()
-  firstName: string;
+  name: string;
 
-  @IsDefined()
-  @IsString()
-  @IsNotEmpty()
-  lastName: string;
-
-  @IsDefined()
   @IsEmail()
+  @IsDefined()
   @IsNotEmpty()
   email: string;
 
@@ -24,7 +19,17 @@ export class RegisterValidation {
   @IsDefined()
   @IsString()
   @IsNotEmpty()
+  industry: string;
+
+  @IsDefined()
+  @IsString()
+  @IsNotEmpty()
   country: string;
+
+  @IsDefined()
+  @IsString()
+  @IsNotEmpty()
+  state: string;
 
   @IsDefined()
   @IsString()
@@ -32,7 +37,6 @@ export class RegisterValidation {
   city: string;
 
   @IsDefined()
-  @IsString()
-  @IsNotEmpty()
-  state: string;
+  @IsNumber()
+  ownerId: number;
 }

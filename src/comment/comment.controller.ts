@@ -1,11 +1,11 @@
 import { NextFunction, Response, Request } from 'express';
 import { inject, injectable } from 'inversify';
 import { StatusCodes } from 'http-status-codes';
+import { plainToInstance } from 'class-transformer';
 
 import { CommentService } from './comment.service';
 import { COMMENT_INV } from '../common/utils/inversifyConstants';
 import { NotFoundException } from '../common/exceptions/not-found.exception';
-import { plainToInstance } from 'class-transformer';
 import { CommentResponseDto } from './dtos/comment-response.dto';
 
 @injectable()
@@ -24,7 +24,9 @@ export class CommentController {
 
     //response logic
 
-    return res.status(StatusCodes.OK).json(data);
+    const responseData = plainToInstance(CommentResponseDto, data, { excludeExtraneousValues: true });
+
+    return res.status(StatusCodes.OK).json(responseData);
   }
 
   async likeComment(req: Request, res: Response, next: NextFunction) {

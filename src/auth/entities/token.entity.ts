@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 
 import { User } from '../../user/entities/user.entity';
+import { Company } from '../../company/entities/company.entity';
 
 @Entity()
 export class Token extends BaseEntity {
@@ -22,6 +23,10 @@ export class Token extends BaseEntity {
   @OneToOne(() => User)
   @JoinColumn()
   user: User;
+
+  @OneToOne(() => Company)
+  @JoinColumn()
+  company: Company;
 
   @CreateDateColumn()
   createdAt: Date;

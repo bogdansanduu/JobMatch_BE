@@ -7,6 +7,9 @@ import { plainToInstance } from 'class-transformer';
 import { UserResponseDto } from '../user/dtos/user-response.dto';
 import { validateBody } from '../common/utils/validateBody';
 import { RegisterValidation } from './dtos/register.validation';
+import { CreateCompanyValidation } from '../company/dtos/create-company.validation';
+import { CompanyResponseDto } from '../company/dtos/company-response.dto';
+import { LoginValidation } from './dtos/login.validation';
 
 @injectable()
 export class AuthController {
@@ -37,10 +40,30 @@ export class AuthController {
     return res.status(StatusCodes.CREATED).send();
   }
 
-  async login(req: Request, res: Response, next: NextFunction) {
-    const { email, password } = req.body; // Assuming email and pass are sent in the request body
+  async registerCompany(req: Request, res: Response, next: NextFunction) {
+    const body = req.body;
 
     //validate logic
+
+    await validateBody(body, CreateCompanyValidation);
+
+    const user = await this.authService.registerCompany(body);
+
+    //response logic
+
+    if (!user) {
+      return res.status(StatusCodes.CONFLICT).send();
+    }
+
+    return res.status(StatusCodes.CREATED).send();
+  }
+
+  async login(req: Request, res: Response, next: NextFunction) {
+    const { email, password } = req.body;
+
+    //validate logic
+
+    await validateBody({ email, password }, LoginValidation);
 
     const { user, accessToken, refreshToken } = await this.authService.login(email, password);
 
@@ -57,6 +80,32 @@ export class AuthController {
 
     return res.status(StatusCodes.OK).json({
       user: userDto,
+      accessToken,
+    });
+  }
+
+  async loginCompany(req: Request, res: Response, next: NextFunction) {
+    const { email, password } = req.body;
+
+    //validate logic
+
+    await validateBody({ email, password }, LoginValidation);
+
+    const { company, accessToken, refreshToken } = await this.authService.loginCompany(email, password);
+
+    //response logic
+
+    const companyDto = plainToInstance(CompanyResponseDto, company);
+
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: false,
+      secure: true,
+      sameSite: 'none',
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+    });
+
+    return res.status(StatusCodes.OK).json({
+      company: companyDto,
       accessToken,
     });
   }
@@ -96,6 +145,27 @@ export class AuthController {
 
     return res.status(StatusCodes.OK).json({
       user: userDto,
+      accessToken,
+    });
+  }
+
+  async refreshAccessTokenCompany(req: Request, res: Response, next: NextFunction) {
+    const { refreshToken } = req.cookies;
+
+    //validate logic
+
+    if (!refreshToken) {
+      return res.status(StatusCodes.UNAUTHORIZED).send();
+    }
+
+    const { company, accessToken } = await this.authService.refreshAccessTokenCompany(refreshToken);
+
+    //response logic
+
+    const companyDto = plainToInstance(CompanyResponseDto, company, { excludeExtraneousValues: true });
+
+    return res.status(StatusCodes.OK).json({
+      companyDto,
       accessToken,
     });
   }

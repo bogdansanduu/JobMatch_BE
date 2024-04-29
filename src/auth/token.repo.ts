@@ -5,6 +5,7 @@ import { Token } from './entities/token.entity';
 import { dataSource } from '../database/dataSource';
 import { User } from '../user/entities/user.entity';
 import { TokenRepositoryInterface } from './interfaces/token-repository.interface';
+import { Company } from '../company/entities/company.entity';
 
 @injectable()
 export class TokenRepository implements TokenRepositoryInterface {
@@ -20,9 +21,21 @@ export class TokenRepository implements TokenRepositoryInterface {
     return this.tokenRepo.save(token);
   }
 
+  createTokenCompany(tokenData: { refreshToken: string; company: Company }) {
+    const token = this.tokenRepo.create(tokenData);
+
+    return this.tokenRepo.save(token);
+  }
+
   deleteTokensByUser(user: User) {
     return this.tokenRepo.delete({
       user,
+    });
+  }
+
+  deleteTokensByCompany(company: Company) {
+    return this.tokenRepo.delete({
+      company,
     });
   }
 
@@ -39,6 +52,7 @@ export class TokenRepository implements TokenRepositoryInterface {
       },
       relations: {
         user: true,
+        company: true,
       },
     });
   }

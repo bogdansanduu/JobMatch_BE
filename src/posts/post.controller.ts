@@ -13,7 +13,7 @@ import { PostResponseDto } from './dtos/post-response.dto';
 import { CreateCommentValidation } from '../comment/dtos/create-comment.validation';
 import { JwtAuth } from '../common/decorators/jwt-auth.decorator';
 import { RequiresRoles } from '../common/decorators/requires-roles.decorator';
-import { Roles } from '../user/entities/user.entity';
+import { Roles } from '../common/constants/user.constants';
 
 @injectable()
 export class PostController {
@@ -26,7 +26,7 @@ export class PostController {
   }
 
   @JwtAuth()
-  @RequiresRoles([Roles.USER])
+  @RequiresRoles([Roles.USER, Roles.COMPANY_OWNER])
   async getAllPosts(req: Request, res: Response, next: NextFunction) {
     const data = await this.postService.getAllPosts();
 

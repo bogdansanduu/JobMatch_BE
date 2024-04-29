@@ -6,6 +6,7 @@ import {
   JoinTable,
   ManyToMany,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -15,11 +16,8 @@ import { Room } from '../../chat/room/entities/room.entity';
 import { Message } from '../../chat/message/entity/message.entity';
 import { Post } from '../../posts/entities/post.entity';
 import { Like } from '../../like/entities/like.entity';
-
-export enum Roles {
-  ADMIN = 'admin',
-  USER = 'user',
-}
+import { Company } from '../../company/entities/company.entity';
+import { Roles } from '../../common/constants/user.constants';
 
 @Entity()
 export class User extends BaseEntity {
@@ -87,6 +85,9 @@ export class User extends BaseEntity {
 
   @Column({ type: 'enum', enum: Roles, default: Roles.USER })
   role: string;
+
+  @OneToOne(() => Company, (company) => company.owner)
+  company: Company;
 
   @CreateDateColumn()
   createdAt: Date;

@@ -7,6 +7,7 @@ import { UserServiceInterface } from './interfaces/user-service.interface';
 import UserRepository from './user.repository';
 import { NotFoundException } from '../common/exceptions/not-found.exception';
 import { InvalidException } from '../common/exceptions/invalid.exception';
+import { User } from './entities/user.entity';
 
 @injectable()
 class UserService implements UserServiceInterface {
@@ -50,7 +51,7 @@ class UserService implements UserServiceInterface {
     return this.userRepository.getUserByEmail(email);
   }
 
-  updateUser(id: number, user: any) {
+  updateUser(id: number, user: Partial<User>) {
     return this.userRepository.updateUser(id, user);
   }
 

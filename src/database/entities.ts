@@ -7,7 +7,7 @@ import { UserToRoom } from '../chat/room/entities/user-to-room.entity';
 import { Post } from '../posts/entities/post.entity';
 import { Comment } from '../comment/entities/comment.entity';
 import { Like } from '../like/entities/like.entity';
-import { CompanyEntity } from '../company/entities/company.entity';
+import { Company } from '../company/entities/company.entity';
 
 export const ENTITIES: MixedList<string | Function | EntitySchema> = [
   User,
@@ -18,5 +18,5 @@ export const ENTITIES: MixedList<string | Function | EntitySchema> = [
   Post,
   Comment,
   Like,
-  CompanyEntity,
+  Company,
 ];

@@ -39,3 +39,9 @@ export const COMMENT_INV = {
   CommentService: Symbol.for('CommentService'),
   CommentController: Symbol.for('CommentController'),
 };
+
+export const COMPANY_INV = {
+  CompanyRepository: Symbol.for('CompanyRepository'),
+  CompanyService: Symbol.for('CompanyService'),
+  CompanyController: Symbol.for('CompanyController'),
+};
