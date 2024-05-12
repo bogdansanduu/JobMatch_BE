@@ -1,5 +1,13 @@
 import { Exclude, Expose, Type } from 'class-transformer';
 
+import { UserToRoom } from '../../chat/room/entities/user-to-room.entity';
+import { Room } from '../../chat/room/entities/room.entity';
+import { Message } from '../../chat/message/entity/message.entity';
+import { Post } from '../../posts/entities/post.entity';
+import { Like } from '../../like/entities/like.entity';
+import { Company } from '../../company/entities/company.entity';
+import { CompanySimpleResponseDto } from '../../company/dtos/company-response.dto';
+
 @Exclude()
 export class UserResponseDto {
   @Expose()
@@ -20,7 +28,22 @@ export class UserResponseDto {
   profilePicture: string;
 
   @Expose()
+  country: string;
+
+  @Expose()
+  state: string;
+
+  @Expose()
+  city: string;
+
+  @Expose()
   socketId: string;
+
+  userToRooms: UserToRoom[];
+
+  roomsAsHost: Room[];
+
+  messages: Message[];
 
   @Expose()
   @Type(() => UserResponseDto)
@@ -29,6 +52,21 @@ export class UserResponseDto {
   @Expose()
   @Type(() => UserResponseDto)
   following: UserResponseDto[];
+
+  posts: Post[];
+
+  likes: Like[];
+
+  @Expose()
+  role: string;
+
+  @Expose()
+  @Type(() => CompanySimpleResponseDto)
+  company: Company;
+
+  createdAt: Date;
+
+  updatedAt: Date;
 }
 
 @Exclude()

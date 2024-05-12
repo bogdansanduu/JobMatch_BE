@@ -16,6 +16,9 @@ export class CompanyResponseDto {
   name: string;
 
   @Expose()
+  profilePicture: string;
+
+  @Expose()
   industry: string;
 
   @Expose()
@@ -36,4 +39,19 @@ export class CompanyResponseDto {
 
   @Expose()
   updatedAt: Date;
+}
+
+@Exclude()
+export class CompanySimpleResponseDto {
+  @Expose()
+  id: number;
+
+  email: string;
+
+  password: string;
+
+  @Expose()
+  name: string;
+
+  //TODO COMPLETE THIS
 }

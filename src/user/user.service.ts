@@ -1,13 +1,14 @@
 import { inject, injectable } from 'inversify';
 
 import { USER_INV } from '../common/utils/inversifyConstants';
-import { DEFUALT_PROFILE_PICTURE } from '../common/constants/user.constants';
+import { DEFUALT_PROFILE_PICTURE, Roles } from '../common/constants/user.constants';
 
 import { UserServiceInterface } from './interfaces/user-service.interface';
 import UserRepository from './user.repository';
 import { NotFoundException } from '../common/exceptions/not-found.exception';
 import { InvalidException } from '../common/exceptions/invalid.exception';
 import { User } from './entities/user.entity';
+import bcrypt from 'bcrypt';
 
 @injectable()
 class UserService implements UserServiceInterface {
@@ -23,6 +24,9 @@ class UserService implements UserServiceInterface {
     password: string;
     email: string;
     profilePicture?: string;
+    country: string;
+    city: string;
+    state: string;
   }) {
     user.profilePicture = user.profilePicture || DEFUALT_PROFILE_PICTURE;
 
@@ -101,6 +105,42 @@ class UserService implements UserServiceInterface {
     await this.userRepository.saveUser(user2);
 
     return this.userRepository.getUserById(userId);
+  }
+
+  //---RecSys---
+
+  async addRecSysUsers() {
+    const users: User[] = [];
+    const saltRounds = 10;
+    const salt = await bcrypt.genSalt(saltRounds);
+    const password = 'recsys';
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    for (let i = 1; i <= 6; i++) {
+      const firstName = `RecSys${i}`;
+      const lastName = `RecSys${i}`;
+      const email = `recsys${i}@recsys.com`;
+      const country = 'RecSys';
+      const city = 'RecSys';
+      const state = 'RecSys';
+
+      const user = await this.createUser({
+        firstName,
+        lastName,
+        email,
+        password: hashedPassword,
+        country,
+        city,
+        state,
+      });
+
+      await this.updateUser(user.id, { role: Roles.COMPANY_OWNER });
+
+      console.log(`Created RecSys user ${i}`);
+      users.push(user);
+    }
+
+    return users;
   }
 }
 

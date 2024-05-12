@@ -4,6 +4,7 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -11,6 +12,9 @@ import {
 
 import { User } from '../../user/entities/user.entity';
 import { Roles } from '../../common/constants/user.constants';
+import { Post } from '../../posts/entities/post.entity';
+import { Like } from '../../like/entities/like.entity';
+import { Job } from '../../job/entities/job.entity';
 
 @Entity()
 export class Company extends BaseEntity {
@@ -20,11 +24,14 @@ export class Company extends BaseEntity {
   @Column({ unique: true })
   email: string;
 
-  @Column()
+  @Column({ type: 'varchar' })
   password: string;
 
-  @Column()
+  @Column({ type: 'varchar', unique: true })
   name: string;
+
+  @Column({ type: 'longtext' })
+  profilePicture: string;
 
   @Column({ nullable: false, type: 'varchar' })
   industry: string;
@@ -32,7 +39,7 @@ export class Company extends BaseEntity {
   @Column({ nullable: false, type: 'varchar' })
   country: string;
 
-  @Column({ nullable: false, type: 'varchar' })
+  @Column({ nullable: true, type: 'varchar' })
   state: string;
 
   @Column({ nullable: true, type: 'varchar' })
@@ -44,6 +51,15 @@ export class Company extends BaseEntity {
 
   @Column({ type: 'enum', enum: Roles, default: Roles.COMPANY })
   role: string;
+
+  @OneToMany(() => Post, (post) => post.author, { onDelete: 'CASCADE' })
+  posts: Post[];
+
+  @OneToMany(() => Like, (like) => like.company, { onDelete: 'CASCADE' })
+  likes: Like[];
+
+  @OneToMany(() => Job, (job) => job.company, { onDelete: 'CASCADE' })
+  jobs: Job[];
 
   @CreateDateColumn()
   createdAt: Date;

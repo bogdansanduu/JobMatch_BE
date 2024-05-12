@@ -45,3 +45,14 @@ export const COMPANY_INV = {
   CompanyService: Symbol.for('CompanyService'),
   CompanyController: Symbol.for('CompanyController'),
 };
+
+export const JOB_INV = {
+  JobRepository: Symbol.for('JobRepository'),
+  JobService: Symbol.for('JobService'),
+  JobController: Symbol.for('JobController'),
+};
+
+export const RECOMMENDATION_INV = {
+  RecommendationService: Symbol.for('RecommendationService'),
+  RecommendationController: Symbol.for('RecommendationController'),
+};

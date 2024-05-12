@@ -26,7 +26,7 @@ export class PostController {
   }
 
   @JwtAuth()
-  @RequiresRoles([Roles.USER, Roles.COMPANY_OWNER])
+  @RequiresRoles([Roles.USER, Roles.COMPANY, Roles.COMPANY_OWNER])
   async getAllPosts(req: Request, res: Response, next: NextFunction) {
     const data = await this.postService.getAllPosts();
 
@@ -54,6 +54,25 @@ export class PostController {
     return res.status(StatusCodes.CREATED).json(responseData);
   }
 
+  async createPostCompany(req: Request, res: Response, next: NextFunction) {
+    const body = req.body;
+    const companyId = Number(req.params.companyId);
+
+    if (!companyId) {
+      throw new NotFoundException('Company not found');
+    }
+
+    await validateBody(body, CreatePostValidation);
+
+    const data = await this.postService.createPostCompany(companyId, body);
+
+    //response logic
+
+    const responseData = plainToInstance(PostResponseDto, data, { excludeExtraneousValues: true });
+
+    return res.status(StatusCodes.CREATED).json(responseData);
+  }
+
   async likePost(req: Request, res: Response, next: NextFunction) {
     const postId = Number(req.params.postId);
     const userId = Number(req.params.userId);
@@ -63,6 +82,21 @@ export class PostController {
     }
 
     const data = await this.postService.likePost(postId, userId);
+
+    const responseData = plainToInstance(PostResponseDto, data, { excludeExtraneousValues: true });
+
+    return res.status(StatusCodes.OK).json(responseData);
+  }
+
+  async likePostCompany(req: Request, res: Response, next: NextFunction) {
+    const postId = Number(req.params.postId);
+    const companyId = Number(req.params.companyId);
+
+    if (!postId || !companyId) {
+      throw new NotFoundException('Company or post not found');
+    }
+
+    const data = await this.postService.likePostCompany(postId, companyId);
 
     const responseData = plainToInstance(PostResponseDto, data, { excludeExtraneousValues: true });
 
@@ -84,6 +118,21 @@ export class PostController {
     return res.status(StatusCodes.OK).json(responseData);
   }
 
+  async unlikePostCompany(req: Request, res: Response, next: NextFunction) {
+    const postId = Number(req.params.postId);
+    const companyId = Number(req.params.companyId);
+
+    if (!postId || !companyId) {
+      throw new NotFoundException('Company or post not found');
+    }
+
+    const data = await this.postService.unlikePostCompany(postId, companyId);
+
+    const responseData = plainToInstance(PostResponseDto, data, { excludeExtraneousValues: true });
+
+    return res.status(StatusCodes.OK).json(responseData);
+  }
+
   async commentPost(req: Request, res: Response, next: NextFunction) {
     const body = req.body;
     const userId = Number(req.params.userId);
@@ -98,6 +147,32 @@ export class PostController {
     await validateBody(body, CreateCommentValidation);
 
     const data = await this.postService.commentPost(userId, postId, body);
+
+    console.log(data);
+
+    //response logic
+
+    const responseData = plainToInstance(PostResponseDto, data, { excludeExtraneousValues: true });
+
+    return res.status(StatusCodes.OK).json(responseData);
+  }
+
+  async commentPostCompany(req: Request, res: Response, next: NextFunction) {
+    const body = req.body;
+    const companyId = Number(req.params.companyId);
+    const postId = Number(req.params.postId);
+
+    //validate logic
+
+    if (!companyId || !postId) {
+      throw new NotFoundException('Company or post not found');
+    }
+
+    await validateBody(body, CreateCommentValidation);
+
+    const data = await this.postService.commentPostCompany(companyId, postId, body);
+
+    console.log(data);
 
     //response logic
 

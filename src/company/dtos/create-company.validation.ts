@@ -1,4 +1,4 @@
-import { IsDefined, IsEmail, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsDefined, IsEmail, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateCompanyValidation {
   @IsDefined()
@@ -39,4 +39,8 @@ export class CreateCompanyValidation {
   @IsDefined()
   @IsNumber()
   ownerId: number;
+
+  @IsString()
+  @IsOptional()
+  profilePicture?: string;
 }

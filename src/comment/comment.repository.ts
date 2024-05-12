@@ -20,9 +20,11 @@ export class CommentRepository {
       relations: {
         likes: {
           author: true,
+          company: true,
         },
         post: true,
         author: true,
+        company: true,
       },
     });
   }
@@ -32,9 +34,11 @@ export class CommentRepository {
       relations: {
         likes: {
           author: true,
+          company: true,
         },
         post: true,
         author: true,
+        company: true,
       },
     });
   }

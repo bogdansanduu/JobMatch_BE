@@ -18,6 +18,9 @@ import { authRouter } from './auth/auth.router';
 import { postRouter } from './posts/post.router';
 import { commentRouter } from './comment/comment.router';
 import { likeRouter } from './like/like.router';
+import { companyRouter } from './company/company.router';
+import { jobRouter } from './job/job.router';
+import { recommendationRouter } from './recommendation/recommendation.router';
 
 const logger = pino({ name: 'server start' });
 
@@ -69,6 +72,9 @@ app.use('/auth', authRouter);
 app.use('/post', postRouter);
 app.use('/comment', commentRouter);
 app.use('/like', likeRouter);
+app.use('/company', companyRouter);
+app.use('/job', jobRouter);
+app.use('/recommendation', recommendationRouter);
 
 // Error handlers
 app.use(errorHandler());

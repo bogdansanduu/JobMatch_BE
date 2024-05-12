@@ -48,6 +48,25 @@ export class CommentController {
     return res.status(StatusCodes.OK).json(responseData);
   }
 
+  async likeCommentCompany(req: Request, res: Response, next: NextFunction) {
+    const commentId = Number(req.params.commentId);
+    const companyId = Number(req.params.companyId);
+
+    //validate logic
+
+    if (!commentId || !companyId) {
+      throw new NotFoundException('Company or comment not found');
+    }
+
+    const data = await this.commentService.likeCommentCompany(commentId, companyId);
+
+    //response logic
+
+    const responseData = plainToInstance(CommentResponseDto, data, { excludeExtraneousValues: true });
+
+    return res.status(StatusCodes.OK).json(responseData);
+  }
+
   async unlikeComment(req: Request, res: Response, next: NextFunction) {
     const commentId = Number(req.params.commentId);
     const userId = Number(req.params.userId);
@@ -59,6 +78,25 @@ export class CommentController {
     }
 
     const data = await this.commentService.unlikeComment(commentId, userId);
+
+    //response logic
+
+    const responseData = plainToInstance(CommentResponseDto, data, { excludeExtraneousValues: true });
+
+    return res.status(StatusCodes.OK).json(responseData);
+  }
+
+  async unlikeCommentCompany(req: Request, res: Response, next: NextFunction) {
+    const commentId = Number(req.params.commentId);
+    const companyId = Number(req.params.companyId);
+
+    //validate logic
+
+    if (!commentId || !companyId) {
+      throw new NotFoundException('Company or comment not found');
+    }
+
+    const data = await this.commentService.unlikeCommentCompany(commentId, companyId);
 
     //response logic
 

@@ -35,4 +35,8 @@ userRouter.delete('/:id', catchErrors(controller.deleteUser.bind(controller)));
 userRouter.put('/add-contact', catchErrors(controller.addContact.bind(controller)));
 userRouter.put('/remove-contact', catchErrors(controller.removeContact.bind(controller)));
 
+//---RecSys---
+
+userRouter.post('/recSys', catchErrors(controller.addRecSysUsers.bind(controller)));
+
 export { userRouter, userContainerModule };

@@ -25,4 +25,8 @@ const controller = container.get<CompanyController>(COMPANY_INV.CompanyControlle
 
 companyRouter.get('/all', catchErrors(controller.getAllCompanies.bind(controller)));
 
+//---RecSys---
+
+companyRouter.post('/recSys', catchErrors(controller.addRecSysCompanies.bind(controller)));
+
 export { companyRouter, companyContainerModule };

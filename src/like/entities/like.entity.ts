@@ -3,6 +3,7 @@ import { BaseEntity, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Post } from '../../posts/entities/post.entity';
 import { User } from '../../user/entities/user.entity';
 import { Comment } from '../../comment/entities/comment.entity';
+import { Company } from '../../company/entities/company.entity';
 
 @Entity()
 export class Like extends BaseEntity {
@@ -17,4 +18,7 @@ export class Like extends BaseEntity {
 
   @ManyToOne(() => User, (user: User) => user.likes, { onDelete: 'CASCADE' })
   author: User;
+
+  @ManyToOne(() => Company, (company: Company) => company.likes, { onDelete: 'CASCADE' })
+  company: Company;
 }

@@ -3,6 +3,7 @@ import { BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColum
 import { Post } from '../../posts/entities/post.entity';
 import { User } from '../../user/entities/user.entity';
 import { Like } from '../../like/entities/like.entity';
+import { Company } from '../../company/entities/company.entity';
 
 @Entity()
 export class Comment extends BaseEntity {
@@ -20,4 +21,7 @@ export class Comment extends BaseEntity {
 
   @ManyToOne(() => User, (user) => user.posts, { onDelete: 'CASCADE' })
   author: User;
+
+  @ManyToOne(() => Company, (company) => company.posts, { onDelete: 'CASCADE' })
+  company: Company;
 }

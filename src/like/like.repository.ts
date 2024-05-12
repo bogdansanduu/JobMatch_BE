@@ -44,6 +44,19 @@ export class LikeRepository implements LikeRepositoryInterfaces {
     });
   }
 
+  async findOneByPostAndCompany(postId: number, companyId: number) {
+    return this.likeRepo.findOne({
+      where: {
+        post: {
+          id: postId,
+        },
+        company: {
+          id: companyId,
+        },
+      },
+    });
+  }
+
   async findOneByCommentAndUser(commentId: number, userId: number) {
     return this.likeRepo.findOne({
       where: {
@@ -52,6 +65,19 @@ export class LikeRepository implements LikeRepositoryInterfaces {
         },
         author: {
           id: userId,
+        },
+      },
+    });
+  }
+
+  async findOneByCommentAndCompany(commentId: number, companyId: number) {
+    return this.likeRepo.findOne({
+      where: {
+        comment: {
+          id: commentId,
+        },
+        company: {
+          id: companyId,
         },
       },
     });

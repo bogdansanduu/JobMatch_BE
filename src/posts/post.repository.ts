@@ -21,15 +21,18 @@ export class PostRepository implements PostRepositoryInterface {
       relations: {
         likes: {
           author: true,
+          company: true,
         },
         comments: {
           author: true,
           likes: {
             author: true,
+            company: true,
           },
           post: true,
         },
         author: true,
+        company: true,
       },
     });
   }
@@ -39,15 +42,21 @@ export class PostRepository implements PostRepositoryInterface {
       relations: {
         likes: {
           author: true,
+          company: true,
         },
         comments: {
           author: true,
           likes: {
             author: true,
+            company: true,
           },
           post: true,
         },
         author: true,
+        company: true,
+      },
+      order: {
+        createdAt: 'DESC',
       },
     });
   }

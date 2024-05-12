@@ -13,6 +13,7 @@ import {
 import { User } from '../../user/entities/user.entity';
 import { Like } from '../../like/entities/like.entity';
 import { Comment } from '../../comment/entities/comment.entity';
+import { Company } from '../../company/entities/company.entity';
 
 @Entity()
 export class Post extends BaseEntity {
@@ -31,6 +32,9 @@ export class Post extends BaseEntity {
   @ManyToOne(() => User, (user) => user.posts, { onDelete: 'CASCADE' })
   @JoinColumn()
   author: User;
+
+  @ManyToOne(() => Company, (company) => company.posts, { nullable: true })
+  company: Company;
 
   @OneToMany(() => Like, (like) => like.post, { onDelete: 'CASCADE' })
   likes: Like[];

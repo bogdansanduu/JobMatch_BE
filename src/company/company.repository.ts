@@ -11,6 +11,18 @@ export class CompanyRepository {
     this.companyRepo = dataSource.getRepository<Company>(Company);
   }
 
+  getCompanyById(id: number) {
+    return this.companyRepo.findOne({
+      where: {
+        id,
+      },
+      relations: {
+        owner: true,
+        posts: true,
+      },
+    });
+  }
+
   findAll() {
     return this.companyRepo.find({
       relations: {
@@ -23,6 +35,17 @@ export class CompanyRepository {
     return this.companyRepo.findOne({
       where: {
         email,
+      },
+      relations: {
+        owner: true,
+      },
+    });
+  }
+
+  findByName(name: string) {
+    return this.companyRepo.findOne({
+      where: {
+        name,
       },
       relations: {
         owner: true,
