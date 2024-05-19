@@ -6,6 +6,8 @@ import { RecommendationService } from './recommendation.service';
 import { RECOMMENDATION_INV } from '../common/utils/inversifyConstants';
 import { validateBody } from '../common/utils/validateBody';
 import { GetRecommendationsValidation } from './dtos/get-recommendations.validation';
+import { plainToInstance } from 'class-transformer';
+import { JobResponseDto } from '../job/dtos/job-response.dto';
 
 @injectable()
 export class RecommendationController {
@@ -30,6 +32,8 @@ export class RecommendationController {
 
     const data = await this.recommendationService.getRecommendations(body);
 
-    return res.status(StatusCodes.OK).json(data);
+    const responseData = plainToInstance(JobResponseDto, data, { excludeExtraneousValues: true });
+
+    return res.status(StatusCodes.OK).json(responseData);
   }
 }

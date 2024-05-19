@@ -23,10 +23,11 @@ class UserService implements UserServiceInterface {
     lastName: string;
     password: string;
     email: string;
-    profilePicture?: string;
+    resume: string;
     country: string;
     city: string;
     state: string;
+    profilePicture?: string;
   }) {
     user.profilePicture = user.profilePicture || DEFUALT_PROFILE_PICTURE;
 
@@ -83,7 +84,7 @@ class UserService implements UserServiceInterface {
     await this.userRepository.saveUser(user1);
     await this.userRepository.saveUser(user2);
 
-    return this.userRepository.getUserById(userId);
+    return this.userRepository.getUserById(contactId);
   }
 
   async removeContact({ userId, contactId }: { userId: number; contactId: number }) {
@@ -104,7 +105,7 @@ class UserService implements UserServiceInterface {
     await this.userRepository.saveUser(user1);
     await this.userRepository.saveUser(user2);
 
-    return this.userRepository.getUserById(userId);
+    return this.userRepository.getUserById(contactId);
   }
 
   //---RecSys---
@@ -119,6 +120,7 @@ class UserService implements UserServiceInterface {
     for (let i = 1; i <= 6; i++) {
       const firstName = `RecSys${i}`;
       const lastName = `RecSys${i}`;
+      const resume = 'RecSys';
       const email = `recsys${i}@recsys.com`;
       const country = 'RecSys';
       const city = 'RecSys';
@@ -128,6 +130,7 @@ class UserService implements UserServiceInterface {
         firstName,
         lastName,
         email,
+        resume,
         password: hashedPassword,
         country,
         city,

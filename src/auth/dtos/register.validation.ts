@@ -19,6 +19,11 @@ export class RegisterValidation {
   @IsDefined()
   @IsString()
   @IsNotEmpty()
+  resume: string;
+
+  @IsDefined()
+  @IsString()
+  @IsNotEmpty()
   password: string;
 
   @IsDefined()

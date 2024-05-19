@@ -18,7 +18,7 @@ import { Company } from '../company/entities/company.entity';
 import { Roles } from '../common/constants/user.constants';
 
 //seconds
-const EXPIRES_IN_ACCESS = 5;
+const EXPIRES_IN_ACCESS = 60 * 15;
 const EXPIRES_IN_REFRESH = 60 * 60 * 24;
 
 @injectable()
@@ -41,7 +41,7 @@ class AuthService implements AuthServiceInterface {
   }
 
   async register(data: RegisterValidation) {
-    const { firstName, lastName, email, password, country, city, state } = data;
+    const { firstName, lastName, email, resume, password, country, city, state } = data;
 
     const existingUser = await this.userService.getUserByEmail(email);
 
@@ -57,6 +57,7 @@ class AuthService implements AuthServiceInterface {
       firstName,
       lastName,
       email,
+      resume,
       password: hashedPassword,
       country,
       city,

@@ -9,7 +9,7 @@ export class Job extends BaseEntity {
   @Column({ type: 'varchar' })
   title: string;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'longtext' })
   description: string;
 
   @Column({ type: 'varchar' })

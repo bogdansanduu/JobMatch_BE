@@ -30,6 +30,10 @@ export class UserRepository implements UserRepositoryInterface {
     lastName: string;
     password: string;
     email: string;
+    resume: string;
+    country: string;
+    city: string;
+    state: string;
     profilePicture?: string;
   }) {
     const user = this.userRepo.create(userData);

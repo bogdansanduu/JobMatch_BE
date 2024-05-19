@@ -37,6 +37,9 @@ export class UserResponseDto {
   city: string;
 
   @Expose()
+  resume: string;
+
+  @Expose()
   socketId: string;
 
   userToRooms: UserToRoom[];

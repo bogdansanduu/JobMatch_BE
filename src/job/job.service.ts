@@ -28,6 +28,21 @@ export class JobService {
     return this.jobRepository.findAll();
   }
 
+  async getAllJobsPaginated(page: number, limit: number, searchTerm?: string) {
+    const data = await this.jobRepository.findAllPaginated(page, limit, searchTerm);
+    const totalItems = await this.jobRepository.count();
+
+    return {
+      data,
+      totalItems,
+      currentPage: page,
+    };
+  }
+
+  async getJobById(id: number) {
+    return this.jobRepository.findOne(id);
+  }
+
   async createJob(job: CreateJobValidation) {
     const company = await this.companyService.getCompanyById(job.companyId);
 

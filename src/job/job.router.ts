@@ -26,6 +26,7 @@ container.load(userContainerModule);
 const controller = container.get<JobController>(JOB_INV.JobController);
 
 jobRouter.get('/all', catchErrors(controller.getAllJobs.bind(controller)));
+jobRouter.get('/all-paginated', catchErrors(controller.getAllJobsPaginated.bind(controller)));
 
 //---RecSys---
 

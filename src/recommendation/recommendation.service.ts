@@ -1,13 +1,14 @@
 import { inject, injectable } from 'inversify';
 import axios, { AxiosError } from 'axios';
+import process from 'process';
 
 import UserService from '../user/user.service';
 import { CompanyService } from '../company/company.service';
 import { JobService } from '../job/job.service';
 import { COMPANY_INV, JOB_INV, USER_INV } from '../common/utils/inversifyConstants';
-import process from 'process';
 import { HttpException } from '../common/exceptions/http.exception';
 import { GetRecommendationsValidation } from './dtos/get-recommendations.validation';
+import { Job } from '../job/entities/job.entity';
 
 @injectable()
 export class RecommendationService {
@@ -46,7 +47,17 @@ export class RecommendationService {
         data: recommendationInfo,
       });
 
-      return data;
+      const jobs: Job[] = [];
+
+      for (const jobRecommendation of data.recommendations) {
+        const job = await this.jobService.getJobById(jobRecommendation.id);
+
+        if (job) {
+          jobs.push(job);
+        }
+      }
+
+      return jobs;
     } catch (error) {
       const axiosError = error as AxiosError;
 

@@ -26,6 +26,6 @@ container.load(jobContainerModule);
 const controller = container.get<RecommendationController>(RECOMMENDATION_INV.RecommendationController);
 
 recommendationRouter.post('/populate', catchErrors(controller.populateRecommendations.bind(controller)));
-recommendationRouter.get('/get-recommendations', catchErrors(controller.getRecommendations.bind(controller)));
+recommendationRouter.post('/get-recommendations', catchErrors(controller.getRecommendations.bind(controller)));
 
 export { recommendationRouter, recommendationContainerModule };

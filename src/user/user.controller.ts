@@ -93,7 +93,11 @@ export class UserController {
 
     const data = await this.userService.removeContact(body);
 
-    return res.status(StatusCodes.OK).json(data);
+    //response logic
+
+    const responseData = plainToInstance(UserResponseDto, data, { excludeExtraneousValues: true });
+
+    return res.status(StatusCodes.OK).json(responseData);
   }
 
   async searchByNameAndEmail(req: Request, res: Response, next: NextFunction) {
@@ -104,7 +108,11 @@ export class UserController {
 
     const data = await this.userService.searchByNameAndEmail(searchTerms);
 
-    return res.status(StatusCodes.OK).json(data);
+    //response logic
+
+    const responseData = plainToInstance(UserResponseDto, data, { excludeExtraneousValues: true });
+
+    return res.status(StatusCodes.OK).json(responseData);
   }
 
   //---RecSys---

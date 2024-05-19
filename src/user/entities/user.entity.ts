@@ -58,6 +58,9 @@ export class User extends BaseEntity {
   @Column({ nullable: true, type: 'varchar' })
   city: string;
 
+  @Column({ type: 'longtext' })
+  resume: string;
+
   @Column({ nullable: true })
   socketId: string;
 

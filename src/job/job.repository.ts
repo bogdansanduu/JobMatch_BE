@@ -1,8 +1,8 @@
-import { Repository } from 'typeorm';
+import { FindManyOptions, Like, Repository } from 'typeorm';
+import { injectable } from 'inversify';
 
 import { Job } from './entities/job.entity';
 import { dataSource } from '../database/dataSource';
-import { injectable } from 'inversify';
 
 @injectable()
 export class JobRepository {
@@ -13,7 +13,46 @@ export class JobRepository {
   }
 
   findAll() {
-    return this.jobRepo.find();
+    return this.jobRepo.find({
+      relations: {
+        company: true,
+      },
+    });
+  }
+
+  count() {
+    return this.jobRepo.count();
+  }
+
+  findAllPaginated(page: number, limit: number, searchTerm?: string) {
+    const query: FindManyOptions<Job> = {
+      relations: {
+        company: true,
+      },
+      skip: (page - 1) * limit,
+      take: limit,
+    };
+
+    if (searchTerm) {
+      query.where = [
+        { title: Like(`%${searchTerm}%`) },
+        { description: Like(`%${searchTerm}%`) },
+        { company: { name: Like(`%${searchTerm}%`) } },
+      ];
+    }
+
+    return this.jobRepo.find(query);
+  }
+
+  findOne(id: number) {
+    return this.jobRepo.findOne({
+      where: {
+        id,
+      },
+      relations: {
+        company: true,
+      },
+    });
   }
 
   createJob(jobData: Partial<Job>) {
