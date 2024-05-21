@@ -26,6 +26,21 @@ export class CompanyController {
     return res.status(StatusCodes.OK).json(data);
   }
 
+  async searchByNameAndEmail(req: Request, res: Response, next: NextFunction) {
+    const encodedSearchTerm = req.query.searchTerm as string;
+    const searchTerms = decodeURIComponent(encodedSearchTerm).split(' ');
+
+    //validate logic
+
+    const data = await this.companyService.searchByNameAndEmail(searchTerms);
+
+    //response logic
+
+    const responseData = plainToInstance(CompanyResponseDto, data, { excludeExtraneousValues: true });
+
+    return res.status(StatusCodes.OK).json(responseData);
+  }
+
   //---RecSys---
 
   async addRecSysCompanies(req: Request, res: Response, next: NextFunction) {

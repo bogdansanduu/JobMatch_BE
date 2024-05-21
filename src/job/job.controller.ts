@@ -6,6 +6,8 @@ import { JOB_INV } from '../common/utils/inversifyConstants';
 import { StatusCodes } from 'http-status-codes';
 import { plainToInstance } from 'class-transformer';
 import { JobResponseDto } from './dtos/job-response.dto';
+import { validateBody } from '../common/utils/validateBody';
+import { CreateJobValidation } from './dtos/create-job.validation';
 
 @injectable()
 export class JobController {
@@ -20,6 +22,18 @@ export class JobController {
 
   async getAllJobs(req: Request, res: Response, next: NextFunction) {
     const data = await this.jobService.getAllJobs();
+
+    //response logic
+
+    const responseData = plainToInstance(JobResponseDto, data, { excludeExtraneousValues: true });
+
+    return res.status(StatusCodes.OK).json(responseData);
+  }
+
+  async getAllJobsByCompany(req: Request, res: Response, next: NextFunction) {
+    const companyId = Number(req.params.companyId);
+
+    const data = await this.jobService.getAllJobsByCompany(companyId);
 
     //response logic
 
@@ -44,6 +58,22 @@ export class JobController {
       ...jobsPaginated,
       data: responseData,
     });
+  }
+
+  async createJob(req: Request, res: Response, next: NextFunction) {
+    const body = req.body;
+
+    //validate logic
+
+    await validateBody(body, CreateJobValidation);
+
+    const data = await this.jobService.createJob(body);
+
+    //response logic
+
+    const responseData = plainToInstance(JobResponseDto, data, { excludeExtraneousValues: true });
+
+    return res.status(StatusCodes.CREATED).json(responseData);
   }
 
   //---RecSys---

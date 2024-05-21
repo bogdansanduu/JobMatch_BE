@@ -20,6 +20,19 @@ export class JobRepository {
     });
   }
 
+  findAllByCompany(companyId: number) {
+    return this.jobRepo.find({
+      where: {
+        company: {
+          id: companyId,
+        },
+      },
+      relations: {
+        company: true,
+      },
+    });
+  }
+
   count() {
     return this.jobRepo.count();
   }

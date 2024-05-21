@@ -65,6 +65,12 @@ export class CompanyService {
     });
   }
 
+  async searchByNameAndEmail(searchTerms: string[]) {
+    const companies = await this.companyRepository.searchByNameAndEmail(searchTerms);
+
+    return companies.slice(0, 5);
+  }
+
   //---RecSys---
 
   async addRecSysCompanies() {

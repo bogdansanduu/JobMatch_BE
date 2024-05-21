@@ -46,6 +46,7 @@ export class CompanySimpleResponseDto {
   @Expose()
   id: number;
 
+  @Expose()
   email: string;
 
   password: string;

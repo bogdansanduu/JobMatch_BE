@@ -1,6 +1,6 @@
 import { injectable } from 'inversify';
 import { Company } from './entities/company.entity';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { dataSource } from '../database/dataSource';
 
 @injectable()
@@ -57,5 +57,20 @@ export class CompanyRepository {
     const company = this.companyRepo.create(companyData);
 
     return this.companyRepo.save(company);
+  }
+
+  async searchByNameAndEmail(searchTerms: string[]): Promise<Company[]> {
+    const whereConditions = searchTerms.map((searchTerm) => ({
+      where: [{ name: ILike(`%${searchTerm}%`) }, { email: ILike(`%${searchTerm}%`) }],
+    }));
+
+    const combinedConditions = whereConditions.reduce((acc: { [key: string]: any }[], condition) => {
+      acc.push(...condition.where);
+      return acc;
+    }, []);
+
+    return this.companyRepo.find({
+      where: combinedConditions,
+    });
   }
 }

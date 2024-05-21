@@ -13,18 +13,6 @@ export class UserRepository implements UserRepositoryInterface {
     this.userRepo = dataSource.getRepository(User);
   }
 
-  private findOne(id: number) {
-    return this.userRepo.findOne({
-      where: {
-        id,
-      },
-      relations: {
-        followers: true,
-        following: true,
-      },
-    });
-  }
-
   async createUser(userData: {
     firstName: string;
     lastName: string;
@@ -66,6 +54,7 @@ export class UserRepository implements UserRepositoryInterface {
       relations: {
         followers: true,
         following: true,
+        company: true,
       },
     });
   }
@@ -78,6 +67,7 @@ export class UserRepository implements UserRepositoryInterface {
       relations: {
         followers: true,
         following: true,
+        company: true,
       },
     });
   }
@@ -105,7 +95,7 @@ export class UserRepository implements UserRepositoryInterface {
   async updateUser(id: number, user: Partial<User>) {
     await this.userRepo.update(id, user);
 
-    return this.findOne(id);
+    return this.getUserById(id);
   }
 }
 

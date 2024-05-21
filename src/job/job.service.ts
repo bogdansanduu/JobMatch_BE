@@ -7,6 +7,7 @@ import { JobRepository } from './job.repository';
 import { CreateJobValidation } from './dtos/create-job.validation';
 import { CompanyService } from '../company/company.service';
 import { Job } from './entities/job.entity';
+import { InvalidException } from '../common/exceptions/invalid.exception';
 
 @injectable()
 export class JobService {
@@ -26,6 +27,14 @@ export class JobService {
 
   async getAllJobs() {
     return this.jobRepository.findAll();
+  }
+
+  async getAllJobsByCompany(companyId: number) {
+    if (!companyId) {
+      throw new InvalidException('Company ID is invalid.');
+    }
+
+    return this.jobRepository.findAllByCompany(companyId);
   }
 
   async getAllJobsPaginated(page: number, limit: number, searchTerm?: string) {
