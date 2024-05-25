@@ -7,6 +7,7 @@ import { Post } from '../../posts/entities/post.entity';
 import { Like } from '../../like/entities/like.entity';
 import { Company } from '../../company/entities/company.entity';
 import { CompanySimpleResponseDto } from '../../company/dtos/company-response.dto';
+import { JobApplication } from '../../job-application/entities/job-application.entity';
 
 @Exclude()
 export class UserResponseDto {
@@ -59,6 +60,9 @@ export class UserResponseDto {
   posts: Post[];
 
   likes: Like[];
+
+  @Expose()
+  jobApplications: JobApplication[];
 
   @Expose()
   role: string;

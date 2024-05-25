@@ -18,11 +18,15 @@ import { Post } from '../../posts/entities/post.entity';
 import { Like } from '../../like/entities/like.entity';
 import { Company } from '../../company/entities/company.entity';
 import { Roles } from '../../common/constants/user.constants';
+import { JobApplication } from '../../job-application/entities/job-application.entity';
 
 @Entity()
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column({ type: 'enum', enum: Roles, default: Roles.USER })
+  role: string;
 
   @Column({ unique: true })
   email: string;
@@ -86,8 +90,8 @@ export class User extends BaseEntity {
   @OneToMany(() => Like, (like) => like.author, { onDelete: 'CASCADE' })
   likes: Like[];
 
-  @Column({ type: 'enum', enum: Roles, default: Roles.USER })
-  role: string;
+  @OneToMany(() => JobApplication, (jobApplication) => jobApplication.applicant, { onDelete: 'CASCADE' })
+  jobApplications: JobApplication[];
 
   @OneToOne(() => Company, (company) => company.owner)
   company: Company;

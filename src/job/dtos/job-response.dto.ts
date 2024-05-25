@@ -40,6 +40,12 @@ export class JobResponseDto {
   preferredQualifications: string;
 
   @Expose()
+  createdAt: Date;
+
+  @Expose()
+  updatedAt: Date;
+
+  @Expose()
   @Type(() => CompanyResponseDto)
   company: CompanyResponseDto;
 }

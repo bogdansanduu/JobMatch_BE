@@ -1,5 +1,15 @@
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Company } from '../../company/entities/company.entity';
+import { JobApplication } from '../../job-application/entities/job-application.entity';
 
 @Entity()
 export class Job extends BaseEntity {
@@ -35,6 +45,15 @@ export class Job extends BaseEntity {
 
   @Column({ type: 'longtext', nullable: false })
   minimumQualifications: string;
+
+  @OneToMany(() => JobApplication, (jobApplication) => jobApplication.job)
+  applications: JobApplication[];
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   @Column({ type: 'longtext', nullable: false })
   preferredQualifications: string;

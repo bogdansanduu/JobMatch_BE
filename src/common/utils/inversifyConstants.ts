@@ -56,3 +56,9 @@ export const RECOMMENDATION_INV = {
   RecommendationService: Symbol.for('RecommendationService'),
   RecommendationController: Symbol.for('RecommendationController'),
 };
+
+export const JOB_APPLICATION_INV = {
+  JobApplicationRepository: Symbol.for('JobApplicationRepository'),
+  JobApplicationService: Symbol.for('JobApplicationService'),
+  JobApplicationController: Symbol.for('JobApplicationController'),
+};

@@ -21,6 +21,7 @@ import { likeRouter } from './like/like.router';
 import { companyRouter } from './company/company.router';
 import { jobRouter } from './job/job.router';
 import { recommendationRouter } from './recommendation/recommendation.router';
+import { jobApplicationRouter } from './job-application/job-application.router';
 
 const logger = pino({ name: 'server start' });
 
@@ -75,6 +76,7 @@ app.use('/like', likeRouter);
 app.use('/company', companyRouter);
 app.use('/job', jobRouter);
 app.use('/recommendation', recommendationRouter);
+app.use('/job-application', jobApplicationRouter);
 
 // Error handlers
 app.use(errorHandler());
