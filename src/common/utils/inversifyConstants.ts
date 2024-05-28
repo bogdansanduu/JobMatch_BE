@@ -62,3 +62,9 @@ export const JOB_APPLICATION_INV = {
   JobApplicationService: Symbol.for('JobApplicationService'),
   JobApplicationController: Symbol.for('JobApplicationController'),
 };
+
+export const JOB_SAVED_INV = {
+  JobSavedRepository: Symbol.for('JobSavedRepository'),
+  JobSavedService: Symbol.for('JobSavedService'),
+  JobSavedController: Symbol.for('JobSavedController'),
+};

@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { Company } from '../../company/entities/company.entity';
 import { JobApplication } from '../../job-application/entities/job-application.entity';
+import { JobSaved } from '../../job-saved/entities/job-saved.entity';
 
 @Entity()
 export class Job extends BaseEntity {
@@ -48,6 +49,9 @@ export class Job extends BaseEntity {
 
   @OneToMany(() => JobApplication, (jobApplication) => jobApplication.job)
   applications: JobApplication[];
+
+  @OneToMany(() => JobSaved, (jobSaved) => jobSaved.job)
+  saved: JobSaved[];
 
   @CreateDateColumn()
   createdAt: Date;

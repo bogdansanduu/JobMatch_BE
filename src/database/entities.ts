@@ -10,6 +10,7 @@ import { Like } from '../like/entities/like.entity';
 import { Company } from '../company/entities/company.entity';
 import { Job } from '../job/entities/job.entity';
 import { JobApplication } from '../job-application/entities/job-application.entity';
+import { JobSaved } from '../job-saved/entities/job-saved.entity';
 
 export const ENTITIES: MixedList<string | Function | EntitySchema> = [
   User,
@@ -23,4 +24,5 @@ export const ENTITIES: MixedList<string | Function | EntitySchema> = [
   Company,
   Job,
   JobApplication,
+  JobSaved,
 ];

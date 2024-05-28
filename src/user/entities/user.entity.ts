@@ -19,6 +19,7 @@ import { Like } from '../../like/entities/like.entity';
 import { Company } from '../../company/entities/company.entity';
 import { Roles } from '../../common/constants/user.constants';
 import { JobApplication } from '../../job-application/entities/job-application.entity';
+import { JobSaved } from '../../job-saved/entities/job-saved.entity';
 
 @Entity()
 export class User extends BaseEntity {
@@ -92,6 +93,9 @@ export class User extends BaseEntity {
 
   @OneToMany(() => JobApplication, (jobApplication) => jobApplication.applicant, { onDelete: 'CASCADE' })
   jobApplications: JobApplication[];
+
+  @OneToMany(() => JobSaved, (jobSaved) => jobSaved.user, { onDelete: 'CASCADE' })
+  jobsSaved: JobSaved[];
 
   @OneToOne(() => Company, (company) => company.owner)
   company: Company;

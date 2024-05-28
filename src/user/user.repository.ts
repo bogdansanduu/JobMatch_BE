@@ -45,6 +45,9 @@ export class UserRepository implements UserRepositoryInterface {
         jobApplications: {
           job: true,
         },
+        jobsSaved: {
+          job: true,
+        },
       },
     });
   }
@@ -58,6 +61,9 @@ export class UserRepository implements UserRepositoryInterface {
         followers: true,
         following: true,
         jobApplications: {
+          job: true,
+        },
+        jobsSaved: {
           job: true,
         },
         company: true,
@@ -74,6 +80,9 @@ export class UserRepository implements UserRepositoryInterface {
         followers: true,
         following: true,
         jobApplications: {
+          job: true,
+        },
+        jobsSaved: {
           job: true,
         },
         company: true,

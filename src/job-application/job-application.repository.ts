@@ -15,7 +15,25 @@ export class JobApplicationRepository {
   findAll() {
     return this.jobApplicationRepo.find({
       relations: {
-        job: true,
+        job: {
+          company: true,
+        },
+        applicant: true,
+      },
+    });
+  }
+
+  findAllByUser(userId: number) {
+    return this.jobApplicationRepo.find({
+      where: {
+        applicant: {
+          id: userId,
+        },
+      },
+      relations: {
+        job: {
+          company: true,
+        },
         applicant: true,
       },
     });
@@ -27,7 +45,9 @@ export class JobApplicationRepository {
         id,
       },
       relations: {
-        job: true,
+        job: {
+          company: true,
+        },
         applicant: true,
       },
     });

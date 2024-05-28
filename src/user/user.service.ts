@@ -12,7 +12,7 @@ import bcrypt from 'bcrypt';
 
 @injectable()
 class UserService implements UserServiceInterface {
-  private userRepository: UserRepository;
+  private readonly userRepository: UserRepository;
 
   constructor(@inject(USER_INV.UserRepository) userRepository: UserRepository) {
     this.userRepository = userRepository;

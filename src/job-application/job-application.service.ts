@@ -8,26 +8,26 @@ import { NotFoundException } from '../common/exceptions/not-found.exception';
 
 @injectable()
 export class JobApplicationService {
-  private jobApplicationRepository: JobApplicationRepository;
-  private jobService: JobService;
-  private userService: UserService;
+  private readonly jobApplicationRepo: JobApplicationRepository;
+  private readonly jobService: JobService;
+  private readonly userService: UserService;
 
   constructor(
     @inject(JOB_APPLICATION_INV.JobApplicationRepository) jobApplicationRepository: JobApplicationRepository,
     @inject(JOB_INV.JobService) jobService: JobService,
     @inject(USER_INV.UserService) userService: UserService
   ) {
-    this.jobApplicationRepository = jobApplicationRepository;
+    this.jobApplicationRepo = jobApplicationRepository;
     this.jobService = jobService;
     this.userService = userService;
   }
 
   async getAllJobApplications() {
-    return this.jobApplicationRepository.findAll();
+    return this.jobApplicationRepo.findAll();
   }
 
   async getJobApplicationById(id: number) {
-    return this.jobApplicationRepository.findOne(id);
+    return this.jobApplicationRepo.findOne(id);
   }
 
   async applyForJob(userId: number, jobId: number, resume: string) {
@@ -38,10 +38,20 @@ export class JobApplicationService {
       throw new NotFoundException('Job or User not found');
     }
 
-    return this.jobApplicationRepository.createJobApplication({
+    return this.jobApplicationRepo.createJobApplication({
       job,
       applicant,
       resume,
     });
+  }
+
+  async getAllJobApplicationsForUser(userId: number) {
+    const user = await this.userService.getUserById(userId);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return this.jobApplicationRepo.findAllByUser(userId);
   }
 }

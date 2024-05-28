@@ -26,6 +26,7 @@ const jobApplicationRouter = express.Router();
 const controller = container.get<JobApplicationController>(JOB_APPLICATION_INV.JobApplicationController);
 
 jobApplicationRouter.get('/all', controller.getAllJobApplications.bind(controller));
+jobApplicationRouter.get('/user/:userId', controller.getAllJobApplicationsForUser.bind(controller));
 jobApplicationRouter.get('/:id', controller.getJobApplicationById.bind(controller));
 
 jobApplicationRouter.post('/apply/:userId/:jobId', controller.applyForJob.bind(controller));

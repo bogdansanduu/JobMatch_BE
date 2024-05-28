@@ -1,9 +1,9 @@
 import { inject, injectable } from 'inversify';
 import { NextFunction, Request, Response } from 'express';
+import { StatusCodes } from 'http-status-codes';
 
 import { JobApplicationService } from './job-application.service';
 import { JOB_APPLICATION_INV } from '../common/utils/inversifyConstants';
-import { StatusCodes } from 'http-status-codes';
 
 @injectable()
 export class JobApplicationController {
@@ -24,7 +24,16 @@ export class JobApplicationController {
 
   async getJobApplicationById(req: Request, res: Response, next: NextFunction) {
     const id = Number(req.params.id);
+
     const data = await this.jobApplicationService.getJobApplicationById(id);
+
+    return res.status(StatusCodes.OK).json(data);
+  }
+
+  async getAllJobApplicationsForUser(req: Request, res: Response, next: NextFunction) {
+    const userId = Number(req.params.userId);
+
+    const data = await this.jobApplicationService.getAllJobApplicationsForUser(userId);
 
     return res.status(StatusCodes.OK).json(data);
   }

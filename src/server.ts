@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import './auth/passport';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import './common/s3/s3';
 
 import './chat/message/message.gateway';
 import './chat/room/room.gateway';
@@ -22,6 +23,7 @@ import { companyRouter } from './company/company.router';
 import { jobRouter } from './job/job.router';
 import { recommendationRouter } from './recommendation/recommendation.router';
 import { jobApplicationRouter } from './job-application/job-application.router';
+import { jobSavedRouter } from './job-saved/job-saved.router';
 
 const logger = pino({ name: 'server start' });
 
@@ -77,6 +79,7 @@ app.use('/company', companyRouter);
 app.use('/job', jobRouter);
 app.use('/recommendation', recommendationRouter);
 app.use('/job-application', jobApplicationRouter);
+app.use('/job-saved', jobSavedRouter);
 
 // Error handlers
 app.use(errorHandler());
