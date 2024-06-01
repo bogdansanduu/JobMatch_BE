@@ -25,6 +25,7 @@ const controller = container.get<CompanyController>(COMPANY_INV.CompanyControlle
 
 companyRouter.get('/all', catchErrors(controller.getAllCompanies.bind(controller)));
 companyRouter.get('/search', catchErrors(controller.searchByNameAndEmail.bind(controller)));
+companyRouter.get('/:id', catchErrors(controller.getCompanyById.bind(controller)));
 
 //---RecSys---
 

@@ -1,4 +1,6 @@
 import { inject, injectable } from 'inversify';
+import bcrypt from 'bcrypt';
+import crypto from 'crypto';
 
 import { USER_INV } from '../common/utils/inversifyConstants';
 import { DEFUALT_PROFILE_PICTURE, Roles } from '../common/constants/user.constants';
@@ -8,7 +10,8 @@ import UserRepository from './user.repository';
 import { NotFoundException } from '../common/exceptions/not-found.exception';
 import { InvalidException } from '../common/exceptions/invalid.exception';
 import { User } from './entities/user.entity';
-import bcrypt from 'bcrypt';
+import { ResumeFile } from '../common/types/resume-file.type';
+import { UploadResumeValidation } from './dtos/upload-resume.validation';
 
 @injectable()
 class UserService implements UserServiceInterface {
@@ -58,6 +61,29 @@ class UserService implements UserServiceInterface {
 
   updateUser(id: number, user: Partial<User>) {
     return this.userRepository.updateUser(id, user);
+  }
+
+  async uploadUserResume(userId: number, resumeFileDto: UploadResumeValidation) {
+    const user = await this.getUserById(userId);
+
+    const resumeFile: ResumeFile = {
+      id: crypto.randomUUID(),
+      fileName: resumeFileDto.fileName,
+      fileKey: resumeFileDto.fileKey,
+      uploadedAt: new Date(),
+    };
+
+    await this.userRepository.updateUser(user.id, { resumeFile });
+
+    return this.getUserById(user.id);
+  }
+
+  async deleteUserResume(userId: number) {
+    const user = await this.getUserById(userId);
+
+    await this.userRepository.updateUser(user.id, { resumeFile: null });
+
+    return this.getUserById(user.id);
   }
 
   async searchByNameAndEmail(searchTerms: string[]) {

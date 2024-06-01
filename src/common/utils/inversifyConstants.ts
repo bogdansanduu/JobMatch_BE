@@ -68,3 +68,8 @@ export const JOB_SAVED_INV = {
   JobSavedService: Symbol.for('JobSavedService'),
   JobSavedController: Symbol.for('JobSavedController'),
 };
+
+export const S3_DOCUMENT_INV = {
+  S3DocumentService: Symbol.for('S3DocumentService'),
+  S3DocumentController: Symbol.for('S3DocumentController'),
+};

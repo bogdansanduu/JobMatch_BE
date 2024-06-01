@@ -33,6 +33,9 @@ export class Company extends BaseEntity {
   @Column({ type: 'longtext' })
   profilePicture: string;
 
+  @Column({ type: 'longtext' })
+  description: string;
+
   @Column({ nullable: false, type: 'varchar' })
   industry: string;
 

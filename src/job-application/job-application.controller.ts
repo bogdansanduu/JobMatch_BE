@@ -1,9 +1,11 @@
 import { inject, injectable } from 'inversify';
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
+import { plainToInstance } from 'class-transformer';
 
 import { JobApplicationService } from './job-application.service';
 import { JOB_APPLICATION_INV } from '../common/utils/inversifyConstants';
+import { JobApplicationResponseDto } from './dtos/job-application-response.dto';
 
 @injectable()
 export class JobApplicationController {
@@ -19,7 +21,11 @@ export class JobApplicationController {
   async getAllJobApplications(req: Request, res: Response, next: NextFunction) {
     const data = await this.jobApplicationService.getAllJobApplications();
 
-    return res.status(StatusCodes.OK).json(data);
+    //response logic
+
+    const responseData = plainToInstance(JobApplicationResponseDto, data, { excludeExtraneousValues: true });
+
+    return res.status(StatusCodes.OK).json(responseData);
   }
 
   async getJobApplicationById(req: Request, res: Response, next: NextFunction) {
@@ -27,7 +33,11 @@ export class JobApplicationController {
 
     const data = await this.jobApplicationService.getJobApplicationById(id);
 
-    return res.status(StatusCodes.OK).json(data);
+    //response logic
+
+    const responseData = plainToInstance(JobApplicationResponseDto, data, { excludeExtraneousValues: true });
+
+    return res.status(StatusCodes.OK).json(responseData);
   }
 
   async getAllJobApplicationsForUser(req: Request, res: Response, next: NextFunction) {
@@ -35,7 +45,23 @@ export class JobApplicationController {
 
     const data = await this.jobApplicationService.getAllJobApplicationsForUser(userId);
 
-    return res.status(StatusCodes.OK).json(data);
+    //response logic
+
+    const responseData = plainToInstance(JobApplicationResponseDto, data, { excludeExtraneousValues: true });
+
+    return res.status(StatusCodes.OK).json(responseData);
+  }
+
+  async getAllJobApplicationsForJob(req: Request, res: Response, next: NextFunction) {
+    const jobId = Number(req.params.jobId);
+
+    const data = await this.jobApplicationService.getAllJobApplicationsForJob(jobId);
+
+    //response logic
+
+    const responseData = plainToInstance(JobApplicationResponseDto, data, { excludeExtraneousValues: true });
+
+    return res.status(StatusCodes.OK).json(responseData);
   }
 
   async applyForJob(req: Request, res: Response, next: NextFunction) {
@@ -45,6 +71,10 @@ export class JobApplicationController {
 
     const data = await this.jobApplicationService.applyForJob(userId, jobId, resume);
 
-    return res.status(StatusCodes.CREATED).json(data);
+    //response logic
+
+    const responseData = plainToInstance(JobApplicationResponseDto, data, { excludeExtraneousValues: true });
+
+    return res.status(StatusCodes.CREATED).json(responseData);
   }
 }

@@ -46,6 +46,26 @@ export class PostService implements PostServiceInterface {
     return this.postRepository.findAll();
   }
 
+  async getPostsByCompany(companyId: number) {
+    const company = await this.companyService.getCompanyById(companyId);
+
+    if (!company) {
+      throw new NotFoundException('Company not found');
+    }
+
+    return this.postRepository.findByCompanyId(company.id);
+  }
+
+  async getMostRecentCompanyPosts(companyId: number, limit: number) {
+    const company = await this.companyService.getCompanyById(companyId);
+
+    if (!company) {
+      throw new NotFoundException('Company not found');
+    }
+
+    return this.postRepository.findMostRecentByCompanyId(company.id, limit);
+  }
+
   async createPost(userId: number, postDto: CreatePostDto) {
     const user = await this.userService.getUserById(userId);
 

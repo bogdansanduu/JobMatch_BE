@@ -16,6 +16,11 @@ export class JobRepository {
     return this.jobRepo.find({
       relations: {
         company: true,
+        applications: {
+          job: true,
+          applicant: true,
+        },
+        saved: true,
       },
     });
   }
@@ -29,6 +34,11 @@ export class JobRepository {
       },
       relations: {
         company: true,
+        applications: {
+          job: true,
+          applicant: true,
+        },
+        saved: true,
       },
     });
   }
@@ -41,6 +51,11 @@ export class JobRepository {
     const query: FindManyOptions<Job> = {
       relations: {
         company: true,
+        applications: {
+          job: true,
+          applicant: true,
+        },
+        saved: true,
       },
       skip: (page - 1) * limit,
       take: limit,
@@ -64,6 +79,11 @@ export class JobRepository {
       },
       relations: {
         company: true,
+        applications: {
+          job: true,
+          applicant: true,
+        },
+        saved: true,
       },
     });
   }

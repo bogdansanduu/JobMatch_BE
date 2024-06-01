@@ -35,6 +35,35 @@ export class PostController {
     return res.status(StatusCodes.OK).json(responseData);
   }
 
+  async getAllPostByCompany(req: Request, res: Response, next: NextFunction) {
+    const companyId = Number(req.params.companyId);
+
+    //validate logic
+
+    const data = await this.postService.getPostsByCompany(companyId);
+
+    //response logic
+
+    const responseData = plainToInstance(PostResponseDto, data, { excludeExtraneousValues: true });
+
+    return res.status(StatusCodes.OK).json(responseData);
+  }
+
+  async getMostRecentCompanyPosts(req: Request, res: Response, next: NextFunction) {
+    const companyId = Number(req.params.companyId);
+    const limit = Number(req.query.limit);
+
+    //validate logic
+
+    const data = await this.postService.getMostRecentCompanyPosts(companyId, limit);
+
+    //response logic
+
+    const responseData = plainToInstance(PostResponseDto, data, { excludeExtraneousValues: true });
+
+    return res.status(StatusCodes.OK).json(responseData);
+  }
+
   async createPost(req: Request, res: Response, next: NextFunction) {
     const body = req.body;
     const userId = Number(req.params.userId);

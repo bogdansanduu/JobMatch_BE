@@ -10,6 +10,7 @@ import { validateBody } from '../common/utils/validateBody';
 import { RemoveContactValidation } from './dtos/remove-contact.validation';
 import { plainToInstance } from 'class-transformer';
 import { UserResponseDto } from './dtos/user-response.dto';
+import { UploadResumeValidation } from './dtos/upload-resume.validation';
 
 // import { JwtAuth } from '../common/decorators/jwt-auth.decorator';
 
@@ -31,17 +32,25 @@ export class UserController {
 
     const data = await this.userService.createUser(body);
 
-    return res.status(StatusCodes.CREATED).json(data);
+    //response logic
+
+    const responseData = plainToInstance(UserResponseDto, data, { excludeExtraneousValues: true });
+
+    return res.status(StatusCodes.CREATED).json(responseData);
   }
 
-  async getUser(req: Request, res: Response, next: NextFunction) {
-    const body = parseInt(req.params.id || '-1');
+  async getUserById(req: Request, res: Response, next: NextFunction) {
+    const body = Number(req.params.id);
 
     //validate logic
 
     const data = await this.userService.getUserById(body);
 
-    return res.status(StatusCodes.OK).json(data);
+    //response logic
+
+    const responseData = plainToInstance(UserResponseDto, data, { excludeExtraneousValues: true });
+
+    return res.status(StatusCodes.OK).json(responseData);
   }
 
   async updateUser(req: Request, res: Response, next: NextFunction) {
@@ -52,15 +61,50 @@ export class UserController {
 
     const data = await this.userService.updateUser(parseInt(id), body);
 
-    return res.status(StatusCodes.OK).json(data);
+    //response logic
+
+    const responseData = plainToInstance(UserResponseDto, data, { excludeExtraneousValues: true });
+
+    return res.status(StatusCodes.OK).json(responseData);
   }
 
-  async deleteUser(req: Request, res: Response, next: NextFunction) {
-    const id = req.params.id || '-1';
+  async uploadUserResume(req: Request, res: Response, next: NextFunction) {
+    const userId = Number(req.params.id);
+    const body = req.body;
 
     //validate logic
 
-    await this.userService.deleteUser(parseInt(id));
+    await validateBody(body, UploadResumeValidation);
+
+    const data = await this.userService.uploadUserResume(userId, body);
+
+    //response logic
+
+    const responseData = plainToInstance(UserResponseDto, data, { excludeExtraneousValues: true });
+
+    return res.status(StatusCodes.OK).json(responseData);
+  }
+
+  async deleteUserResume(req: Request, res: Response, next: NextFunction) {
+    const userId = Number(req.params.id);
+
+    //validate logic
+
+    const data = await this.userService.deleteUserResume(userId);
+
+    //response logic
+
+    const responseData = plainToInstance(UserResponseDto, data, { excludeExtraneousValues: true });
+
+    return res.status(StatusCodes.OK).json(responseData);
+  }
+
+  async deleteUser(req: Request, res: Response, next: NextFunction) {
+    const id = Number(req.params.id);
+
+    //validate logic
+
+    await this.userService.deleteUser(id);
 
     return res.status(StatusCodes.NO_CONTENT).send();
   }
@@ -69,7 +113,11 @@ export class UserController {
   async getAllUsers(req: Request, res: Response, next: NextFunction) {
     const data = await this.userService.getAllUsers();
 
-    return res.status(StatusCodes.OK).json(data);
+    //response logic
+
+    const responseData = plainToInstance(UserResponseDto, data, { excludeExtraneousValues: true });
+
+    return res.status(StatusCodes.OK).json(responseData);
   }
 
   async addContact(req: Request, res: Response, next: NextFunction) {
@@ -81,7 +129,11 @@ export class UserController {
 
     const data = await this.userService.addContact(body);
 
-    return res.status(StatusCodes.OK).json(data);
+    //response logic
+
+    const responseData = plainToInstance(UserResponseDto, data, { excludeExtraneousValues: true });
+
+    return res.status(StatusCodes.OK).json(responseData);
   }
 
   async removeContact(req: Request, res: Response, next: NextFunction) {

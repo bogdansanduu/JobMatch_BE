@@ -20,6 +20,7 @@ import { Company } from '../../company/entities/company.entity';
 import { Roles } from '../../common/constants/user.constants';
 import { JobApplication } from '../../job-application/entities/job-application.entity';
 import { JobSaved } from '../../job-saved/entities/job-saved.entity';
+import { ResumeFile } from '../../common/types/resume-file.type';
 
 @Entity()
 export class User extends BaseEntity {
@@ -65,6 +66,9 @@ export class User extends BaseEntity {
 
   @Column({ type: 'longtext' })
   resume: string;
+
+  @Column({ nullable: true, type: 'json' })
+  resumeFile: ResumeFile | null;
 
   @Column({ nullable: true })
   socketId: string;

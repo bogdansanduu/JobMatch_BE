@@ -29,10 +29,9 @@ container.load(commentContainerModule);
 
 const controller = container.get<PostController>(POST_INV.PostController);
 
-postRouter.get('/', (req, res) => {
-  res.send('Hello World!');
-});
 postRouter.get('/all', catchErrors(controller.getAllPosts.bind(controller)));
+postRouter.get('/company/:companyId', catchErrors(controller.getAllPostByCompany.bind(controller)));
+postRouter.get('/company/most-recent/:companyId', catchErrors(controller.getMostRecentCompanyPosts.bind(controller)));
 
 postRouter.post('/user-post/:userId', catchErrors(controller.createPost.bind(controller)));
 postRouter.post('/company-post/:companyId', catchErrors(controller.createPostCompany.bind(controller)));

@@ -39,6 +39,22 @@ export class JobApplicationRepository {
     });
   }
 
+  findAllByJob(jobId: number) {
+    return this.jobApplicationRepo.find({
+      where: {
+        job: {
+          id: jobId,
+        },
+      },
+      relations: {
+        job: {
+          company: true,
+        },
+        applicant: true,
+      },
+    });
+  }
+
   findOne(id: number) {
     return this.jobApplicationRepo.findOne({
       where: {

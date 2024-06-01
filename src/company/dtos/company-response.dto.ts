@@ -16,6 +16,9 @@ export class CompanyResponseDto {
   name: string;
 
   @Expose()
+  description: string;
+
+  @Expose()
   profilePicture: string;
 
   @Expose()

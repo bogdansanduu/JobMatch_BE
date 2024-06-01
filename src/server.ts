@@ -24,6 +24,7 @@ import { jobRouter } from './job/job.router';
 import { recommendationRouter } from './recommendation/recommendation.router';
 import { jobApplicationRouter } from './job-application/job-application.router';
 import { jobSavedRouter } from './job-saved/job-saved.router';
+import { s3DocumentRouter } from './s3-document/s3-document.router';
 
 const logger = pino({ name: 'server start' });
 
@@ -80,6 +81,7 @@ app.use('/job', jobRouter);
 app.use('/recommendation', recommendationRouter);
 app.use('/job-application', jobApplicationRouter);
 app.use('/job-saved', jobSavedRouter);
+app.use('/s3-document', s3DocumentRouter);
 
 // Error handlers
 app.use(errorHandler());

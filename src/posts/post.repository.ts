@@ -61,6 +61,65 @@ export class PostRepository implements PostRepositoryInterface {
     });
   }
 
+  findByCompanyId(companyId: number) {
+    return this.postRepo.find({
+      where: {
+        company: {
+          id: companyId,
+        },
+      },
+      relations: {
+        likes: {
+          author: true,
+          company: true,
+        },
+        comments: {
+          author: true,
+          likes: {
+            author: true,
+            company: true,
+          },
+          post: true,
+        },
+        author: true,
+        company: true,
+      },
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+  }
+
+  findMostRecentByCompanyId(companyId: number, limit: number) {
+    return this.postRepo.find({
+      where: {
+        company: {
+          id: companyId,
+        },
+      },
+      take: limit,
+      relations: {
+        likes: {
+          author: true,
+          company: true,
+        },
+        comments: {
+          author: true,
+          likes: {
+            author: true,
+            company: true,
+          },
+          post: true,
+        },
+        author: true,
+        company: true,
+      },
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+  }
+
   async create(postData: Partial<Post>) {
     const post = this.postRepo.create(postData);
 

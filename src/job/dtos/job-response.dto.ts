@@ -1,5 +1,6 @@
 import { Exclude, Expose, Type } from 'class-transformer';
 import { CompanyResponseDto } from '../../company/dtos/company-response.dto';
+import { JobApplicationResponseDto } from '../../job-application/dtos/job-application-response.dto';
 
 @Exclude()
 export class JobResponseDto {
@@ -38,6 +39,10 @@ export class JobResponseDto {
 
   @Expose()
   preferredQualifications: string;
+
+  @Expose()
+  @Type(() => JobApplicationResponseDto)
+  applications: JobApplicationResponseDto[];
 
   @Expose()
   createdAt: Date;

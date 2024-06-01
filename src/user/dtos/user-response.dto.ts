@@ -9,6 +9,8 @@ import { Company } from '../../company/entities/company.entity';
 import { CompanySimpleResponseDto } from '../../company/dtos/company-response.dto';
 import { JobApplication } from '../../job-application/entities/job-application.entity';
 import { JobSaved } from '../../job-saved/entities/job-saved.entity';
+import { JobApplicationResponseDto } from '../../job-application/dtos/job-application-response.dto';
+import { ResumeFile } from '../../common/types/resume-file.type';
 
 @Exclude()
 export class UserResponseDto {
@@ -42,6 +44,9 @@ export class UserResponseDto {
   resume: string;
 
   @Expose()
+  resumeFile: ResumeFile;
+
+  @Expose()
   socketId: string;
 
   userToRooms: UserToRoom[];
@@ -63,6 +68,7 @@ export class UserResponseDto {
   likes: Like[];
 
   @Expose()
+  @Type(() => JobApplicationResponseDto)
   jobApplications: JobApplication[];
 
   @Expose()
@@ -85,6 +91,7 @@ export class UserSimpleResponseDto {
   @Expose()
   id: number;
 
+  @Expose()
   email: string;
 
   password: string;
@@ -95,6 +102,7 @@ export class UserSimpleResponseDto {
   @Expose()
   lastName: string;
 
+  @Expose()
   profilePicture: string;
 
   socketId: string;

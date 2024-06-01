@@ -54,4 +54,14 @@ export class JobApplicationService {
 
     return this.jobApplicationRepo.findAllByUser(userId);
   }
+
+  async getAllJobApplicationsForJob(jobId: number) {
+    const job = await this.jobService.getJobById(jobId);
+
+    if (!job) {
+      throw new NotFoundException('Job not found');
+    }
+
+    return this.jobApplicationRepo.findAllByJob(jobId);
+  }
 }
