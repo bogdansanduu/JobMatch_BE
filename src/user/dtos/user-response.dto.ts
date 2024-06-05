@@ -105,6 +105,12 @@ export class UserSimpleResponseDto {
   @Expose()
   profilePicture: string;
 
+  @Expose()
+  resume: string;
+
+  @Expose()
+  resumeFile: ResumeFile;
+
   socketId: string;
 
   followers: UserResponseDto[];

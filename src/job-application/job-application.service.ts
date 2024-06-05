@@ -5,6 +5,7 @@ import { JOB_APPLICATION_INV, JOB_INV, USER_INV } from '../common/utils/inversif
 import { JobService } from '../job/job.service';
 import UserService from '../user/user.service';
 import { NotFoundException } from '../common/exceptions/not-found.exception';
+import { ReviewApplicationValidation } from './dtos/review-application.validation';
 
 @injectable()
 export class JobApplicationService {
@@ -30,7 +31,7 @@ export class JobApplicationService {
     return this.jobApplicationRepo.findOne(id);
   }
 
-  async applyForJob(userId: number, jobId: number, resume: string) {
+  async applyForJob(userId: number, jobId: number) {
     const job = await this.jobService.getJobById(jobId);
     const applicant = await this.userService.getUserById(userId);
 
@@ -41,8 +42,19 @@ export class JobApplicationService {
     return this.jobApplicationRepo.createJobApplication({
       job,
       applicant,
-      resume,
     });
+  }
+
+  async reviewApplication(id: number, data: ReviewApplicationValidation) {
+    const application = await this.jobApplicationRepo.findOne(id);
+
+    if (!application) {
+      throw new NotFoundException('Application not found');
+    }
+
+    await this.jobApplicationRepo.updateJobApplicationStatus(id, data);
+
+    return this.jobApplicationRepo.findOne(id);
   }
 
   async getAllJobApplicationsForUser(userId: number) {

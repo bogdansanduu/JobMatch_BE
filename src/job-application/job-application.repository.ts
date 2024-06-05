@@ -74,4 +74,8 @@ export class JobApplicationRepository {
 
     return this.jobApplicationRepo.save(jobApplication);
   }
+
+  updateJobApplicationStatus(id: number, data: Partial<JobApplication>) {
+    return this.jobApplicationRepo.update(id, data);
+  }
 }

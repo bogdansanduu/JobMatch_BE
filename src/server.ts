@@ -5,7 +5,7 @@ import { pino } from 'pino';
 import dotenv from 'dotenv';
 import './auth/passport';
 import cookieParser from 'cookie-parser';
-import cors from 'cors';
+import cors, { CorsOptions } from 'cors';
 import './common/s3/s3';
 
 import './chat/message/message.gateway';
@@ -45,10 +45,11 @@ dataSource
 const app: Express = express();
 
 //allow cors
-const corsOptions = {
+const corsOptions: CorsOptions = {
   origin: 'http://localhost:3000',
   credentials: true, //access-control-allow-credentials:true
-  optionSuccessStatus: 200,
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
 

@@ -6,6 +6,8 @@ import { plainToInstance } from 'class-transformer';
 import { JobApplicationService } from './job-application.service';
 import { JOB_APPLICATION_INV } from '../common/utils/inversifyConstants';
 import { JobApplicationResponseDto } from './dtos/job-application-response.dto';
+import { validateBody } from '../common/utils/validateBody';
+import { ReviewApplicationValidation } from './dtos/review-application.validation';
 
 @injectable()
 export class JobApplicationController {
@@ -67,14 +69,30 @@ export class JobApplicationController {
   async applyForJob(req: Request, res: Response, next: NextFunction) {
     const userId = Number(req.params.userId);
     const jobId = Number(req.params.jobId);
-    const resume = req.body.resume;
 
-    const data = await this.jobApplicationService.applyForJob(userId, jobId, resume);
+    const data = await this.jobApplicationService.applyForJob(userId, jobId);
 
     //response logic
 
     const responseData = plainToInstance(JobApplicationResponseDto, data, { excludeExtraneousValues: true });
 
     return res.status(StatusCodes.CREATED).json(responseData);
+  }
+
+  async reviewApplication(req: Request, res: Response, next: NextFunction) {
+    const id = Number(req.params.id);
+    const body = req.body;
+
+    //validate logic
+
+    await validateBody(body, ReviewApplicationValidation);
+
+    const data = await this.jobApplicationService.reviewApplication(id, body);
+
+    //response logic
+
+    const responseData = plainToInstance(JobApplicationResponseDto, data, { excludeExtraneousValues: true });
+
+    return res.status(StatusCodes.OK).json(responseData);
   }
 }

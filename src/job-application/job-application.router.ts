@@ -32,4 +32,6 @@ jobApplicationRouter.get('/:id', controller.getJobApplicationById.bind(controlle
 
 jobApplicationRouter.post('/apply/:userId/:jobId', controller.applyForJob.bind(controller));
 
+jobApplicationRouter.put('/review/:id', controller.reviewApplication.bind(controller));
+
 export { jobApplicationRouter, jobApplicationContainerModule };
