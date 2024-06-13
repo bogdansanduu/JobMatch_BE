@@ -27,6 +27,7 @@ const authRouter = express.Router();
 const controller = container.get<AuthController>(AUTH_INV.AuthController);
 
 authRouter.put('/register', catchErrors(controller.register.bind(controller)));
+authRouter.put('/register-admin', catchErrors(controller.registerAdmin.bind(controller)));
 authRouter.put('/register-company', catchErrors(controller.registerCompany.bind(controller)));
 
 authRouter.post('/login', catchErrors(controller.login.bind(controller)));

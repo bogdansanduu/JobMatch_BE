@@ -69,7 +69,12 @@ export const JOB_SAVED_INV = {
   JobSavedController: Symbol.for('JobSavedController'),
 };
 
-export const S3_DOCUMENT_INV = {
+export const AWS_S3_DOCUMENT_INV = {
   S3DocumentService: Symbol.for('S3DocumentService'),
   S3DocumentController: Symbol.for('S3DocumentController'),
+};
+
+export const AWS_SES_INV = {
+  SESService: Symbol.for('SesService'),
+  SESController: Symbol.for('SesController'),
 };

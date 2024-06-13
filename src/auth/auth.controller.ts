@@ -29,15 +29,29 @@ export class AuthController {
 
     await validateBody(body, RegisterValidation);
 
-    const user = await this.authService.register(body);
+    const data = await this.authService.register(body);
 
     //response logic
 
-    if (!user) {
-      return res.status(StatusCodes.CONFLICT).send();
-    }
+    const responseData = plainToInstance(UserResponseDto, data, { excludeExtraneousValues: true });
 
-    return res.status(StatusCodes.CREATED).send();
+    return res.status(StatusCodes.CREATED).json(responseData);
+  }
+
+  async registerAdmin(req: Request, res: Response, next: NextFunction) {
+    const body = req.body;
+
+    //validate logic
+
+    await validateBody(body, RegisterValidation);
+
+    const data = await this.authService.registerAdmin(body);
+
+    //response logic
+
+    const responseData = plainToInstance(UserResponseDto, data, { excludeExtraneousValues: true });
+
+    return res.status(StatusCodes.CREATED).json(responseData);
   }
 
   async registerCompany(req: Request, res: Response, next: NextFunction) {

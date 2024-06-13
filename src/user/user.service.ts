@@ -41,8 +41,8 @@ class UserService implements UserServiceInterface {
     return this.userRepository.deleteUser(id);
   }
 
-  getAllUsers() {
-    return this.userRepository.getAllUsers();
+  getAllUsers(isBanned = false) {
+    return this.userRepository.getAllUsers(isBanned);
   }
 
   async getUserById(id: number) {
@@ -132,6 +132,16 @@ class UserService implements UserServiceInterface {
     await this.userRepository.saveUser(user2);
 
     return this.userRepository.getUserById(contactId);
+  }
+
+  async banUser(userId: number, banned: boolean) {
+    const user = await this.userRepository.getUserById(userId);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return this.userRepository.updateUser(userId, { isBanned: banned });
   }
 
   //---RecSys---

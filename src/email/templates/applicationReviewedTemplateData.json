@@ -1,0 +1,8 @@
+{
+  "Source":"<sandubogdan2001@gmail.com>",
+  "Template": "ApplicationReviewed",
+  "Destination": {
+    "ToAddresses": [ "sandubogdan2001@gmail.com"]
+  },
+  "TemplateData": "{ \"USER_NAME\":\"Bogdan\", \"JOB_TITLE\": \"tester\", \"COMPANY_NAME\": \"caca\", \"REDIRECT_LINK\": \"www.google.com\" }"
+}

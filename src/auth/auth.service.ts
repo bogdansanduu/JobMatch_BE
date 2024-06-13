@@ -16,6 +16,7 @@ import { CompanyService } from '../company/company.service';
 import { CreateCompanyValidation } from '../company/dtos/create-company.validation';
 import { Company } from '../company/entities/company.entity';
 import { Roles } from '../common/constants/user.constants';
+import { BannedException } from '../common/exceptions/banned.exception';
 
 //seconds
 const EXPIRES_IN_ACCESS = 60 * 15;
@@ -41,7 +42,7 @@ class AuthService implements AuthServiceInterface {
   }
 
   async register(data: RegisterValidation) {
-    const { firstName, lastName, email, resume, password, country, city, state } = data;
+    const { email, password } = data;
 
     const existingUser = await this.userService.getUserByEmail(email);
 
@@ -54,14 +55,30 @@ class AuthService implements AuthServiceInterface {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     const newUserData = {
-      firstName,
-      lastName,
-      email,
-      resume,
+      ...data,
       password: hashedPassword,
-      country,
-      city,
-      state,
+    };
+
+    return await this.userService.createUser(newUserData);
+  }
+
+  async registerAdmin(data: RegisterValidation) {
+    const { email, password } = data;
+
+    const existingUser = await this.userService.getUserByEmail(email);
+
+    if (existingUser) {
+      throw new HttpException('User already exists', StatusCodes.CONFLICT);
+    }
+
+    const saltRounds = 10;
+    const salt = await bcrypt.genSalt(saltRounds);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const newUserData = {
+      ...data,
+      password: hashedPassword,
+      role: Roles.ADMIN,
     };
 
     return await this.userService.createUser(newUserData);
@@ -101,6 +118,10 @@ class AuthService implements AuthServiceInterface {
 
     if (!user) {
       throw new NotFoundException('User not found');
+    }
+
+    if (user.isBanned) {
+      throw new BannedException('User is banned');
     }
 
     const isMatch = await bcrypt.compare(password, user.password);

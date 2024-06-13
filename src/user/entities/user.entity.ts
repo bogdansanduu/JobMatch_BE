@@ -30,6 +30,9 @@ export class User extends BaseEntity {
   @Column({ type: 'enum', enum: Roles, default: Roles.USER })
   role: string;
 
+  @Column({ type: 'boolean', default: false })
+  isBanned: boolean;
+
   @Column({ unique: true })
   email: string;
 

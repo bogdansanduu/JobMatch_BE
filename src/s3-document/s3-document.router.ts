@@ -3,7 +3,7 @@ import { Container, ContainerModule } from 'inversify';
 
 import { S3DocumentService } from './s3-document.service';
 import { S3DocumentController } from './s3-document.controller';
-import { S3_DOCUMENT_INV } from '../common/utils/inversifyConstants';
+import { AWS_S3_DOCUMENT_INV } from '../common/utils/inversifyConstants';
 import catchErrors from '../common/utils/catchErrors';
 
 const s3DocumentRouter = express.Router();
@@ -11,13 +11,13 @@ const s3DocumentRouter = express.Router();
 const container = new Container();
 
 const s3DocumentContainerModule = new ContainerModule((bind) => {
-  bind(S3_DOCUMENT_INV.S3DocumentService).to(S3DocumentService);
-  bind(S3_DOCUMENT_INV.S3DocumentController).to(S3DocumentController);
+  bind(AWS_S3_DOCUMENT_INV.S3DocumentService).to(S3DocumentService);
+  bind(AWS_S3_DOCUMENT_INV.S3DocumentController).to(S3DocumentController);
 });
 
 container.load(s3DocumentContainerModule);
 
-const controller = container.get<S3DocumentController>(S3_DOCUMENT_INV.S3DocumentController);
+const controller = container.get<S3DocumentController>(AWS_S3_DOCUMENT_INV.S3DocumentController);
 
 s3DocumentRouter.post('/presigned-put-url', catchErrors(controller.generatePreSignedPutUrl.bind(controller)));
 s3DocumentRouter.post('/presigned-get-url', catchErrors(controller.generatePreSignedGetUrl.bind(controller)));

@@ -36,6 +36,7 @@ userRouter.delete('/delete-resume/:id', catchErrors(controller.deleteUserResume.
 
 userRouter.put('/add-contact', catchErrors(controller.addContact.bind(controller)));
 userRouter.put('/remove-contact', catchErrors(controller.removeContact.bind(controller)));
+userRouter.put('/ban/:id', catchErrors(controller.banUser.bind(controller)));
 
 //---RecSys---
 

@@ -11,6 +11,7 @@ import { RemoveContactValidation } from './dtos/remove-contact.validation';
 import { plainToInstance } from 'class-transformer';
 import { UserResponseDto } from './dtos/user-response.dto';
 import { UploadResumeValidation } from './dtos/upload-resume.validation';
+import { BanUserValidation } from './dtos/ban-user.validation';
 
 // import { JwtAuth } from '../common/decorators/jwt-auth.decorator';
 
@@ -111,7 +112,11 @@ export class UserController {
 
   // @JwtAuth()
   async getAllUsers(req: Request, res: Response, next: NextFunction) {
-    const data = await this.userService.getAllUsers();
+    const isBanned = req.query.banned === 'true';
+
+    console.log(isBanned);
+
+    const data = await this.userService.getAllUsers(isBanned);
 
     //response logic
 
@@ -159,6 +164,23 @@ export class UserController {
     //validate logic
 
     const data = await this.userService.searchByNameAndEmail(searchTerms);
+
+    //response logic
+
+    const responseData = plainToInstance(UserResponseDto, data, { excludeExtraneousValues: true });
+
+    return res.status(StatusCodes.OK).json(responseData);
+  }
+
+  async banUser(req: Request, res: Response, next: NextFunction) {
+    const userId = Number(req.params.id);
+    const body = req.body;
+
+    //validate logic
+
+    await validateBody(body, BanUserValidation);
+
+    const data = await this.userService.banUser(userId, body.banned);
 
     //response logic
 

@@ -37,8 +37,11 @@ export class UserRepository implements UserRepositoryInterface {
     return this.userRepo.delete(id);
   }
 
-  getAllUsers() {
+  getAllUsers(isBanned = false) {
     return this.userRepo.find({
+      where: {
+        isBanned,
+      },
       relations: {
         followers: true,
         following: true,
@@ -93,9 +96,9 @@ export class UserRepository implements UserRepositoryInterface {
   async searchByNameAndEmail(searchTerms: string[]): Promise<User[]> {
     const whereConditions = searchTerms.map((searchTerm) => ({
       where: [
-        { firstName: ILike(`%${searchTerm}%`) },
-        { lastName: ILike(`%${searchTerm}%`) },
-        { email: ILike(`%${searchTerm}%`) },
+        { firstName: ILike(`%${searchTerm}%`), isBanned: false },
+        { lastName: ILike(`%${searchTerm}%`), isBanned: false },
+        { email: ILike(`%${searchTerm}%`), isBanned: false },
       ],
     }));
 

@@ -66,6 +66,26 @@ export class PostService implements PostServiceInterface {
     return this.postRepository.findMostRecentByCompanyId(company.id, limit);
   }
 
+  async deletePostsByUserId(userId: number) {
+    const user = await this.userService.getUserById(userId);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return this.postRepository.deleteByUserId(user.id);
+  }
+
+  async getMostRecentUserPosts(userId: number, limit: number) {
+    const user = await this.userService.getUserById(userId);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return this.postRepository.findMostRecentByUserId(user.id, limit);
+  }
+
   async createPost(userId: number, postDto: CreatePostDto) {
     const user = await this.userService.getUserById(userId);
 

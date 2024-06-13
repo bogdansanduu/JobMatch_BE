@@ -30,6 +30,18 @@ export class JobController {
     return res.status(StatusCodes.OK).json(responseData);
   }
 
+  async getJobById(req: Request, res: Response, next: NextFunction) {
+    const jobId = Number(req.params.jobId);
+
+    const data = await this.jobService.getJobById(jobId);
+
+    //response logic
+
+    const responseData = plainToInstance(JobResponseDto, data, { excludeExtraneousValues: true });
+
+    return res.status(StatusCodes.OK).json(responseData);
+  }
+
   async getAllJobsByCompany(req: Request, res: Response, next: NextFunction) {
     const companyId = Number(req.params.companyId);
 

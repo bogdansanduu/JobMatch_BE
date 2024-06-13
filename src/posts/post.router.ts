@@ -32,6 +32,7 @@ const controller = container.get<PostController>(POST_INV.PostController);
 postRouter.get('/all', catchErrors(controller.getAllPosts.bind(controller)));
 postRouter.get('/company/:companyId', catchErrors(controller.getAllPostByCompany.bind(controller)));
 postRouter.get('/company/most-recent/:companyId', catchErrors(controller.getMostRecentCompanyPosts.bind(controller)));
+postRouter.get('/user/most-recent/:userId', catchErrors(controller.getMostRecentUserPosts.bind(controller)));
 
 postRouter.post('/user-post/:userId', catchErrors(controller.createPost.bind(controller)));
 postRouter.post('/company-post/:companyId', catchErrors(controller.createPostCompany.bind(controller)));

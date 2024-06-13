@@ -120,6 +120,36 @@ export class PostRepository implements PostRepositoryInterface {
     });
   }
 
+  findMostRecentByUserId(userId: number, limit: number) {
+    return this.postRepo.find({
+      where: {
+        author: {
+          id: userId,
+        },
+      },
+      take: limit,
+      relations: {
+        likes: {
+          author: true,
+          company: true,
+        },
+        comments: {
+          author: true,
+          likes: {
+            author: true,
+            company: true,
+          },
+          post: true,
+        },
+        author: true,
+        company: true,
+      },
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+  }
+
   async create(postData: Partial<Post>) {
     const post = this.postRepo.create(postData);
 
@@ -130,5 +160,13 @@ export class PostRepository implements PostRepositoryInterface {
     await this.postRepo.update(id, post);
 
     return this.findOne(id);
+  }
+
+  async deleteByUserId(userId) {
+    return this.postRepo.delete({
+      author: {
+        id: userId,
+      },
+    });
   }
 }

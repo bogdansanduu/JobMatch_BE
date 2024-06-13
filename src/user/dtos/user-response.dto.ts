@@ -18,6 +18,12 @@ export class UserResponseDto {
   id: number;
 
   @Expose()
+  role: string;
+
+  @Expose()
+  isBanned: boolean;
+
+  @Expose()
   email: string;
 
   password: string;
@@ -75,9 +81,6 @@ export class UserResponseDto {
   jobSaved: JobSaved[];
 
   @Expose()
-  role: string;
-
-  @Expose()
   @Type(() => CompanySimpleResponseDto)
   company: Company;
 
@@ -90,6 +93,12 @@ export class UserResponseDto {
 export class UserSimpleResponseDto {
   @Expose()
   id: number;
+
+  @Expose()
+  role: string;
+
+  @Expose()
+  isBanned: boolean;
 
   @Expose()
   email: string;

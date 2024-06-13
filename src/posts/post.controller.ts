@@ -64,6 +64,21 @@ export class PostController {
     return res.status(StatusCodes.OK).json(responseData);
   }
 
+  async getMostRecentUserPosts(req: Request, res: Response, next: NextFunction) {
+    const userId = Number(req.params.userId);
+    const limit = Number(req.query.limit);
+
+    //validate logic
+
+    const data = await this.postService.getMostRecentUserPosts(userId, limit);
+
+    //response logic
+
+    const responseData = plainToInstance(PostResponseDto, data, { excludeExtraneousValues: true });
+
+    return res.status(StatusCodes.OK).json(responseData);
+  }
+
   async createPost(req: Request, res: Response, next: NextFunction) {
     const body = req.body;
     const userId = Number(req.params.userId);
@@ -177,8 +192,6 @@ export class PostController {
 
     const data = await this.postService.commentPost(userId, postId, body);
 
-    console.log(data);
-
     //response logic
 
     const responseData = plainToInstance(PostResponseDto, data, { excludeExtraneousValues: true });
@@ -200,8 +213,6 @@ export class PostController {
     await validateBody(body, CreateCommentValidation);
 
     const data = await this.postService.commentPostCompany(companyId, postId, body);
-
-    console.log(data);
 
     //response logic
 

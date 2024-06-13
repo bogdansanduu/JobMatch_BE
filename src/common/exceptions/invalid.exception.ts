@@ -1,5 +1,5 @@
-import { HttpException } from './http.exception';
 import { StatusCodes } from 'http-status-codes';
+import { HttpException } from './http.exception';
 
 export class InvalidException extends HttpException {
   constructor(message?: string) {
