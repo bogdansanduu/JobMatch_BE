@@ -50,9 +50,9 @@ let JobSavedRepository = class JobSavedRepository {
         return this.jobSavedRepo.delete(jobSavedData);
     }
 };
-JobSavedRepository = __decorate([
+exports.JobSavedRepository = JobSavedRepository;
+exports.JobSavedRepository = JobSavedRepository = __decorate([
     (0, inversify_1.injectable)(),
     __metadata("design:paramtypes", [])
 ], JobSavedRepository);
-exports.JobSavedRepository = JobSavedRepository;
 //# sourceMappingURL=job-saved.repository.js.map

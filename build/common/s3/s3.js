@@ -11,10 +11,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.uploadFile = void 0;
 const client_s3_1 = require("@aws-sdk/client-s3");
-const bucketRegion = process.env.BUCKET_REGION || 'test';
-const bucketName = process.env.BUCKET_NAME || 'test';
-const accessKey = process.env.ACCESS_KEY || 'test';
-const secretAccessKey = process.env.SECRET_ACCESS_KEY || 'test';
+const envConfig_1 = require("../utils/envConfig");
+const bucketRegion = (0, envConfig_1.getEnvVar)('BUCKET_REGION', 'string');
+const bucketName = (0, envConfig_1.getEnvVar)('BUCKET_NAME', 'string');
+const accessKey = (0, envConfig_1.getEnvVar)('ACCESS_KEY', 'string');
+const secretAccessKey = (0, envConfig_1.getEnvVar)('SECRET_ACCESS_KEY', 'string');
 const s3 = new client_s3_1.S3Client({
     region: bucketRegion,
     credentials: {

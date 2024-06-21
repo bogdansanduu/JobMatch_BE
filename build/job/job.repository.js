@@ -91,10 +91,20 @@ let JobRepository = class JobRepository {
         const job = this.jobRepo.create(jobData);
         return this.jobRepo.save(job);
     }
+    deleteByCompanyId(companyId) {
+        return this.jobRepo.delete({
+            company: {
+                id: companyId,
+            },
+        });
+    }
+    delete(jobId) {
+        return this.jobRepo.delete(jobId);
+    }
 };
-JobRepository = __decorate([
+exports.JobRepository = JobRepository;
+exports.JobRepository = JobRepository = __decorate([
     (0, inversify_1.injectable)(),
     __metadata("design:paramtypes", [])
 ], JobRepository);
-exports.JobRepository = JobRepository;
 //# sourceMappingURL=job.repository.js.map

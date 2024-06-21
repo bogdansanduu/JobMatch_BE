@@ -18,10 +18,15 @@ const like_entity_1 = require("../../like/entities/like.entity");
 const job_entity_1 = require("../../job/entities/job.entity");
 let Company = class Company extends typeorm_1.BaseEntity {
 };
+exports.Company = Company;
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
 ], Company.prototype, "id", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'boolean', default: false }),
+    __metadata("design:type", Boolean)
+], Company.prototype, "isBanned", void 0);
 __decorate([
     (0, typeorm_1.Column)({ unique: true }),
     __metadata("design:type", String)
@@ -87,8 +92,7 @@ __decorate([
     (0, typeorm_1.UpdateDateColumn)(),
     __metadata("design:type", Date)
 ], Company.prototype, "updatedAt", void 0);
-Company = __decorate([
+exports.Company = Company = __decorate([
     (0, typeorm_1.Entity)()
 ], Company);
-exports.Company = Company;
 //# sourceMappingURL=company.entity.js.map

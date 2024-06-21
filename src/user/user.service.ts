@@ -1,8 +1,17 @@
 import { inject, injectable } from 'inversify';
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
+import { DeepPartial } from 'typeorm';
 
-import { USER_INV } from '../common/utils/inversifyConstants';
+import {
+  AWS_SES_INV,
+  COMMENT_INV,
+  JOB_APPLICATION_INV,
+  LIKE_INV,
+  POST_INV,
+  ROOM_INV,
+  USER_INV,
+} from '../common/utils/inversifyConstants';
 import { DEFUALT_PROFILE_PICTURE, Roles } from '../common/constants/user.constants';
 
 import { UserServiceInterface } from './interfaces/user-service.interface';
@@ -12,6 +21,13 @@ import { InvalidException } from '../common/exceptions/invalid.exception';
 import { User } from './entities/user.entity';
 import { ResumeFile } from '../common/types/resume-file.type';
 import { UploadResumeValidation } from './dtos/upload-resume.validation';
+import { PostService } from '../posts/post.service';
+import { centralizedContainer } from '../common/centralizedContainer/centralizedContainer';
+import { LikeService } from '../like/like.service';
+import { JobApplicationService } from '../job-application/job-application.service';
+import { CommentService } from '../comment/comment.service';
+import { RoomService } from '../chat/room/room.service';
+import { SESService } from '../email/ses.service';
 
 @injectable()
 class UserService implements UserServiceInterface {
@@ -21,17 +37,7 @@ class UserService implements UserServiceInterface {
     this.userRepository = userRepository;
   }
 
-  async createUser(user: {
-    firstName: string;
-    lastName: string;
-    password: string;
-    email: string;
-    resume: string;
-    country: string;
-    city: string;
-    state: string;
-    profilePicture?: string;
-  }) {
+  async createUser(user: DeepPartial<User>) {
     user.profilePicture = user.profilePicture || DEFUALT_PROFILE_PICTURE;
 
     return this.userRepository.createUser(user);
@@ -140,6 +146,28 @@ class UserService implements UserServiceInterface {
     if (!user) {
       throw new NotFoundException('User not found');
     }
+
+    const notAllowed = false;
+
+    if (banned && notAllowed) {
+      const postService = centralizedContainer.get<PostService>(POST_INV.PostService);
+      const commentService = centralizedContainer.get<CommentService>(COMMENT_INV.CommentService);
+      const likeService = centralizedContainer.get<LikeService>(LIKE_INV.LikeService);
+      const jobApplicationService = centralizedContainer.get<JobApplicationService>(
+        JOB_APPLICATION_INV.JobApplicationService
+      );
+      const roomService = centralizedContainer.get<RoomService>(ROOM_INV.RoomService);
+
+      await postService.removePostsByUserId(user.id);
+      await commentService.removeCommentsByUserId(user.id);
+      await likeService.removeLikesByUserId(user.id);
+      await jobApplicationService.removeApplicationsByUserId(user.id);
+      await roomService.removeRoomsByUserId(user.id);
+    }
+
+    const emailService = centralizedContainer.get<SESService>(AWS_SES_INV.SESService);
+
+    await emailService.sendAccountPermissionChangedEmail(user.id, banned, true, false);
 
     return this.userRepository.updateUser(userId, { isBanned: banned });
   }

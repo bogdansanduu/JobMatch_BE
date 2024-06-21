@@ -5,6 +5,7 @@ import 'dotenv';
 import { dataSource } from '../database/dataSource';
 import { User } from '../user/entities/user.entity';
 import { Company } from '../company/entities/company.entity';
+import { getEnvVar } from '../common/utils/envConfig';
 
 const Strategy = passportJwt.Strategy;
 const ExtractJwt = passportJwt.ExtractJwt;
@@ -17,7 +18,7 @@ passport.use(
   new Strategy(
     {
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: process.env.ACCESS_TOKEN_SECRET || 'access',
+      secretOrKey: getEnvVar<string>('ACCESS_TOKEN_SECRET', 'string'),
     },
     async (payload, done) => {
       let user: User | null = null;

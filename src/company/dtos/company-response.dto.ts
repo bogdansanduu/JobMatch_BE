@@ -8,6 +8,9 @@ export class CompanyResponseDto {
   id: number;
 
   @Expose()
+  isBanned: boolean;
+
+  @Expose()
   email: string;
 
   password: string;
@@ -48,6 +51,9 @@ export class CompanyResponseDto {
 export class CompanySimpleResponseDto {
   @Expose()
   id: number;
+
+  @Expose()
+  isBanned: boolean;
 
   @Expose()
   email: string;

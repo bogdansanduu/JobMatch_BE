@@ -16,9 +16,9 @@ export class Like extends BaseEntity {
   @ManyToOne(() => Comment, (comment) => comment.likes, { onDelete: 'CASCADE' })
   comment: Comment;
 
-  @ManyToOne(() => User, (user: User) => user.likes, { onDelete: 'CASCADE' })
+  @ManyToOne(() => User, (user: User) => user.likes)
   author: User;
 
-  @ManyToOne(() => Company, (company: Company) => company.likes, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Company, (company: Company) => company.likes)
   company: Company;
 }

@@ -2,18 +2,17 @@ import { DataSource } from 'typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import dotenv from 'dotenv';
 
-// import { ENTITIES } from './entities';
-import * as process from 'process';
 import { ENTITIES } from './entities';
+import { getEnvVar } from '../common/utils/envConfig';
 
 //FIGURE OUT WHY NEEDED
 dotenv.config();
 
-const DB_HOST = process.env.DB_HOST || '127.0.0.1';
-const DB_PORT = parseInt(process.env.DB_PORT || '3306');
-const DB_USER = process.env.DB_USER || 'root';
-const DB_PASSWORD = process.env.DB_PASSWORD || 'root';
-const DB_DATABASE = process.env.DB_DATABASE || 'test';
+const DB_HOST = getEnvVar<string>('DB_HOST', 'string');
+const DB_PORT = getEnvVar<number>('DB_PORT', 'number');
+const DB_USER = getEnvVar<string>('DB_USER', 'string');
+const DB_PASSWORD = getEnvVar<string>('DB_PASSWORD', 'string');
+const DB_DATABASE = getEnvVar<string>('DB_DATABASE', 'string');
 
 export const dataSource = new DataSource({
   type: 'mysql',

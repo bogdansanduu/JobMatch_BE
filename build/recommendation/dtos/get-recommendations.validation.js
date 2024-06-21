@@ -13,6 +13,7 @@ exports.GetRecommendationsValidation = void 0;
 const class_validator_1 = require("class-validator");
 class GetRecommendationsValidation {
 }
+exports.GetRecommendationsValidation = GetRecommendationsValidation;
 __decorate([
     (0, class_validator_1.IsDefined)(),
     (0, class_validator_1.IsString)(),
@@ -29,5 +30,4 @@ __decorate([
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
 ], GetRecommendationsValidation.prototype, "longitude", void 0);
-exports.GetRecommendationsValidation = GetRecommendationsValidation;
 //# sourceMappingURL=get-recommendations.validation.js.map

@@ -4,11 +4,13 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { injectable } from 'inversify';
 
 import { HttpException } from '../common/exceptions/http.exception';
+import { getEnvVar } from '../common/utils/envConfig';
 
-const bucketRegion = process.env.BUCKET_REGION || 'test';
-const bucketName = process.env.BUCKET_NAME || 'test';
-const accessKey = process.env.ACCESS_KEY || 'test';
-const secretAccessKey = process.env.SECRET_ACCESS_KEY || 'test';
+const bucketRegion = getEnvVar<string>('BUCKET_REGION', 'string');
+const bucketName = getEnvVar<string>('BUCKET_NAME', 'string');
+const accessKey = getEnvVar<string>('ACCESS_KEY', 'string');
+const secretAccessKey = getEnvVar<string>('SECRET_ACCESS_KEY', 'string');
+
 const expiresIn = 3600;
 
 @injectable()

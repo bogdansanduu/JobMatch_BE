@@ -29,114 +29,28 @@ const inversify_1 = require("inversify");
 const dataSource_1 = require("../../database/dataSource");
 const user_service_1 = __importDefault(require("../../user/user.service"));
 const user_to_room_entity_1 = require("./entities/user-to-room.entity");
-const room_entity_1 = require("./entities/room.entity");
 const inversifyConstants_1 = require("../../common/utils/inversifyConstants");
 const not_found_exception_1 = require("../../common/exceptions/not-found.exception");
+const room_repository_1 = require("./room.repository");
 let RoomService = class RoomService {
-    constructor(userService) {
-        this.roomRepository = dataSource_1.dataSource.getRepository(room_entity_1.Room);
+    constructor(userService, roomRepository) {
+        this.roomRepository = roomRepository;
         this.userToRoomRepository = dataSource_1.dataSource.getRepository(user_to_room_entity_1.UserToRoom);
         this.userService = userService;
     }
     findOneById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.roomRepository.findOne({
-                where: {
-                    id,
-                },
-                relations: {
-                    userToRooms: {
-                        user: true,
-                    },
-                    host: true,
-                },
-                select: {
-                    id: true,
-                    name: true,
-                    oneOnOne: true,
-                    host: {
-                        id: true,
-                        email: true,
-                        firstName: true,
-                        lastName: true,
-                        profilePicture: true,
-                        socketId: true,
-                    },
-                    userToRooms: {
-                        id: true,
-                        roomId: true,
-                        user: {
-                            id: true,
-                            email: true,
-                            firstName: true,
-                            lastName: true,
-                            profilePicture: true,
-                            socketId: true,
-                        },
-                    },
-                },
-            });
+            return yield this.roomRepository.findOneById(id);
         });
     }
     findOneByName(roomName) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.roomRepository.findOne({
-                where: {
-                    name: roomName,
-                },
-                relations: {
-                    userToRooms: {
-                        user: true,
-                    },
-                    host: true,
-                },
-                select: {
-                    id: true,
-                    name: true,
-                    oneOnOne: true,
-                    host: {
-                        id: true,
-                        email: true,
-                        firstName: true,
-                        lastName: true,
-                        profilePicture: true,
-                        socketId: true,
-                    },
-                    userToRooms: {
-                        id: true,
-                        roomId: true,
-                        user: {
-                            id: true,
-                            email: true,
-                            firstName: true,
-                            lastName: true,
-                            profilePicture: true,
-                            socketId: true,
-                        },
-                    },
-                },
-            });
+            return yield this.roomRepository.findOneByName(roomName);
         });
     }
     findAllByUserId(userId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const rooms = yield this.roomRepository.find({
-                where: {
-                    userToRooms: {
-                        user: {
-                            id: userId,
-                        },
-                    },
-                },
-                relations: {
-                    userToRooms: {
-                        user: true,
-                    },
-                },
-                select: {
-                    id: true,
-                },
-            });
+            const rooms = yield this.roomRepository.findByUserId(userId);
             return yield Promise.all(rooms.map((room) => __awaiter(this, void 0, void 0, function* () {
                 return yield this.findOneById(room.id);
             })));
@@ -195,10 +109,15 @@ let RoomService = class RoomService {
             if (hostId === recipientId) {
                 return null;
             }
-            const searchedRoomName = this.createRoomName(hostId, true, recipientId);
-            const existingRoom = yield this.findOneByName(searchedRoomName);
-            if (existingRoom) {
-                return existingRoom;
+            const searchedRoomName1 = this.createRoomName(hostId, true, recipientId);
+            const searchedRoomName2 = this.createRoomName(recipientId, true, hostId);
+            const existingRoom1 = yield this.findOneByName(searchedRoomName1);
+            const existingRoom2 = yield this.findOneByName(searchedRoomName2);
+            if (existingRoom1) {
+                return existingRoom1;
+            }
+            if (existingRoom2) {
+                return existingRoom2;
             }
             const room = yield this.createRoom({ hostId, recipientId, oneOnOne: true });
             if (!room) {
@@ -209,11 +128,16 @@ let RoomService = class RoomService {
             return this.findOneById(room.id);
         });
     }
+    removeRoomsByUserId(userId) {
+        return this.roomRepository.deleteByUserId(userId);
+    }
 };
-RoomService = __decorate([
+exports.RoomService = RoomService;
+exports.RoomService = RoomService = __decorate([
     (0, inversify_1.injectable)(),
     __param(0, (0, inversify_1.inject)(inversifyConstants_1.USER_INV.UserService)),
-    __metadata("design:paramtypes", [user_service_1.default])
+    __param(1, (0, inversify_1.inject)(inversifyConstants_1.ROOM_INV.RoomRepository)),
+    __metadata("design:paramtypes", [user_service_1.default,
+        room_repository_1.RoomRepository])
 ], RoomService);
-exports.RoomService = RoomService;
 //# sourceMappingURL=room.service.js.map

@@ -78,4 +78,22 @@ export class JobApplicationRepository {
   updateJobApplicationStatus(id: number, data: Partial<JobApplication>) {
     return this.jobApplicationRepo.update(id, data);
   }
+
+  deleteByUserId(userId: number) {
+    return this.jobApplicationRepo.delete({
+      applicant: {
+        id: userId,
+      },
+    });
+  }
+
+  deleteByCompanyId(companyId: number) {
+    return this.jobApplicationRepo.delete({
+      job: {
+        company: {
+          id: companyId,
+        },
+      },
+    });
+  }
 }

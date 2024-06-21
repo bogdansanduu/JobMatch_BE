@@ -43,4 +43,9 @@ export class CreateCompanyValidation {
   @IsString()
   @IsOptional()
   profilePicture?: string;
+
+  @IsString()
+  @IsString()
+  @IsNotEmpty()
+  description: string;
 }

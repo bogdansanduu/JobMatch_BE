@@ -16,6 +16,7 @@ const user_response_dto_1 = require("../../user/dtos/user-response.dto");
 const job_application_constants_1 = require("../../common/constants/job-application.constants");
 let JobApplicationResponseDto = class JobApplicationResponseDto {
 };
+exports.JobApplicationResponseDto = JobApplicationResponseDto;
 __decorate([
     (0, class_transformer_1.Expose)(),
     __metadata("design:type", Number)
@@ -46,8 +47,7 @@ __decorate([
     (0, class_transformer_1.Expose)(),
     __metadata("design:type", Date)
 ], JobApplicationResponseDto.prototype, "applicationDate", void 0);
-JobApplicationResponseDto = __decorate([
+exports.JobApplicationResponseDto = JobApplicationResponseDto = __decorate([
     (0, class_transformer_1.Exclude)()
 ], JobApplicationResponseDto);
-exports.JobApplicationResponseDto = JobApplicationResponseDto;
 //# sourceMappingURL=job-application-response.dto.js.map

@@ -52,9 +52,9 @@ let TokenRepository = class TokenRepository {
         });
     }
 };
-TokenRepository = __decorate([
+exports.TokenRepository = TokenRepository;
+exports.TokenRepository = TokenRepository = __decorate([
     (0, inversify_1.injectable)(),
     __metadata("design:paramtypes", [])
 ], TokenRepository);
-exports.TokenRepository = TokenRepository;
 //# sourceMappingURL=token.repo.js.map

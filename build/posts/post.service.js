@@ -49,6 +49,15 @@ let PostService = class PostService {
             return this.postRepository.findAll();
         });
     }
+    getAllPostsByUserId(userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield this.userService.getUserById(userId);
+            if (!user) {
+                throw new not_found_exception_1.NotFoundException('User not found');
+            }
+            return this.postRepository.findByUserId(user.id);
+        });
+    }
     getPostsByCompany(companyId) {
         return __awaiter(this, void 0, void 0, function* () {
             const company = yield this.companyService.getCompanyById(companyId);
@@ -65,6 +74,15 @@ let PostService = class PostService {
                 throw new not_found_exception_1.NotFoundException('Company not found');
             }
             return this.postRepository.findMostRecentByCompanyId(company.id, limit);
+        });
+    }
+    deletePostsByUserId(userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield this.userService.getUserById(userId);
+            if (!user) {
+                throw new not_found_exception_1.NotFoundException('User not found');
+            }
+            return this.postRepository.deleteByUserId(user.id);
         });
     }
     getMostRecentUserPosts(userId, limit) {
@@ -178,8 +196,24 @@ let PostService = class PostService {
             return this.postRepository.findOne(postId);
         });
     }
+    removePost(postId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.postRepository.delete(postId);
+        });
+    }
+    removePostsByUserId(userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.postRepository.deleteByUserId(userId);
+        });
+    }
+    removePostsByCompanyId(companyId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.postRepository.deleteByCompanyId(companyId);
+        });
+    }
 };
-PostService = __decorate([
+exports.PostService = PostService;
+exports.PostService = PostService = __decorate([
     (0, inversify_1.injectable)(),
     __param(0, (0, inversify_1.inject)(inversifyConstants_1.USER_INV.UserService)),
     __param(1, (0, inversify_1.inject)(inversifyConstants_1.COMPANY_INV.CompanyService)),
@@ -192,5 +226,4 @@ PostService = __decorate([
         post_repository_1.PostRepository,
         like_service_1.LikeService])
 ], PostService);
-exports.PostService = PostService;
 //# sourceMappingURL=post.service.js.map

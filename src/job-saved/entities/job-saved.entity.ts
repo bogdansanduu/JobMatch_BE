@@ -7,7 +7,7 @@ export class JobSaved {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Job, (job) => job.saved)
+  @ManyToOne(() => Job, (job) => job.saved, { onDelete: 'CASCADE' })
   job: Job;
 
   @ManyToOne(() => User, (user) => user.jobsSaved)

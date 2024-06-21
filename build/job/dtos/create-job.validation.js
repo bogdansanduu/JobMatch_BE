@@ -13,6 +13,7 @@ exports.CreateJobValidation = void 0;
 const class_validator_1 = require("class-validator");
 class CreateJobValidation {
 }
+exports.CreateJobValidation = CreateJobValidation;
 __decorate([
     (0, class_validator_1.IsDefined)(),
     (0, class_validator_1.IsString)(),
@@ -82,5 +83,4 @@ __decorate([
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
 ], CreateJobValidation.prototype, "companyId", void 0);
-exports.CreateJobValidation = CreateJobValidation;
 //# sourceMappingURL=create-job.validation.js.map

@@ -1,26 +1,12 @@
 import express from 'express';
-import { Container, ContainerModule } from 'inversify';
 
 import { USER_INV } from '../common/utils/inversifyConstants';
-import { UserRepositoryInterface } from './interfaces/user-repository.interface';
-import { UserServiceInterface } from './interfaces/user-service.interface';
-import UserRepository from './user.repository';
-import UserService from './user.service';
 import UserController from './user.controller';
 import catchErrors from '../common/utils/catchErrors';
-
-const container = new Container();
-const userContainerModule = new ContainerModule((bind) => {
-  bind<UserRepositoryInterface>(USER_INV.UserRepository).to(UserRepository);
-  bind<UserServiceInterface>(USER_INV.UserService).to(UserService);
-  bind(USER_INV.UserController).to(UserController);
-});
-
-container.load(userContainerModule);
-
+import { centralizedContainer } from '../common/centralizedContainer/centralizedContainer';
 const userRouter = express.Router();
 
-const controller = container.get<UserController>(USER_INV.UserController);
+const controller = centralizedContainer.get<UserController>(USER_INV.UserController);
 
 userRouter.get('/search', catchErrors(controller.searchByNameAndEmail.bind(controller)));
 userRouter.get('/all', catchErrors(controller.getAllUsers.bind(controller)));
@@ -42,4 +28,4 @@ userRouter.put('/ban/:id', catchErrors(controller.banUser.bind(controller)));
 
 userRouter.post('/recSys', catchErrors(controller.addRecSysUsers.bind(controller)));
 
-export { userRouter, userContainerModule };
+export { userRouter };

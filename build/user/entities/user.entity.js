@@ -8,7 +8,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var User_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const typeorm_1 = require("typeorm");
@@ -21,8 +20,9 @@ const company_entity_1 = require("../../company/entities/company.entity");
 const user_constants_1 = require("../../common/constants/user.constants");
 const job_application_entity_1 = require("../../job-application/entities/job-application.entity");
 const job_saved_entity_1 = require("../../job-saved/entities/job-saved.entity");
-let User = User_1 = class User extends typeorm_1.BaseEntity {
+let User = class User extends typeorm_1.BaseEntity {
 };
+exports.User = User;
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
@@ -31,6 +31,10 @@ __decorate([
     (0, typeorm_1.Column)({ type: 'enum', enum: user_constants_1.Roles, default: user_constants_1.Roles.USER }),
     __metadata("design:type", String)
 ], User.prototype, "role", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'boolean', default: false }),
+    __metadata("design:type", Boolean)
+], User.prototype, "isBanned", void 0);
 __decorate([
     (0, typeorm_1.Column)({ unique: true }),
     __metadata("design:type", String)
@@ -51,6 +55,10 @@ __decorate([
     (0, typeorm_1.Column)({ type: 'longtext' }),
     __metadata("design:type", String)
 ], User.prototype, "profilePicture", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true, type: 'varchar' }),
+    __metadata("design:type", String)
+], User.prototype, "currentPosition", void 0);
 __decorate([
     (0, typeorm_1.Column)({ nullable: false, type: 'varchar' }),
     __metadata("design:type", String)
@@ -88,12 +96,12 @@ __decorate([
     __metadata("design:type", Array)
 ], User.prototype, "messages", void 0);
 __decorate([
-    (0, typeorm_1.ManyToMany)(() => User_1, (user) => user.following),
+    (0, typeorm_1.ManyToMany)(() => User, (user) => user.following),
     (0, typeorm_1.JoinTable)(),
     __metadata("design:type", Array)
 ], User.prototype, "followers", void 0);
 __decorate([
-    (0, typeorm_1.ManyToMany)(() => User_1, (user) => user.followers),
+    (0, typeorm_1.ManyToMany)(() => User, (user) => user.followers),
     __metadata("design:type", Array)
 ], User.prototype, "following", void 0);
 __decorate([
@@ -124,8 +132,7 @@ __decorate([
     (0, typeorm_1.UpdateDateColumn)(),
     __metadata("design:type", Date)
 ], User.prototype, "updatedAt", void 0);
-User = User_1 = __decorate([
+exports.User = User = __decorate([
     (0, typeorm_1.Entity)()
 ], User);
-exports.User = User;
 //# sourceMappingURL=user.entity.js.map

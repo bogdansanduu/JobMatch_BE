@@ -13,6 +13,7 @@ exports.CreateCompanyValidation = void 0;
 const class_validator_1 = require("class-validator");
 class CreateCompanyValidation {
 }
+exports.CreateCompanyValidation = CreateCompanyValidation;
 __decorate([
     (0, class_validator_1.IsDefined)(),
     (0, class_validator_1.IsString)(),
@@ -65,5 +66,10 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], CreateCompanyValidation.prototype, "profilePicture", void 0);
-exports.CreateCompanyValidation = CreateCompanyValidation;
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
+], CreateCompanyValidation.prototype, "description", void 0);
 //# sourceMappingURL=create-company.validation.js.map

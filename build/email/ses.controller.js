@@ -26,6 +26,9 @@ const inversify_1 = require("inversify");
 const ses_service_1 = require("./ses.service");
 const inversifyConstants_1 = require("../common/utils/inversifyConstants");
 const http_status_codes_1 = require("http-status-codes");
+const jwt_auth_decorator_1 = require("../common/decorators/jwt-auth.decorator");
+const requires_roles_decorator_1 = require("../common/decorators/requires-roles.decorator");
+const user_constants_1 = require("../common/constants/user.constants");
 let SESController = class SESController {
     constructor(sesService) {
         this.sesService = sesService;
@@ -38,10 +41,17 @@ let SESController = class SESController {
         });
     }
 };
-SESController = __decorate([
+exports.SESController = SESController;
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.COMPANY]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], SESController.prototype, "sendApplicationEvaluatedEmail", null);
+exports.SESController = SESController = __decorate([
     (0, inversify_1.injectable)(),
     __param(0, (0, inversify_1.inject)(inversifyConstants_1.AWS_SES_INV.SESService)),
     __metadata("design:paramtypes", [ses_service_1.SESService])
 ], SESController);
-exports.SESController = SESController;
 //# sourceMappingURL=ses.controller.js.map

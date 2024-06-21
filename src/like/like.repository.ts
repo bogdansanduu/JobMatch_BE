@@ -82,4 +82,20 @@ export class LikeRepository implements LikeRepositoryInterfaces {
       },
     });
   }
+
+  async deleteByUserId(userId: number) {
+    return this.likeRepo.delete({
+      author: {
+        id: userId,
+      },
+    });
+  }
+
+  async deleteByCompanyId(companyId: number) {
+    return this.likeRepo.delete({
+      company: {
+        id: companyId,
+      },
+    });
+  }
 }

@@ -1,6 +1,5 @@
 import { inject, injectable } from 'inversify';
 import axios, { AxiosError } from 'axios';
-import process from 'process';
 
 import UserService from '../user/user.service';
 import { CompanyService } from '../company/company.service';
@@ -9,6 +8,7 @@ import { COMPANY_INV, JOB_INV, USER_INV } from '../common/utils/inversifyConstan
 import { HttpException } from '../common/exceptions/http.exception';
 import { GetRecommendationsValidation } from './dtos/get-recommendations.validation';
 import { Job } from '../job/entities/job.entity';
+import { getEnvVar } from '../common/utils/envConfig';
 
 @injectable()
 export class RecommendationService {
@@ -36,8 +36,10 @@ export class RecommendationService {
   }
 
   async getRecommendations(recommendationInfo: GetRecommendationsValidation) {
-    const url = `${process.env.FASTAPI_SERVER_URL}/getRecommendations` || 'http://localhost:8000/getRecommendations';
-    const secretKey = process.env.SECRET_FASTAPI_SERVER || 'secret';
+    const fastApiUrl = getEnvVar<string>('FASTAPI_SERVER_URL', 'string');
+
+    const url = `${fastApiUrl}/getRecommendations` || 'http://localhost:8000/getRecommendations';
+    const secretKey = getEnvVar<string>('SECRET_FASTAPI_SERVER', 'string');
 
     try {
       const { data } = await axios.get(url, {

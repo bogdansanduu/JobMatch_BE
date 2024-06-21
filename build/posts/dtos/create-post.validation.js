@@ -13,6 +13,7 @@ exports.CreatePostValidation = void 0;
 const class_validator_1 = require("class-validator");
 class CreatePostValidation {
 }
+exports.CreatePostValidation = CreatePostValidation;
 __decorate([
     (0, class_validator_1.IsDefined)(),
     (0, class_validator_1.IsString)(),
@@ -30,5 +31,4 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreatePostValidation.prototype, "picture", void 0);
-exports.CreatePostValidation = CreatePostValidation;
 //# sourceMappingURL=create-post.validation.js.map

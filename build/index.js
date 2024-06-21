@@ -6,8 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
 const server_1 = require("./server");
 const socket_io_1 = __importDefault(require("./common/socket/socket-io"));
-const appPort = parseInt(process.env.APP_PORT || '3000');
-const socketPort = parseInt(process.env.SOCKET_PORT || '3001');
+const envConfig_1 = require("./common/utils/envConfig");
+const appPort = (0, envConfig_1.getEnvVar)('APP_PORT', 'number');
+const socketPort = (0, envConfig_1.getEnvVar)('SOCKET_PORT', 'number');
 server_1.app.listen(appPort, () => {
     server_1.logger.info(`Server is running on port ${appPort}`);
 });

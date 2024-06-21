@@ -17,6 +17,7 @@ const post_response_dto_1 = require("../../posts/dtos/post-response.dto");
 const company_response_dto_1 = require("../../company/dtos/company-response.dto");
 let CommentResponseDto = class CommentResponseDto {
 };
+exports.CommentResponseDto = CommentResponseDto;
 __decorate([
     (0, class_transformer_1.Expose)(),
     __metadata("design:type", Number)
@@ -45,8 +46,7 @@ __decorate([
     (0, class_transformer_1.Type)(() => user_response_dto_1.UserSimpleResponseDto),
     __metadata("design:type", user_response_dto_1.UserSimpleResponseDto)
 ], CommentResponseDto.prototype, "author", void 0);
-CommentResponseDto = __decorate([
+exports.CommentResponseDto = CommentResponseDto = __decorate([
     (0, class_transformer_1.Exclude)()
 ], CommentResponseDto);
-exports.CommentResponseDto = CommentResponseDto;
 //# sourceMappingURL=comment-response.dto.js.map

@@ -6,10 +6,14 @@ import { AUTH_INV } from '../common/utils/inversifyConstants';
 import { plainToInstance } from 'class-transformer';
 import { UserResponseDto } from '../user/dtos/user-response.dto';
 import { validateBody } from '../common/utils/validateBody';
-import { RegisterValidation } from './dtos/register.validation';
+import { AdminRegisterValidation, RegisterValidation } from './dtos/register.validation';
 import { CreateCompanyValidation } from '../company/dtos/create-company.validation';
 import { CompanyResponseDto } from '../company/dtos/company-response.dto';
 import { LoginValidation } from './dtos/login.validation';
+import { getEnvVar } from '../common/utils/envConfig';
+import { JwtAuth } from '../common/decorators/jwt-auth.decorator';
+import { RequiresRoles } from '../common/decorators/requires-roles.decorator';
+import { Roles } from '../common/constants/user.constants';
 
 @injectable()
 export class AuthController {
@@ -43,7 +47,13 @@ export class AuthController {
 
     //validate logic
 
-    await validateBody(body, RegisterValidation);
+    await validateBody(body, AdminRegisterValidation);
+
+    const adminSecret = getEnvVar<string>('ADMIN_SECRET_KEY', 'string');
+
+    if (body.secret !== adminSecret) {
+      return res.status(StatusCodes.UNAUTHORIZED).send();
+    }
 
     const data = await this.authService.registerAdmin(body);
 
@@ -54,6 +64,8 @@ export class AuthController {
     return res.status(StatusCodes.CREATED).json(responseData);
   }
 
+  @JwtAuth()
+  @RequiresRoles([Roles.ADMIN, Roles.USER])
   async registerCompany(req: Request, res: Response, next: NextFunction) {
     const body = req.body;
 
@@ -124,6 +136,7 @@ export class AuthController {
     });
   }
 
+  @JwtAuth()
   async logout(req: Request, res: Response, next: NextFunction) {
     const { refreshToken } = req.cookies;
 
@@ -135,7 +148,6 @@ export class AuthController {
 
     res.clearCookie('refreshToken', {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
       sameSite: 'none',
     });
 

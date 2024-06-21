@@ -47,10 +47,10 @@ export class Job extends BaseEntity {
   @Column({ type: 'longtext', nullable: false })
   minimumQualifications: string;
 
-  @OneToMany(() => JobApplication, (jobApplication) => jobApplication.job)
+  @OneToMany(() => JobApplication, (jobApplication) => jobApplication.job, { onDelete: 'CASCADE' })
   applications: JobApplication[];
 
-  @OneToMany(() => JobSaved, (jobSaved) => jobSaved.job)
+  @OneToMany(() => JobSaved, (jobSaved) => jobSaved.job, { onDelete: 'CASCADE' })
   saved: JobSaved[];
 
   @CreateDateColumn()
@@ -62,6 +62,6 @@ export class Job extends BaseEntity {
   @Column({ type: 'longtext', nullable: false })
   preferredQualifications: string;
 
-  @ManyToOne(() => Company, (company) => company.jobs, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Company, (company) => company.jobs)
   company: Company;
 }

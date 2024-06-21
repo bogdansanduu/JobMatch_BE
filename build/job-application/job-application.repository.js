@@ -77,10 +77,26 @@ let JobApplicationRepository = class JobApplicationRepository {
     updateJobApplicationStatus(id, data) {
         return this.jobApplicationRepo.update(id, data);
     }
+    deleteByUserId(userId) {
+        return this.jobApplicationRepo.delete({
+            applicant: {
+                id: userId,
+            },
+        });
+    }
+    deleteByCompanyId(companyId) {
+        return this.jobApplicationRepo.delete({
+            job: {
+                company: {
+                    id: companyId,
+                },
+            },
+        });
+    }
 };
-JobApplicationRepository = __decorate([
+exports.JobApplicationRepository = JobApplicationRepository;
+exports.JobApplicationRepository = JobApplicationRepository = __decorate([
     (0, inversify_1.injectable)(),
     __metadata("design:paramtypes", [])
 ], JobApplicationRepository);
-exports.JobApplicationRepository = JobApplicationRepository;
 //# sourceMappingURL=job-application.repository.js.map

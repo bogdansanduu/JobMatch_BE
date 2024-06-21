@@ -9,10 +9,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RegisterValidation = void 0;
+exports.AdminRegisterValidation = exports.RegisterValidation = void 0;
 const class_validator_1 = require("class-validator");
 class RegisterValidation {
 }
+exports.RegisterValidation = RegisterValidation;
 __decorate([
     (0, class_validator_1.IsDefined)(),
     (0, class_validator_1.IsString)(),
@@ -31,6 +32,12 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], RegisterValidation.prototype, "email", void 0);
+__decorate([
+    (0, class_validator_1.IsDefined)(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
+], RegisterValidation.prototype, "currentPosition", void 0);
 __decorate([
     (0, class_validator_1.IsDefined)(),
     (0, class_validator_1.IsString)(),
@@ -61,5 +68,37 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], RegisterValidation.prototype, "state", void 0);
-exports.RegisterValidation = RegisterValidation;
+class AdminRegisterValidation {
+}
+exports.AdminRegisterValidation = AdminRegisterValidation;
+__decorate([
+    (0, class_validator_1.IsDefined)(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
+], AdminRegisterValidation.prototype, "secret", void 0);
+__decorate([
+    (0, class_validator_1.IsDefined)(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
+], AdminRegisterValidation.prototype, "firstName", void 0);
+__decorate([
+    (0, class_validator_1.IsDefined)(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
+], AdminRegisterValidation.prototype, "lastName", void 0);
+__decorate([
+    (0, class_validator_1.IsDefined)(),
+    (0, class_validator_1.IsEmail)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
+], AdminRegisterValidation.prototype, "email", void 0);
+__decorate([
+    (0, class_validator_1.IsDefined)(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
+], AdminRegisterValidation.prototype, "password", void 0);
 //# sourceMappingURL=register.validation.js.map

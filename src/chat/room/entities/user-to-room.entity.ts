@@ -14,6 +14,6 @@ export class UserToRoom extends BaseEntity {
   @Column()
   roomId: number;
 
-  @ManyToOne(() => Room, (room) => room.userToRooms)
+  @ManyToOne(() => Room, (room) => room.userToRooms, { onDelete: 'CASCADE' })
   room: Room;
 }

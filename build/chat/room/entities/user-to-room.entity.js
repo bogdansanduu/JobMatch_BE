@@ -15,6 +15,7 @@ const room_entity_1 = require("./room.entity");
 const user_entity_1 = require("../../../user/entities/user.entity");
 let UserToRoom = class UserToRoom extends typeorm_1.BaseEntity {
 };
+exports.UserToRoom = UserToRoom;
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
@@ -28,11 +29,10 @@ __decorate([
     __metadata("design:type", Number)
 ], UserToRoom.prototype, "roomId", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => room_entity_1.Room, (room) => room.userToRooms),
+    (0, typeorm_1.ManyToOne)(() => room_entity_1.Room, (room) => room.userToRooms, { onDelete: 'CASCADE' }),
     __metadata("design:type", room_entity_1.Room)
 ], UserToRoom.prototype, "room", void 0);
-UserToRoom = __decorate([
+exports.UserToRoom = UserToRoom = __decorate([
     (0, typeorm_1.Entity)()
 ], UserToRoom);
-exports.UserToRoom = UserToRoom;
 //# sourceMappingURL=user-to-room.entity.js.map

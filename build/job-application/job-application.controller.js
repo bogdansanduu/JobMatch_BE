@@ -30,6 +30,9 @@ const inversifyConstants_1 = require("../common/utils/inversifyConstants");
 const job_application_response_dto_1 = require("./dtos/job-application-response.dto");
 const validateBody_1 = require("../common/utils/validateBody");
 const review_application_validation_1 = require("./dtos/review-application.validation");
+const jwt_auth_decorator_1 = require("../common/decorators/jwt-auth.decorator");
+const requires_roles_decorator_1 = require("../common/decorators/requires-roles.decorator");
+const user_constants_1 = require("../common/constants/user.constants");
 let JobApplicationController = class JobApplicationController {
     constructor(jobApplicationService) {
         this.jobApplicationService = jobApplicationService;
@@ -85,10 +88,52 @@ let JobApplicationController = class JobApplicationController {
         });
     }
 };
-JobApplicationController = __decorate([
+exports.JobApplicationController = JobApplicationController;
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.ADMIN, user_constants_1.Roles.USER, user_constants_1.Roles.COMPANY, user_constants_1.Roles.COMPANY_OWNER]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], JobApplicationController.prototype, "getAllJobApplications", null);
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.ADMIN, user_constants_1.Roles.USER, user_constants_1.Roles.COMPANY, user_constants_1.Roles.COMPANY_OWNER]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], JobApplicationController.prototype, "getJobApplicationById", null);
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.ADMIN, user_constants_1.Roles.USER, user_constants_1.Roles.COMPANY, user_constants_1.Roles.COMPANY_OWNER]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], JobApplicationController.prototype, "getAllJobApplicationsForUser", null);
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.ADMIN, user_constants_1.Roles.USER, user_constants_1.Roles.COMPANY, user_constants_1.Roles.COMPANY_OWNER]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], JobApplicationController.prototype, "getAllJobApplicationsForJob", null);
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.USER, user_constants_1.Roles.COMPANY_OWNER]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], JobApplicationController.prototype, "applyForJob", null);
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.COMPANY]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], JobApplicationController.prototype, "reviewApplication", null);
+exports.JobApplicationController = JobApplicationController = __decorate([
     (0, inversify_1.injectable)(),
     __param(0, (0, inversify_1.inject)(inversifyConstants_1.JOB_APPLICATION_INV.JobApplicationService)),
     __metadata("design:paramtypes", [job_application_service_1.JobApplicationService])
 ], JobApplicationController);
-exports.JobApplicationController = JobApplicationController;
 //# sourceMappingURL=job-application.controller.js.map

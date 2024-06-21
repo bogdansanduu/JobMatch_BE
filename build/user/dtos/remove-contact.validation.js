@@ -13,6 +13,7 @@ exports.RemoveContactValidation = void 0;
 const class_validator_1 = require("class-validator");
 class RemoveContactValidation {
 }
+exports.RemoveContactValidation = RemoveContactValidation;
 __decorate([
     (0, class_validator_1.IsDefined)(),
     (0, class_validator_1.IsNumber)(),
@@ -23,5 +24,4 @@ __decorate([
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
 ], RemoveContactValidation.prototype, "contactId", void 0);
-exports.RemoveContactValidation = RemoveContactValidation;
 //# sourceMappingURL=remove-contact.validation.js.map

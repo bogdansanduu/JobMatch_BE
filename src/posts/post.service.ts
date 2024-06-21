@@ -46,6 +46,16 @@ export class PostService implements PostServiceInterface {
     return this.postRepository.findAll();
   }
 
+  async getAllPostsByUserId(userId: number) {
+    const user = await this.userService.getUserById(userId);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return this.postRepository.findByUserId(user.id);
+  }
+
   async getPostsByCompany(companyId: number) {
     const company = await this.companyService.getCompanyById(companyId);
 
@@ -216,5 +226,17 @@ export class PostService implements PostServiceInterface {
     await this.commentService.createComment(post, commentDto, undefined, company);
 
     return this.postRepository.findOne(postId);
+  }
+
+  async removePost(postId: number) {
+    return this.postRepository.delete(postId);
+  }
+
+  async removePostsByUserId(userId: number) {
+    return this.postRepository.deleteByUserId(userId);
+  }
+
+  async removePostsByCompanyId(companyId: number) {
+    return this.postRepository.deleteByCompanyId(companyId);
   }
 }

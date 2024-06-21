@@ -7,6 +7,9 @@ import { CommentService } from './comment.service';
 import { COMMENT_INV } from '../common/utils/inversifyConstants';
 import { NotFoundException } from '../common/exceptions/not-found.exception';
 import { CommentResponseDto } from './dtos/comment-response.dto';
+import { JwtAuth } from '../common/decorators/jwt-auth.decorator';
+import { RequiresRoles } from '../common/decorators/requires-roles.decorator';
+import { Roles } from '../common/constants/user.constants';
 
 @injectable()
 export class CommentController {
@@ -19,6 +22,8 @@ export class CommentController {
     this.commentService = commentService;
   }
 
+  @JwtAuth()
+  @RequiresRoles([Roles.ADMIN, Roles.USER, Roles.COMPANY, Roles.COMPANY_OWNER])
   async getAllComments(req: Request, res: Response, next: NextFunction) {
     const data = await this.commentService.getAllComments();
 
@@ -29,6 +34,8 @@ export class CommentController {
     return res.status(StatusCodes.OK).json(responseData);
   }
 
+  @JwtAuth()
+  @RequiresRoles([Roles.USER, Roles.COMPANY_OWNER])
   async likeComment(req: Request, res: Response, next: NextFunction) {
     const commentId = Number(req.params.commentId);
     const userId = Number(req.params.userId);
@@ -48,6 +55,8 @@ export class CommentController {
     return res.status(StatusCodes.OK).json(responseData);
   }
 
+  @JwtAuth()
+  @RequiresRoles([Roles.COMPANY])
   async likeCommentCompany(req: Request, res: Response, next: NextFunction) {
     const commentId = Number(req.params.commentId);
     const companyId = Number(req.params.companyId);
@@ -67,6 +76,8 @@ export class CommentController {
     return res.status(StatusCodes.OK).json(responseData);
   }
 
+  @JwtAuth()
+  @RequiresRoles([Roles.USER, Roles.COMPANY_OWNER])
   async unlikeComment(req: Request, res: Response, next: NextFunction) {
     const commentId = Number(req.params.commentId);
     const userId = Number(req.params.userId);
@@ -86,6 +97,8 @@ export class CommentController {
     return res.status(StatusCodes.OK).json(responseData);
   }
 
+  @JwtAuth()
+  @RequiresRoles([Roles.COMPANY])
   async unlikeCommentCompany(req: Request, res: Response, next: NextFunction) {
     const commentId = Number(req.params.commentId);
     const companyId = Number(req.params.companyId);

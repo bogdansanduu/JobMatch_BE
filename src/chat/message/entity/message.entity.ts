@@ -14,7 +14,7 @@ export class Message extends BaseEntity {
   @Column()
   text: string;
 
-  @ManyToOne(() => Room, (room) => room.messages)
+  @ManyToOne(() => Room, (room) => room.messages, { onDelete: 'CASCADE' })
   room: Room;
 
   @CreateDateColumn()

@@ -102,10 +102,28 @@ let LikeRepository = class LikeRepository {
             });
         });
     }
+    deleteByUserId(userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.likeRepo.delete({
+                author: {
+                    id: userId,
+                },
+            });
+        });
+    }
+    deleteByCompanyId(companyId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.likeRepo.delete({
+                company: {
+                    id: companyId,
+                },
+            });
+        });
+    }
 };
-LikeRepository = __decorate([
+exports.LikeRepository = LikeRepository;
+exports.LikeRepository = LikeRepository = __decorate([
     (0, inversify_1.injectable)(),
     __metadata("design:paramtypes", [])
 ], LikeRepository);
-exports.LikeRepository = LikeRepository;
 //# sourceMappingURL=like.repository.js.map

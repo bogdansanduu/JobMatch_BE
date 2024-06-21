@@ -61,6 +61,35 @@ export class PostRepository implements PostRepositoryInterface {
     });
   }
 
+  findByUserId(userId: number) {
+    return this.postRepo.find({
+      where: {
+        author: {
+          id: userId,
+        },
+      },
+      relations: {
+        likes: {
+          author: true,
+          company: true,
+        },
+        comments: {
+          author: true,
+          likes: {
+            author: true,
+            company: true,
+          },
+          post: true,
+        },
+        author: true,
+        company: true,
+      },
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+  }
+
   findByCompanyId(companyId: number) {
     return this.postRepo.find({
       where: {
@@ -162,10 +191,22 @@ export class PostRepository implements PostRepositoryInterface {
     return this.findOne(id);
   }
 
+  async delete(id: number) {
+    return this.postRepo.delete(id);
+  }
+
   async deleteByUserId(userId) {
     return this.postRepo.delete({
       author: {
         id: userId,
+      },
+    });
+  }
+
+  async deleteByCompanyId(companyId) {
+    return this.postRepo.delete({
+      company: {
+        id: companyId,
       },
     });
   }

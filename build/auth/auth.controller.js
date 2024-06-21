@@ -36,6 +36,10 @@ const register_validation_1 = require("./dtos/register.validation");
 const create_company_validation_1 = require("../company/dtos/create-company.validation");
 const company_response_dto_1 = require("../company/dtos/company-response.dto");
 const login_validation_1 = require("./dtos/login.validation");
+const envConfig_1 = require("../common/utils/envConfig");
+const jwt_auth_decorator_1 = require("../common/decorators/jwt-auth.decorator");
+const requires_roles_decorator_1 = require("../common/decorators/requires-roles.decorator");
+const user_constants_1 = require("../common/constants/user.constants");
 let AuthController = class AuthController {
     constructor(authService) {
         this.authService = authService;
@@ -52,7 +56,11 @@ let AuthController = class AuthController {
     registerAdmin(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             const body = req.body;
-            yield (0, validateBody_1.validateBody)(body, register_validation_1.RegisterValidation);
+            yield (0, validateBody_1.validateBody)(body, register_validation_1.AdminRegisterValidation);
+            const adminSecret = (0, envConfig_1.getEnvVar)('ADMIN_SECRET_KEY', 'string');
+            if (body.secret !== adminSecret) {
+                return res.status(http_status_codes_1.StatusCodes.UNAUTHORIZED).send();
+            }
             const data = yield this.authService.registerAdmin(body);
             const responseData = (0, class_transformer_1.plainToInstance)(user_response_dto_1.UserResponseDto, data, { excludeExtraneousValues: true });
             return res.status(http_status_codes_1.StatusCodes.CREATED).json(responseData);
@@ -114,7 +122,6 @@ let AuthController = class AuthController {
             yield this.authService.logout(refreshToken);
             res.clearCookie('refreshToken', {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
                 sameSite: 'none',
             });
             return res.status(http_status_codes_1.StatusCodes.NO_CONTENT).send();
@@ -149,10 +156,23 @@ let AuthController = class AuthController {
         });
     }
 };
-AuthController = __decorate([
+exports.AuthController = AuthController;
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.ADMIN, user_constants_1.Roles.USER]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "registerCompany", null);
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "logout", null);
+exports.AuthController = AuthController = __decorate([
     (0, inversify_1.injectable)(),
     __param(0, (0, inversify_1.inject)(inversifyConstants_1.AUTH_INV.AuthService)),
     __metadata("design:paramtypes", [auth_service_1.default])
 ], AuthController);
-exports.AuthController = AuthController;
 //# sourceMappingURL=auth.controller.js.map

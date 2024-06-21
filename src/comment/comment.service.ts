@@ -129,4 +129,12 @@ export class CommentService {
 
     return this.getCommentById(commentId);
   }
+
+  removeCommentsByUserId(userId: number) {
+    return this.commentRepository.deleteByUserId(userId);
+  }
+
+  removeCommentsByCompanyId(companyId: number) {
+    return this.commentRepository.deleteByCompanyId(companyId);
+  }
 }

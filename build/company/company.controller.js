@@ -28,14 +28,21 @@ const inversifyConstants_1 = require("../common/utils/inversifyConstants");
 const http_status_codes_1 = require("http-status-codes");
 const class_transformer_1 = require("class-transformer");
 const company_response_dto_1 = require("./dtos/company-response.dto");
+const validateBody_1 = require("../common/utils/validateBody");
+const ban_company_validation_1 = require("./dtos/ban-company.validation");
+const jwt_auth_decorator_1 = require("../common/decorators/jwt-auth.decorator");
+const requires_roles_decorator_1 = require("../common/decorators/requires-roles.decorator");
+const user_constants_1 = require("../common/constants/user.constants");
 let CompanyController = class CompanyController {
     constructor(companyService) {
         this.companyService = companyService;
     }
     getAllCompanies(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            const data = yield this.companyService.getAllCompanies();
-            return res.status(http_status_codes_1.StatusCodes.OK).json(data);
+            const isBanned = req.query.banned === 'true';
+            const data = yield this.companyService.getAllCompanies(isBanned);
+            const responseData = (0, class_transformer_1.plainToInstance)(company_response_dto_1.CompanyResponseDto, data, { excludeExtraneousValues: true });
+            return res.status(http_status_codes_1.StatusCodes.OK).json(responseData);
         });
     }
     getCompanyById(req, res, next) {
@@ -55,6 +62,16 @@ let CompanyController = class CompanyController {
             return res.status(http_status_codes_1.StatusCodes.OK).json(responseData);
         });
     }
+    banCompany(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const companyId = Number(req.params.id);
+            const body = req.body;
+            yield (0, validateBody_1.validateBody)(body, ban_company_validation_1.BanCompanyValidation);
+            const data = yield this.companyService.banCompany(companyId, body.banned);
+            const responseData = (0, class_transformer_1.plainToInstance)(company_response_dto_1.CompanyResponseDto, data, { excludeExtraneousValues: true });
+            return res.status(http_status_codes_1.StatusCodes.OK).json(responseData);
+        });
+    }
     addRecSysCompanies(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             const recSysCompanies = yield this.companyService.addRecSysCompanies();
@@ -63,10 +80,45 @@ let CompanyController = class CompanyController {
         });
     }
 };
-CompanyController = __decorate([
+exports.CompanyController = CompanyController;
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.ADMIN, user_constants_1.Roles.USER, user_constants_1.Roles.COMPANY, user_constants_1.Roles.COMPANY_OWNER]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], CompanyController.prototype, "getAllCompanies", null);
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.ADMIN, user_constants_1.Roles.USER, user_constants_1.Roles.COMPANY, user_constants_1.Roles.COMPANY_OWNER]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], CompanyController.prototype, "getCompanyById", null);
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.ADMIN, user_constants_1.Roles.USER, user_constants_1.Roles.COMPANY, user_constants_1.Roles.COMPANY_OWNER]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], CompanyController.prototype, "searchByNameAndEmail", null);
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.ADMIN]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], CompanyController.prototype, "banCompany", null);
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.ADMIN]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], CompanyController.prototype, "addRecSysCompanies", null);
+exports.CompanyController = CompanyController = __decorate([
     (0, inversify_1.injectable)(),
     __param(0, (0, inversify_1.inject)(inversifyConstants_1.COMPANY_INV.CompanyService)),
     __metadata("design:paramtypes", [company_service_1.CompanyService])
 ], CompanyController);
-exports.CompanyController = CompanyController;
 //# sourceMappingURL=company.controller.js.map

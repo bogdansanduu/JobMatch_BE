@@ -88,8 +88,15 @@ let JobApplicationService = class JobApplicationService {
             return this.jobApplicationRepo.findAllByJob(jobId);
         });
     }
+    removeApplicationsByUserId(userId) {
+        return this.jobApplicationRepo.deleteByUserId(userId);
+    }
+    removeApplicationsByCompanyId(companyId) {
+        return this.jobApplicationRepo.deleteByCompanyId(companyId);
+    }
 };
-JobApplicationService = __decorate([
+exports.JobApplicationService = JobApplicationService;
+exports.JobApplicationService = JobApplicationService = __decorate([
     (0, inversify_1.injectable)(),
     __param(0, (0, inversify_1.inject)(inversifyConstants_1.JOB_APPLICATION_INV.JobApplicationRepository)),
     __param(1, (0, inversify_1.inject)(inversifyConstants_1.JOB_INV.JobService)),
@@ -98,5 +105,4 @@ JobApplicationService = __decorate([
         job_service_1.JobService,
         user_service_1.default])
 ], JobApplicationService);
-exports.JobApplicationService = JobApplicationService;
 //# sourceMappingURL=job-application.service.js.map

@@ -1,4 +1,4 @@
-import { ILike, Repository } from 'typeorm';
+import { DeepPartial, ILike, Repository } from 'typeorm';
 import { injectable } from 'inversify';
 
 import { UserRepositoryInterface } from './interfaces/user-repository.interface';
@@ -13,17 +13,7 @@ export class UserRepository implements UserRepositoryInterface {
     this.userRepo = dataSource.getRepository(User);
   }
 
-  async createUser(userData: {
-    firstName: string;
-    lastName: string;
-    password: string;
-    email: string;
-    resume: string;
-    country: string;
-    city: string;
-    state: string;
-    profilePicture?: string;
-  }) {
+  async createUser(userData: DeepPartial<User>) {
     const user = this.userRepo.create(userData);
 
     return this.userRepo.save(user);
@@ -51,6 +41,7 @@ export class UserRepository implements UserRepositoryInterface {
         jobsSaved: {
           job: true,
         },
+        company: true,
       },
     });
   }

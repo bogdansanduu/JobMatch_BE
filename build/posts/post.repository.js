@@ -72,6 +72,34 @@ let PostRepository = class PostRepository {
             },
         });
     }
+    findByUserId(userId) {
+        return this.postRepo.find({
+            where: {
+                author: {
+                    id: userId,
+                },
+            },
+            relations: {
+                likes: {
+                    author: true,
+                    company: true,
+                },
+                comments: {
+                    author: true,
+                    likes: {
+                        author: true,
+                        company: true,
+                    },
+                    post: true,
+                },
+                author: true,
+                company: true,
+            },
+            order: {
+                createdAt: 'DESC',
+            },
+        });
+    }
     findByCompanyId(companyId) {
         return this.postRepo.find({
             where: {
@@ -170,10 +198,33 @@ let PostRepository = class PostRepository {
             return this.findOne(id);
         });
     }
+    delete(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.postRepo.delete(id);
+        });
+    }
+    deleteByUserId(userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.postRepo.delete({
+                author: {
+                    id: userId,
+                },
+            });
+        });
+    }
+    deleteByCompanyId(companyId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.postRepo.delete({
+                company: {
+                    id: companyId,
+                },
+            });
+        });
+    }
 };
-PostRepository = __decorate([
+exports.PostRepository = PostRepository;
+exports.PostRepository = PostRepository = __decorate([
     (0, inversify_1.injectable)(),
     __metadata("design:paramtypes", [])
 ], PostRepository);
-exports.PostRepository = PostRepository;
 //# sourceMappingURL=post.repository.js.map

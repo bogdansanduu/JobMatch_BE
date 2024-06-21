@@ -12,21 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.roomContainerModule = void 0;
-const inversify_1 = require("inversify");
 const inversifyConstants_1 = require("../../common/utils/inversifyConstants");
 const socket_constants_1 = require("../../common/constants/socket.constants");
-const room_service_1 = require("./room.service");
 const socket_io_1 = __importDefault(require("../../common/socket/socket-io"));
-const user_router_1 = require("../../user/user.router");
-const container = new inversify_1.Container();
-const roomContainerModule = new inversify_1.ContainerModule((bind) => {
-    bind(inversifyConstants_1.ROOM_INV.RoomService).to(room_service_1.RoomService);
-});
-exports.roomContainerModule = roomContainerModule;
-container.load(user_router_1.userContainerModule);
-container.load(roomContainerModule);
-const roomService = container.get(inversifyConstants_1.ROOM_INV.RoomService);
+const centralizedContainer_1 = require("../../common/centralizedContainer/centralizedContainer");
+const roomService = centralizedContainer_1.centralizedContainer.get(inversifyConstants_1.ROOM_INV.RoomService);
 socket_io_1.default.on('connection', (socket) => {
     socket.on(socket_constants_1.SocketEventsClient.JOIN_ROOM, (addUserToRoomDto) => __awaiter(void 0, void 0, void 0, function* () {
         const { roomId, userId } = addUserToRoomDto;
@@ -39,6 +29,14 @@ socket_io_1.default.on('connection', (socket) => {
         }
         socket.join(room.name);
         socket.to(room.name).emit(socket_constants_1.SocketEventsServer.JOINED_ROOM, room);
+    }));
+    socket.on(socket_constants_1.SocketEventsClient.LEAVE_ROOM, (leaveRoomDto) => __awaiter(void 0, void 0, void 0, function* () {
+        const { roomId } = leaveRoomDto;
+        const room = yield roomService.findOneById(roomId);
+        if (!room) {
+            return;
+        }
+        socket.leave(room.name);
     }));
     socket.on(socket_constants_1.SocketEventsClient.CREATE_ONE_ON_ONE_ROOM, (createOneOnOneRoomDto) => __awaiter(void 0, void 0, void 0, function* () {
         const room = yield roomService.createOneOnOneRoom(createOneOnOneRoomDto);

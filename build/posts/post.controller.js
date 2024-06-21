@@ -54,6 +54,14 @@ let PostController = class PostController {
             return res.status(http_status_codes_1.StatusCodes.OK).json(responseData);
         });
     }
+    getAllPostsByUser(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const userId = Number(req.params.userId);
+            const data = yield this.postService.getAllPostsByUserId(userId);
+            const responseData = (0, class_transformer_1.plainToInstance)(post_response_dto_1.PostResponseDto, data, { excludeExtraneousValues: true });
+            return res.status(http_status_codes_1.StatusCodes.OK).json(responseData);
+        });
+    }
     getMostRecentCompanyPosts(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             const companyId = Number(req.params.companyId);
@@ -174,18 +182,119 @@ let PostController = class PostController {
             return res.status(http_status_codes_1.StatusCodes.OK).json(responseData);
         });
     }
+    removePost(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const postId = Number(req.params.postId);
+            if (!postId) {
+                throw new not_found_exception_1.NotFoundException('Post not found');
+            }
+            yield this.postService.removePost(postId);
+            return res.status(http_status_codes_1.StatusCodes.OK).json({ message: 'Post removed successfully' });
+        });
+    }
 };
+exports.PostController = PostController;
 __decorate([
     (0, jwt_auth_decorator_1.JwtAuth)(),
-    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.USER, user_constants_1.Roles.COMPANY, user_constants_1.Roles.COMPANY_OWNER]),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.ADMIN, user_constants_1.Roles.USER, user_constants_1.Roles.COMPANY, user_constants_1.Roles.COMPANY_OWNER]),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object, Function]),
     __metadata("design:returntype", Promise)
 ], PostController.prototype, "getAllPosts", null);
-PostController = __decorate([
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.ADMIN, user_constants_1.Roles.USER, user_constants_1.Roles.COMPANY, user_constants_1.Roles.COMPANY_OWNER]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], PostController.prototype, "getAllPostByCompany", null);
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.ADMIN, user_constants_1.Roles.USER, user_constants_1.Roles.COMPANY, user_constants_1.Roles.COMPANY_OWNER]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], PostController.prototype, "getAllPostsByUser", null);
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.ADMIN, user_constants_1.Roles.USER, user_constants_1.Roles.COMPANY, user_constants_1.Roles.COMPANY_OWNER]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], PostController.prototype, "getMostRecentCompanyPosts", null);
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.ADMIN, user_constants_1.Roles.USER, user_constants_1.Roles.COMPANY, user_constants_1.Roles.COMPANY_OWNER]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], PostController.prototype, "getMostRecentUserPosts", null);
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.USER, user_constants_1.Roles.COMPANY_OWNER]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], PostController.prototype, "createPost", null);
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.COMPANY]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], PostController.prototype, "createPostCompany", null);
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.USER, user_constants_1.Roles.COMPANY_OWNER]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], PostController.prototype, "likePost", null);
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.COMPANY]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], PostController.prototype, "likePostCompany", null);
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.USER, user_constants_1.Roles.COMPANY_OWNER]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], PostController.prototype, "unlikePost", null);
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.COMPANY]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], PostController.prototype, "unlikePostCompany", null);
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.USER, user_constants_1.Roles.COMPANY_OWNER]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], PostController.prototype, "commentPost", null);
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.COMPANY]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], PostController.prototype, "commentPostCompany", null);
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.ADMIN]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], PostController.prototype, "removePost", null);
+exports.PostController = PostController = __decorate([
     (0, inversify_1.injectable)(),
     __param(0, (0, inversify_1.inject)(inversifyConstants_1.POST_INV.PostService)),
     __metadata("design:paramtypes", [post_service_1.PostService])
 ], PostController);
-exports.PostController = PostController;
 //# sourceMappingURL=post.controller.js.map

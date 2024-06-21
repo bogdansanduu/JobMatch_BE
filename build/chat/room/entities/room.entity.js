@@ -16,6 +16,7 @@ const user_to_room_entity_1 = require("./user-to-room.entity");
 const user_entity_1 = require("../../../user/entities/user.entity");
 let Room = class Room extends typeorm_1.BaseEntity {
 };
+exports.Room = Room;
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
@@ -29,19 +30,18 @@ __decorate([
     __metadata("design:type", String)
 ], Room.prototype, "name", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => user_to_room_entity_1.UserToRoom, (userToRoom) => userToRoom.room),
+    (0, typeorm_1.OneToMany)(() => user_to_room_entity_1.UserToRoom, (userToRoom) => userToRoom.room, { onDelete: 'CASCADE' }),
     __metadata("design:type", Array)
 ], Room.prototype, "userToRooms", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => message_entity_1.Message, (message) => message.room),
+    (0, typeorm_1.OneToMany)(() => message_entity_1.Message, (message) => message.room, { onDelete: 'CASCADE' }),
     __metadata("design:type", Array)
 ], Room.prototype, "messages", void 0);
 __decorate([
     (0, typeorm_1.Column)({ default: false }),
     __metadata("design:type", Boolean)
 ], Room.prototype, "oneOnOne", void 0);
-Room = __decorate([
+exports.Room = Room = __decorate([
     (0, typeorm_1.Entity)()
 ], Room);
-exports.Room = Room;
 //# sourceMappingURL=room.entity.js.map

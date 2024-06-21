@@ -17,6 +17,7 @@ const comment_entity_1 = require("../../comment/entities/comment.entity");
 const company_entity_1 = require("../../company/entities/company.entity");
 let Post = class Post extends typeorm_1.BaseEntity {
 };
+exports.Post = Post;
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
@@ -30,16 +31,13 @@ __decorate([
     __metadata("design:type", String)
 ], Post.prototype, "content", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: true, type: 'longtext' }),
-    __metadata("design:type", String)
-], Post.prototype, "picture", void 0);
-__decorate([
-    (0, typeorm_1.ManyToOne)(() => user_entity_1.User, (user) => user.posts, { onDelete: 'CASCADE' }),
+    (0, typeorm_1.ManyToOne)(() => user_entity_1.User, (user) => user.posts, { nullable: true }),
     (0, typeorm_1.JoinColumn)(),
     __metadata("design:type", user_entity_1.User)
 ], Post.prototype, "author", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => company_entity_1.Company, (company) => company.posts, { nullable: true }),
+    (0, typeorm_1.JoinColumn)(),
     __metadata("design:type", company_entity_1.Company)
 ], Post.prototype, "company", void 0);
 __decorate([
@@ -58,8 +56,7 @@ __decorate([
     (0, typeorm_1.UpdateDateColumn)(),
     __metadata("design:type", Date)
 ], Post.prototype, "updatedAt", void 0);
-Post = __decorate([
+exports.Post = Post = __decorate([
     (0, typeorm_1.Entity)()
 ], Post);
-exports.Post = Post;
 //# sourceMappingURL=post.entity.js.map

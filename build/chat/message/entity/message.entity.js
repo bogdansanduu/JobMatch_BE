@@ -15,6 +15,7 @@ const user_entity_1 = require("../../../user/entities/user.entity");
 const room_entity_1 = require("../../room/entities/room.entity");
 let Message = class Message extends typeorm_1.BaseEntity {
 };
+exports.Message = Message;
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
@@ -28,15 +29,14 @@ __decorate([
     __metadata("design:type", String)
 ], Message.prototype, "text", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => room_entity_1.Room, (room) => room.messages),
+    (0, typeorm_1.ManyToOne)(() => room_entity_1.Room, (room) => room.messages, { onDelete: 'CASCADE' }),
     __metadata("design:type", room_entity_1.Room)
 ], Message.prototype, "room", void 0);
 __decorate([
     (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", Date)
 ], Message.prototype, "createdAt", void 0);
-Message = __decorate([
+exports.Message = Message = __decorate([
     (0, typeorm_1.Entity)()
 ], Message);
-exports.Message = Message;
 //# sourceMappingURL=message.entity.js.map

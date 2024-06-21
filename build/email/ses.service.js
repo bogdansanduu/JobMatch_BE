@@ -20,6 +20,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SESService = void 0;
 const client_ses_1 = require("@aws-sdk/client-ses");
@@ -27,12 +30,15 @@ const inversify_1 = require("inversify");
 const job_application_service_1 = require("../job-application/job-application.service");
 const inversifyConstants_1 = require("../common/utils/inversifyConstants");
 const not_found_exception_1 = require("../common/exceptions/not-found.exception");
-const sesRegion = process.env.SES_REGION || 'test';
-const accessKey = process.env.ACCESS_KEY || 'test';
-const secretAccessKey = process.env.SECRET_ACCESS_KEY || 'test';
-const sesSenderEmail = process.env.SES_SENDER_EMAIL || 'test';
+const user_service_1 = __importDefault(require("../user/user.service"));
+const company_service_1 = require("../company/company.service");
+const envConfig_1 = require("../common/utils/envConfig");
+const sesRegion = (0, envConfig_1.getEnvVar)('SES_REGION', 'string');
+const accessKey = (0, envConfig_1.getEnvVar)('ACCESS_KEY', 'string');
+const secretAccessKey = (0, envConfig_1.getEnvVar)('SECRET_ACCESS_KEY', 'string');
+const sesSenderEmail = (0, envConfig_1.getEnvVar)('SES_SENDER_EMAIL', 'string');
 let SESService = class SESService {
-    constructor(jobApplicationService) {
+    constructor(jobApplicationService, userService, companyService) {
         this.sesClient = new client_ses_1.SESClient({
             credentials: {
                 accessKeyId: accessKey,
@@ -41,6 +47,8 @@ let SESService = class SESService {
             region: sesRegion,
         });
         this.jobApplicationService = jobApplicationService;
+        this.userService = userService;
+        this.companyService = companyService;
     }
     sendApplicationEvaluatedEmail(jobApplicationId) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -60,16 +68,50 @@ let SESService = class SESService {
                     ToAddresses: ['sandubogdan2001@gmail.com'],
                 },
             };
-            console.log(params);
             const sendEmailCommand = new client_ses_1.SendTemplatedEmailCommand(params);
             return yield this.sesClient.send(sendEmailCommand);
         });
     }
+    sendAccountPermissionChangedEmail(accountId, banned, isUser, isCompany) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const status = banned ? 'banned' : 'unbanned';
+            if (isUser) {
+                const userAccount = yield this.userService.getUserById(accountId);
+                const params = {
+                    Source: `JobMatch <${sesSenderEmail}>`,
+                    Template: 'AccountPermissionChange',
+                    TemplateData: `{ "USER_NAME": "${userAccount.firstName} ${userAccount.lastName}", "STATUS": "${status}" }`,
+                    Destination: {
+                        ToAddresses: ['sandubogdan2001@gmail.com'],
+                    },
+                };
+                const sendEmailCommand = new client_ses_1.SendTemplatedEmailCommand(params);
+                return yield this.sesClient.send(sendEmailCommand);
+            }
+            if (isCompany) {
+                const companyAccount = yield this.companyService.getCompanyById(accountId);
+                const params = {
+                    Source: `JobMatch <${sesSenderEmail}>`,
+                    Template: 'AccountPermissionChange',
+                    TemplateData: `{ "USER_NAME": "${companyAccount.name}", "STATUS": "${status}" }`,
+                    Destination: {
+                        ToAddresses: ['sandubogdan2001@gmail.com'],
+                    },
+                };
+                const sendEmailCommand = new client_ses_1.SendTemplatedEmailCommand(params);
+                return yield this.sesClient.send(sendEmailCommand);
+            }
+        });
+    }
 };
-SESService = __decorate([
+exports.SESService = SESService;
+exports.SESService = SESService = __decorate([
     (0, inversify_1.injectable)(),
     __param(0, (0, inversify_1.inject)(inversifyConstants_1.JOB_APPLICATION_INV.JobApplicationService)),
-    __metadata("design:paramtypes", [job_application_service_1.JobApplicationService])
+    __param(1, (0, inversify_1.inject)(inversifyConstants_1.USER_INV.UserService)),
+    __param(2, (0, inversify_1.inject)(inversifyConstants_1.COMPANY_INV.CompanyService)),
+    __metadata("design:paramtypes", [job_application_service_1.JobApplicationService,
+        user_service_1.default,
+        company_service_1.CompanyService])
 ], SESService);
-exports.SESService = SESService;
 //# sourceMappingURL=ses.service.js.map

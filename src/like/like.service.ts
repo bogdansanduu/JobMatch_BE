@@ -61,4 +61,12 @@ export class LikeService {
       company,
     });
   }
+
+  removeLikesByUserId(userId: number) {
+    return this.likeRepository.deleteByUserId(userId);
+  }
+
+  removeLikesByCompanyId(companyId: number) {
+    return this.likeRepository.deleteByCompanyId(companyId);
+  }
 }

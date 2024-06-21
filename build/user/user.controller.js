@@ -35,6 +35,10 @@ const remove_contact_validation_1 = require("./dtos/remove-contact.validation");
 const class_transformer_1 = require("class-transformer");
 const user_response_dto_1 = require("./dtos/user-response.dto");
 const upload_resume_validation_1 = require("./dtos/upload-resume.validation");
+const ban_user_validation_1 = require("./dtos/ban-user.validation");
+const jwt_auth_decorator_1 = require("../common/decorators/jwt-auth.decorator");
+const requires_roles_decorator_1 = require("../common/decorators/requires-roles.decorator");
+const user_constants_1 = require("../common/constants/user.constants");
 let UserController = class UserController {
     constructor(userService) {
         this.userService = userService;
@@ -91,7 +95,8 @@ let UserController = class UserController {
     }
     getAllUsers(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            const data = yield this.userService.getAllUsers();
+            const isBanned = req.query.banned === 'true';
+            const data = yield this.userService.getAllUsers(isBanned);
             const responseData = (0, class_transformer_1.plainToInstance)(user_response_dto_1.UserResponseDto, data, { excludeExtraneousValues: true });
             return res.status(http_status_codes_1.StatusCodes.OK).json(responseData);
         });
@@ -123,6 +128,16 @@ let UserController = class UserController {
             return res.status(http_status_codes_1.StatusCodes.OK).json(responseData);
         });
     }
+    banUser(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const userId = Number(req.params.id);
+            const body = req.body;
+            yield (0, validateBody_1.validateBody)(body, ban_user_validation_1.BanUserValidation);
+            const data = yield this.userService.banUser(userId, body.banned);
+            const responseData = (0, class_transformer_1.plainToInstance)(user_response_dto_1.UserResponseDto, data, { excludeExtraneousValues: true });
+            return res.status(http_status_codes_1.StatusCodes.OK).json(responseData);
+        });
+    }
     addRecSysUsers(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             const recSysUsers = yield this.userService.addRecSysUsers();
@@ -131,11 +146,95 @@ let UserController = class UserController {
         });
     }
 };
-UserController = __decorate([
+exports.UserController = UserController;
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.ADMIN, user_constants_1.Roles.USER, user_constants_1.Roles.COMPANY, user_constants_1.Roles.COMPANY_OWNER]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "createUser", null);
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.ADMIN, user_constants_1.Roles.USER, user_constants_1.Roles.COMPANY, user_constants_1.Roles.COMPANY_OWNER]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "getUserById", null);
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.ADMIN, user_constants_1.Roles.USER, user_constants_1.Roles.COMPANY_OWNER]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "updateUser", null);
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.USER, user_constants_1.Roles.COMPANY_OWNER]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "uploadUserResume", null);
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.USER, user_constants_1.Roles.COMPANY_OWNER]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "deleteUserResume", null);
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.ADMIN, user_constants_1.Roles.USER, user_constants_1.Roles.COMPANY, user_constants_1.Roles.COMPANY_OWNER]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "deleteUser", null);
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.ADMIN, user_constants_1.Roles.USER, user_constants_1.Roles.COMPANY, user_constants_1.Roles.COMPANY_OWNER]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "getAllUsers", null);
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.USER, user_constants_1.Roles.COMPANY_OWNER]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "addContact", null);
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.USER, user_constants_1.Roles.COMPANY_OWNER]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "removeContact", null);
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.ADMIN, user_constants_1.Roles.USER, user_constants_1.Roles.COMPANY, user_constants_1.Roles.COMPANY_OWNER]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "searchByNameAndEmail", null);
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.ADMIN]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "banUser", null);
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.ADMIN]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "addRecSysUsers", null);
+exports.UserController = UserController = __decorate([
     (0, inversify_1.injectable)(),
     __param(0, (0, inversify_1.inject)(inversifyConstants_1.USER_INV.UserService)),
     __metadata("design:paramtypes", [user_service_1.default])
 ], UserController);
-exports.UserController = UserController;
 exports.default = UserController;
 //# sourceMappingURL=user.controller.js.map

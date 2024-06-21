@@ -16,6 +16,7 @@ const job_application_entity_1 = require("../../job-application/entities/job-app
 const job_saved_entity_1 = require("../../job-saved/entities/job-saved.entity");
 let Job = class Job extends typeorm_1.BaseEntity {
 };
+exports.Job = Job;
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
@@ -61,11 +62,11 @@ __decorate([
     __metadata("design:type", String)
 ], Job.prototype, "minimumQualifications", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => job_application_entity_1.JobApplication, (jobApplication) => jobApplication.job),
+    (0, typeorm_1.OneToMany)(() => job_application_entity_1.JobApplication, (jobApplication) => jobApplication.job, { onDelete: 'CASCADE' }),
     __metadata("design:type", Array)
 ], Job.prototype, "applications", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => job_saved_entity_1.JobSaved, (jobSaved) => jobSaved.job),
+    (0, typeorm_1.OneToMany)(() => job_saved_entity_1.JobSaved, (jobSaved) => jobSaved.job, { onDelete: 'CASCADE' }),
     __metadata("design:type", Array)
 ], Job.prototype, "saved", void 0);
 __decorate([
@@ -81,11 +82,10 @@ __decorate([
     __metadata("design:type", String)
 ], Job.prototype, "preferredQualifications", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => company_entity_1.Company, (company) => company.jobs, { onDelete: 'CASCADE' }),
+    (0, typeorm_1.ManyToOne)(() => company_entity_1.Company, (company) => company.jobs),
     __metadata("design:type", company_entity_1.Company)
 ], Job.prototype, "company", void 0);
-Job = __decorate([
+exports.Job = Job = __decorate([
     (0, typeorm_1.Entity)()
 ], Job);
-exports.Job = Job;
 //# sourceMappingURL=job.entity.js.map

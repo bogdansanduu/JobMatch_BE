@@ -72,7 +72,8 @@ let JobSavedService = class JobSavedService {
         });
     }
 };
-JobSavedService = __decorate([
+exports.JobSavedService = JobSavedService;
+exports.JobSavedService = JobSavedService = __decorate([
     (0, inversify_1.injectable)(),
     __param(0, (0, inversify_1.inject)(inversifyConstants_1.JOB_SAVED_INV.JobSavedRepository)),
     __param(1, (0, inversify_1.inject)(inversifyConstants_1.JOB_INV.JobService)),
@@ -81,5 +82,4 @@ JobSavedService = __decorate([
         job_service_1.JobService,
         user_service_1.default])
 ], JobSavedService);
-exports.JobSavedService = JobSavedService;
 //# sourceMappingURL=job-saved.service.js.map

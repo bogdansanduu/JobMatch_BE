@@ -59,11 +59,17 @@ let LikeService = class LikeService {
             company,
         });
     }
+    removeLikesByUserId(userId) {
+        return this.likeRepository.deleteByUserId(userId);
+    }
+    removeLikesByCompanyId(companyId) {
+        return this.likeRepository.deleteByCompanyId(companyId);
+    }
 };
-LikeService = __decorate([
+exports.LikeService = LikeService;
+exports.LikeService = LikeService = __decorate([
     (0, inversify_1.injectable)(),
     __param(0, (0, inversify_1.inject)(inversifyConstants_1.LIKE_INV.LikeRepository)),
     __metadata("design:paramtypes", [like_repository_1.LikeRepository])
 ], LikeService);
-exports.LikeService = LikeService;
 //# sourceMappingURL=like.service.js.map

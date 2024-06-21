@@ -76,4 +76,12 @@ export class JobApplicationService {
 
     return this.jobApplicationRepo.findAllByJob(jobId);
   }
+
+  removeApplicationsByUserId(userId: number) {
+    return this.jobApplicationRepo.deleteByUserId(userId);
+  }
+
+  removeApplicationsByCompanyId(companyId: number) {
+    return this.jobApplicationRepo.deleteByCompanyId(companyId);
+  }
 }

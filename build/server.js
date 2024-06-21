@@ -12,6 +12,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 require("./auth/passport");
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const cors_1 = __importDefault(require("cors"));
+const helmet_1 = __importDefault(require("helmet"));
 require("./common/s3/s3");
 require("./chat/message/message.gateway");
 require("./chat/room/room.gateway");
@@ -44,6 +45,7 @@ dataSource_1.dataSource
 });
 const app = (0, express_1.default)();
 exports.app = app;
+app.use((0, helmet_1.default)());
 const corsOptions = {
     origin: 'http://localhost:3000',
     credentials: true,

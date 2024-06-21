@@ -64,6 +64,7 @@ const inversifyConstants_1 = require("../common/utils/inversifyConstants");
 const user_service_1 = __importDefault(require("../user/user.service"));
 const not_found_exception_1 = require("../common/exceptions/not-found.exception");
 const user_constants_1 = require("../common/constants/user.constants");
+const centralizedContainer_1 = require("../common/centralizedContainer/centralizedContainer");
 let CompanyService = class CompanyService {
     constructor(companyRepository, userService) {
         this.userService = userService;
@@ -78,9 +79,9 @@ let CompanyService = class CompanyService {
             return company;
         });
     }
-    getAllCompanies() {
+    getAllCompanies(isBanned = false) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.companyRepository.findAll();
+            return this.companyRepository.findAll(isBanned);
         });
     }
     getCompanyByEmail(email) {
@@ -109,8 +110,30 @@ let CompanyService = class CompanyService {
             return companies.slice(0, 5);
         });
     }
+    banCompany(companyId, banned) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const company = yield this.companyRepository.getCompanyById(companyId);
+            if (!company) {
+                throw new not_found_exception_1.NotFoundException('Company not found');
+            }
+            const notAllowed = false;
+            if (banned && notAllowed) {
+                const postService = centralizedContainer_1.centralizedContainer.get(inversifyConstants_1.POST_INV.PostService);
+                const commentService = centralizedContainer_1.centralizedContainer.get(inversifyConstants_1.COMMENT_INV.CommentService);
+                const likeService = centralizedContainer_1.centralizedContainer.get(inversifyConstants_1.LIKE_INV.LikeService);
+                const jobService = centralizedContainer_1.centralizedContainer.get(inversifyConstants_1.JOB_INV.JobService);
+                yield postService.removePostsByCompanyId(companyId);
+                yield commentService.removeCommentsByCompanyId(companyId);
+                yield likeService.removeLikesByCompanyId(companyId);
+                yield jobService.deleteByCompanyId(companyId);
+            }
+            const emailService = centralizedContainer_1.centralizedContainer.get(inversifyConstants_1.AWS_SES_INV.SESService);
+            yield emailService.sendAccountPermissionChangedEmail(company.id, banned, false, true);
+            return this.companyRepository.updateCompany(companyId, { isBanned: banned });
+        });
+    }
     addRecSysCompanies() {
-        var e_1, _a;
+        var _a, e_1, _b, _c;
         return __awaiter(this, void 0, void 0, function* () {
             const companies = [];
             const uniqueCompanies = new Set();
@@ -133,8 +156,10 @@ let CompanyService = class CompanyService {
             }
             let index = 1;
             try {
-                for (var parser_1 = __asyncValues(parser), parser_1_1; parser_1_1 = yield parser_1.next(), !parser_1_1.done;) {
-                    const companyData = parser_1_1.value;
+                for (var _d = true, parser_1 = __asyncValues(parser), parser_1_1; parser_1_1 = yield parser_1.next(), _a = parser_1_1.done, !_a; _d = true) {
+                    _c = parser_1_1.value;
+                    _d = false;
+                    const companyData = _c;
                     if (!uniqueCompanies.has(companyData.Company)) {
                         uniqueCompanies.add(companyData.Company);
                         const locationParts = companyData.Location.split(',').map((part) => part.trim());
@@ -163,6 +188,7 @@ let CompanyService = class CompanyService {
                             country,
                             industry,
                             ownerId: ownerId,
+                            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut facilisis aliquam dictum. Suspendisse potenti. Phasellus gravida vel purus eu imperdiet. Phasellus interdum, nisl et aliquam tempus, turpis risus tempus dui, sit amet tincidunt magna metus ac turpis. Vestibulum quis est ac eros sagittis sodales. Cras consequat nulla fringilla, pellentesque velit vitae, porttitor nunc. Cras ornare massa nec turpis eleifend, blandit sodales ipsum tristique. Cras blandit pellentesque ipsum, id feugiat sapien ultrices quis. Proin tincidunt, arcu eu euismod cursus, ipsum elit congue ligula, vitae tristique ex justo eu massa. Morbi sodales non nulla non faucibus. Proin ac ex turpis. Vestibulum faucibus sagittis lacus, vitae commodo elit euismod at. Quisque est orci, blandit non imperdiet nec, elementum eu tellus. Aliquam rutrum, magna ac lobortis suscipit, ipsum dolor porttitor eros, in rutrum nunc augue sed risus. Donec facilisis maximus justo et vehicula. Nulla facilisi.',
                         });
                         console.log(`Created company: ${companyName}`);
                         index++;
@@ -173,7 +199,7 @@ let CompanyService = class CompanyService {
             catch (e_1_1) { e_1 = { error: e_1_1 }; }
             finally {
                 try {
-                    if (parser_1_1 && !parser_1_1.done && (_a = parser_1.return)) yield _a.call(parser_1);
+                    if (!_d && !_a && (_b = parser_1.return)) yield _b.call(parser_1);
                 }
                 finally { if (e_1) throw e_1.error; }
             }
@@ -181,12 +207,12 @@ let CompanyService = class CompanyService {
         });
     }
 };
-CompanyService = __decorate([
+exports.CompanyService = CompanyService;
+exports.CompanyService = CompanyService = __decorate([
     (0, inversify_1.injectable)(),
     __param(0, (0, inversify_1.inject)(inversifyConstants_1.COMPANY_INV.CompanyRepository)),
     __param(1, (0, inversify_1.inject)(inversifyConstants_1.USER_INV.UserService)),
     __metadata("design:paramtypes", [company_repository_1.CompanyRepository,
         user_service_1.default])
 ], CompanyService);
-exports.CompanyService = CompanyService;
 //# sourceMappingURL=company.service.js.map

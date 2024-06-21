@@ -50,10 +50,24 @@ let CommentRepository = class CommentRepository {
         const comment = this.commentRepo.create(commentData);
         return this.commentRepo.save(comment);
     }
+    deleteByUserId(userId) {
+        return this.commentRepo.delete({
+            author: {
+                id: userId,
+            },
+        });
+    }
+    deleteByCompanyId(companyId) {
+        return this.commentRepo.delete({
+            company: {
+                id: companyId,
+            },
+        });
+    }
 };
-CommentRepository = __decorate([
+exports.CommentRepository = CommentRepository;
+exports.CommentRepository = CommentRepository = __decorate([
     (0, inversify_1.injectable)(),
     __metadata("design:paramtypes", [])
 ], CommentRepository);
-exports.CommentRepository = CommentRepository;
 //# sourceMappingURL=comment.repository.js.map

@@ -19,9 +19,9 @@ export class Comment extends BaseEntity {
   @OneToMany(() => Like, (like) => like.comment, { onDelete: 'CASCADE' })
   likes: Like[];
 
-  @ManyToOne(() => User, (user) => user.posts, { onDelete: 'CASCADE' })
+  @ManyToOne(() => User, (user) => user.posts)
   author: User;
 
-  @ManyToOne(() => Company, (company) => company.posts, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Company, (company) => company.posts)
   company: Company;
 }

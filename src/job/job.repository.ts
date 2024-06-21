@@ -93,4 +93,16 @@ export class JobRepository {
 
     return this.jobRepo.save(job);
   }
+
+  deleteByCompanyId(companyId: number) {
+    return this.jobRepo.delete({
+      company: {
+        id: companyId,
+      },
+    });
+  }
+
+  delete(jobId: number) {
+    return this.jobRepo.delete(jobId);
+  }
 }

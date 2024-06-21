@@ -15,6 +15,7 @@ const user_entity_1 = require("../../user/entities/user.entity");
 const company_entity_1 = require("../../company/entities/company.entity");
 let Token = class Token extends typeorm_1.BaseEntity {
 };
+exports.Token = Token;
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
@@ -41,8 +42,7 @@ __decorate([
     (0, typeorm_1.UpdateDateColumn)(),
     __metadata("design:type", Date)
 ], Token.prototype, "updatedAt", void 0);
-Token = __decorate([
+exports.Token = Token = __decorate([
     (0, typeorm_1.Entity)()
 ], Token);
-exports.Token = Token;
 //# sourceMappingURL=token.entity.js.map

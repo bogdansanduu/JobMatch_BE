@@ -11,16 +11,20 @@ import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { User } from '../user/entities/user.entity';
 import { TokenRepository } from './token.repo';
 import { AuthServiceInterface } from './interfaces/auth-service.interface';
-import { RegisterValidation } from './dtos/register.validation';
+import { AdminRegisterValidation, RegisterValidation } from './dtos/register.validation';
 import { CompanyService } from '../company/company.service';
 import { CreateCompanyValidation } from '../company/dtos/create-company.validation';
 import { Company } from '../company/entities/company.entity';
 import { Roles } from '../common/constants/user.constants';
 import { BannedException } from '../common/exceptions/banned.exception';
+import { getEnvVar } from '../common/utils/envConfig';
 
 //seconds
 const EXPIRES_IN_ACCESS = 60 * 15;
 const EXPIRES_IN_REFRESH = 60 * 60 * 24;
+
+const refreshTokenSecret = getEnvVar<string>('REFRESH_TOKEN_SECRET', 'string');
+const accessTokenSecret = getEnvVar<string>('ACCESS_TOKEN_SECRET', 'string');
 
 @injectable()
 class AuthService implements AuthServiceInterface {
@@ -62,7 +66,7 @@ class AuthService implements AuthServiceInterface {
     return await this.userService.createUser(newUserData);
   }
 
-  async registerAdmin(data: RegisterValidation) {
+  async registerAdmin(data: AdminRegisterValidation) {
     const { email, password } = data;
 
     const existingUser = await this.userService.getUserByEmail(email);
@@ -77,6 +81,10 @@ class AuthService implements AuthServiceInterface {
 
     const newUserData = {
       ...data,
+      country: 'N/A',
+      city: 'N/A',
+      state: 'N/A',
+      resume: 'N/A',
       password: hashedPassword,
       role: Roles.ADMIN,
     };
@@ -85,7 +93,7 @@ class AuthService implements AuthServiceInterface {
   }
 
   async registerCompany(data: CreateCompanyValidation) {
-    const { name, email, password, industry, country, city, state, ownerId } = data;
+    const { name, email, password, industry, country, city, description, state, ownerId } = data;
 
     const existingCompany = await this.companyService.getCompanyByEmail(email);
 
@@ -106,6 +114,7 @@ class AuthService implements AuthServiceInterface {
       city,
       state,
       ownerId,
+      description,
     };
 
     await this.userService.updateUser(ownerId, { role: Roles.COMPANY_OWNER });
@@ -157,6 +166,10 @@ class AuthService implements AuthServiceInterface {
       throw new NotFoundException('Company not found');
     }
 
+    if (company.isBanned) {
+      throw new BannedException('Company is banned');
+    }
+
     const isMatch = await bcrypt.compare(password, company.password);
 
     if (!isMatch) {
@@ -194,7 +207,7 @@ class AuthService implements AuthServiceInterface {
       throw new NotFoundException('Token not found');
     }
 
-    const { userId } = <JwtPayload>jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET || 'refresh');
+    const { userId } = <JwtPayload>jwt.verify(refreshToken, refreshTokenSecret);
     const user = refreshTokenDb.user;
 
     if (user.id !== userId) {
@@ -216,7 +229,7 @@ class AuthService implements AuthServiceInterface {
       throw new NotFoundException('Token not found');
     }
 
-    const { companyId } = <JwtPayload>jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET || 'refresh');
+    const { companyId } = <JwtPayload>jwt.verify(refreshToken, refreshTokenSecret);
     const company = refreshTokenDb.company;
 
     if (company.id !== companyId) {
@@ -239,7 +252,7 @@ class AuthService implements AuthServiceInterface {
       email: data.email,
     };
 
-    return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET || 'access', {
+    return jwt.sign(payload, accessTokenSecret, {
       expiresIn: EXPIRES_IN_ACCESS,
     });
   }
@@ -250,7 +263,7 @@ class AuthService implements AuthServiceInterface {
       email: company.email,
     };
 
-    return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET || 'access', {
+    return jwt.sign(payload, accessTokenSecret, {
       expiresIn: EXPIRES_IN_ACCESS,
     });
   }
@@ -261,7 +274,7 @@ class AuthService implements AuthServiceInterface {
       email: data.email,
     };
 
-    return jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET || 'refresh', {
+    return jwt.sign(payload, refreshTokenSecret, {
       expiresIn: EXPIRES_IN_REFRESH,
     });
   }
@@ -272,7 +285,7 @@ class AuthService implements AuthServiceInterface {
       email: company.email,
     };
 
-    return jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET || 'refresh', {
+    return jwt.sign(payload, refreshTokenSecret, {
       expiresIn: EXPIRES_IN_REFRESH,
     });
   }

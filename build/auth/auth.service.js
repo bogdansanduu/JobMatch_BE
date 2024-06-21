@@ -35,8 +35,12 @@ const inversifyConstants_1 = require("../common/utils/inversifyConstants");
 const token_repo_1 = require("./token.repo");
 const company_service_1 = require("../company/company.service");
 const user_constants_1 = require("../common/constants/user.constants");
+const banned_exception_1 = require("../common/exceptions/banned.exception");
+const envConfig_1 = require("../common/utils/envConfig");
 const EXPIRES_IN_ACCESS = 60 * 15;
 const EXPIRES_IN_REFRESH = 60 * 60 * 24;
+const refreshTokenSecret = (0, envConfig_1.getEnvVar)('REFRESH_TOKEN_SECRET', 'string');
+const accessTokenSecret = (0, envConfig_1.getEnvVar)('ACCESS_TOKEN_SECRET', 'string');
 let AuthService = class AuthService {
     constructor(userService, companyService, tokenRepository) {
         this.userService = userService;
@@ -67,13 +71,13 @@ let AuthService = class AuthService {
             const saltRounds = 10;
             const salt = yield bcrypt_1.default.genSalt(saltRounds);
             const hashedPassword = yield bcrypt_1.default.hash(password, salt);
-            const newUserData = Object.assign(Object.assign({}, data), { password: hashedPassword, role: user_constants_1.Roles.ADMIN });
+            const newUserData = Object.assign(Object.assign({}, data), { country: 'N/A', city: 'N/A', state: 'N/A', resume: 'N/A', password: hashedPassword, role: user_constants_1.Roles.ADMIN });
             return yield this.userService.createUser(newUserData);
         });
     }
     registerCompany(data) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { name, email, password, industry, country, city, state, ownerId } = data;
+            const { name, email, password, industry, country, city, description, state, ownerId } = data;
             const existingCompany = yield this.companyService.getCompanyByEmail(email);
             if (existingCompany) {
                 throw new http_exception_1.HttpException('Company already exists', http_status_codes_1.StatusCodes.CONFLICT);
@@ -90,6 +94,7 @@ let AuthService = class AuthService {
                 city,
                 state,
                 ownerId,
+                description,
             };
             yield this.userService.updateUser(ownerId, { role: user_constants_1.Roles.COMPANY_OWNER });
             return yield this.companyService.createCompany(newCompanyData);
@@ -100,6 +105,9 @@ let AuthService = class AuthService {
             const user = yield this.userService.getUserByEmail(email);
             if (!user) {
                 throw new not_found_exception_1.NotFoundException('User not found');
+            }
+            if (user.isBanned) {
+                throw new banned_exception_1.BannedException('User is banned');
             }
             const isMatch = yield bcrypt_1.default.compare(password, user.password);
             if (!isMatch) {
@@ -124,6 +132,9 @@ let AuthService = class AuthService {
             const company = yield this.companyService.getCompanyByEmail(email);
             if (!company) {
                 throw new not_found_exception_1.NotFoundException('Company not found');
+            }
+            if (company.isBanned) {
+                throw new banned_exception_1.BannedException('Company is banned');
             }
             const isMatch = yield bcrypt_1.default.compare(password, company.password);
             if (!isMatch) {
@@ -154,7 +165,7 @@ let AuthService = class AuthService {
             if (!refreshTokenDb) {
                 throw new not_found_exception_1.NotFoundException('Token not found');
             }
-            const { userId } = jsonwebtoken_1.default.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET || 'refresh');
+            const { userId } = jsonwebtoken_1.default.verify(refreshToken, refreshTokenSecret);
             const user = refreshTokenDb.user;
             if (user.id !== userId) {
                 throw new http_exception_1.HttpException('Invalid token', http_status_codes_1.StatusCodes.FORBIDDEN);
@@ -172,7 +183,7 @@ let AuthService = class AuthService {
             if (!refreshTokenDb) {
                 throw new not_found_exception_1.NotFoundException('Token not found');
             }
-            const { companyId } = jsonwebtoken_1.default.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET || 'refresh');
+            const { companyId } = jsonwebtoken_1.default.verify(refreshToken, refreshTokenSecret);
             const company = refreshTokenDb.company;
             if (company.id !== companyId) {
                 throw new http_exception_1.HttpException('Invalid token', http_status_codes_1.StatusCodes.FORBIDDEN);
@@ -189,7 +200,7 @@ let AuthService = class AuthService {
             userId: data.id,
             email: data.email,
         };
-        return jsonwebtoken_1.default.sign(payload, process.env.ACCESS_TOKEN_SECRET || 'access', {
+        return jsonwebtoken_1.default.sign(payload, accessTokenSecret, {
             expiresIn: EXPIRES_IN_ACCESS,
         });
     }
@@ -198,7 +209,7 @@ let AuthService = class AuthService {
             companyId: company.id,
             email: company.email,
         };
-        return jsonwebtoken_1.default.sign(payload, process.env.ACCESS_TOKEN_SECRET || 'access', {
+        return jsonwebtoken_1.default.sign(payload, accessTokenSecret, {
             expiresIn: EXPIRES_IN_ACCESS,
         });
     }
@@ -207,7 +218,7 @@ let AuthService = class AuthService {
             userId: data.id,
             email: data.email,
         };
-        return jsonwebtoken_1.default.sign(payload, process.env.REFRESH_TOKEN_SECRET || 'refresh', {
+        return jsonwebtoken_1.default.sign(payload, refreshTokenSecret, {
             expiresIn: EXPIRES_IN_REFRESH,
         });
     }
@@ -216,7 +227,7 @@ let AuthService = class AuthService {
             companyId: company.id,
             email: company.email,
         };
-        return jsonwebtoken_1.default.sign(payload, process.env.REFRESH_TOKEN_SECRET || 'refresh', {
+        return jsonwebtoken_1.default.sign(payload, refreshTokenSecret, {
             expiresIn: EXPIRES_IN_REFRESH,
         });
     }

@@ -14,6 +14,7 @@ const class_validator_1 = require("class-validator");
 const job_application_constants_1 = require("../../common/constants/job-application.constants");
 class ReviewApplicationValidation {
 }
+exports.ReviewApplicationValidation = ReviewApplicationValidation;
 __decorate([
     (0, class_validator_1.IsDefined)(),
     (0, class_validator_1.IsEnum)(job_application_constants_1.APPLICATION_STATUS),
@@ -26,5 +27,4 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], ReviewApplicationValidation.prototype, "observations", void 0);
-exports.ReviewApplicationValidation = ReviewApplicationValidation;
 //# sourceMappingURL=review-application.validation.js.map

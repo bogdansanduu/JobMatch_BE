@@ -16,12 +16,13 @@ const user_entity_1 = require("../../user/entities/user.entity");
 const job_application_constants_1 = require("../../common/constants/job-application.constants");
 let JobApplication = class JobApplication extends typeorm_1.BaseEntity {
 };
+exports.JobApplication = JobApplication;
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
 ], JobApplication.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => job_entity_1.Job, (job) => job.applications),
+    (0, typeorm_1.ManyToOne)(() => job_entity_1.Job, (job) => job.applications, { onDelete: 'CASCADE' }),
     __metadata("design:type", job_entity_1.Job)
 ], JobApplication.prototype, "job", void 0);
 __decorate([
@@ -51,8 +52,7 @@ __decorate([
     (0, typeorm_1.UpdateDateColumn)(),
     __metadata("design:type", Date)
 ], JobApplication.prototype, "updateDate", void 0);
-JobApplication = __decorate([
+exports.JobApplication = JobApplication = __decorate([
     (0, typeorm_1.Entity)()
 ], JobApplication);
-exports.JobApplication = JobApplication;
 //# sourceMappingURL=job-application.entity.js.map

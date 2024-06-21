@@ -115,8 +115,15 @@ let CommentService = class CommentService {
             return this.getCommentById(commentId);
         });
     }
+    removeCommentsByUserId(userId) {
+        return this.commentRepository.deleteByUserId(userId);
+    }
+    removeCommentsByCompanyId(companyId) {
+        return this.commentRepository.deleteByCompanyId(companyId);
+    }
 };
-CommentService = __decorate([
+exports.CommentService = CommentService;
+exports.CommentService = CommentService = __decorate([
     (0, inversify_1.injectable)(),
     __param(0, (0, inversify_1.inject)(inversifyConstants_1.USER_INV.UserService)),
     __param(1, (0, inversify_1.inject)(inversifyConstants_1.COMPANY_INV.CompanyService)),
@@ -127,5 +134,4 @@ CommentService = __decorate([
         like_service_1.LikeService,
         comment_repository_1.CommentRepository])
 ], CommentService);
-exports.CommentService = CommentService;
 //# sourceMappingURL=comment.service.js.map

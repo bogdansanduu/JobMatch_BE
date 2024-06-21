@@ -2,7 +2,7 @@ import { Exclude, Expose, Type } from 'class-transformer';
 import { UserResponseDto, UserSimpleResponseDto } from '../../user/dtos/user-response.dto';
 import { LikeResponseDto } from '../../like/dtos/like-response.dto';
 import { CommentResponseDto } from '../../comment/dtos/comment-response.dto';
-import { CompanyResponseDto } from '../../company/dtos/company-response.dto';
+import { CompanyResponseDto, CompanySimpleResponseDto } from '../../company/dtos/company-response.dto';
 
 @Exclude()
 export class PostSimpleResponseDto {
@@ -12,6 +12,10 @@ export class PostSimpleResponseDto {
   @Expose()
   @Type(() => UserSimpleResponseDto)
   author: UserSimpleResponseDto;
+
+  @Expose()
+  @Type(() => CompanySimpleResponseDto)
+  company: CompanySimpleResponseDto;
 }
 
 @Exclude()
@@ -24,9 +28,6 @@ export class PostResponseDto {
 
   @Expose()
   content: string;
-
-  @Expose()
-  picture: string;
 
   @Expose()
   @Type(() => UserResponseDto)

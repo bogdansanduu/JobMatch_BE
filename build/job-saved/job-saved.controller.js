@@ -26,6 +26,9 @@ const inversify_1 = require("inversify");
 const http_status_codes_1 = require("http-status-codes");
 const job_saved_service_1 = require("./job-saved.service");
 const inversifyConstants_1 = require("../common/utils/inversifyConstants");
+const jwt_auth_decorator_1 = require("../common/decorators/jwt-auth.decorator");
+const requires_roles_decorator_1 = require("../common/decorators/requires-roles.decorator");
+const user_constants_1 = require("../common/constants/user.constants");
 let JobSavedController = class JobSavedController {
     constructor(jobSavedService) {
         this.jobSavedService = jobSavedService;
@@ -60,10 +63,38 @@ let JobSavedController = class JobSavedController {
         });
     }
 };
-JobSavedController = __decorate([
+exports.JobSavedController = JobSavedController;
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.ADMIN, user_constants_1.Roles.USER, user_constants_1.Roles.COMPANY, user_constants_1.Roles.COMPANY_OWNER]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], JobSavedController.prototype, "getAllSavedJobs", null);
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.ADMIN, user_constants_1.Roles.USER, user_constants_1.Roles.COMPANY, user_constants_1.Roles.COMPANY_OWNER]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], JobSavedController.prototype, "getAllSavedJobsForUser", null);
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.USER, user_constants_1.Roles.COMPANY_OWNER]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], JobSavedController.prototype, "saveJob", null);
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.USER, user_constants_1.Roles.COMPANY_OWNER]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], JobSavedController.prototype, "unsaveJob", null);
+exports.JobSavedController = JobSavedController = __decorate([
     (0, inversify_1.injectable)(),
     __param(0, (0, inversify_1.inject)(inversifyConstants_1.JOB_SAVED_INV.JobSavedService)),
     __metadata("design:paramtypes", [job_saved_service_1.JobSavedService])
 ], JobSavedController);
-exports.JobSavedController = JobSavedController;
 //# sourceMappingURL=job-saved.controller.js.map

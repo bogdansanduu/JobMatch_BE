@@ -15,6 +15,7 @@ const company_response_dto_1 = require("../../company/dtos/company-response.dto"
 const job_application_response_dto_1 = require("../../job-application/dtos/job-application-response.dto");
 let JobResponseDto = class JobResponseDto {
 };
+exports.JobResponseDto = JobResponseDto;
 __decorate([
     (0, class_transformer_1.Expose)(),
     __metadata("design:type", Number)
@@ -81,8 +82,7 @@ __decorate([
     (0, class_transformer_1.Type)(() => company_response_dto_1.CompanyResponseDto),
     __metadata("design:type", company_response_dto_1.CompanyResponseDto)
 ], JobResponseDto.prototype, "company", void 0);
-JobResponseDto = __decorate([
+exports.JobResponseDto = JobResponseDto = __decorate([
     (0, class_transformer_1.Exclude)()
 ], JobResponseDto);
-exports.JobResponseDto = JobResponseDto;
 //# sourceMappingURL=job-response.dto.js.map

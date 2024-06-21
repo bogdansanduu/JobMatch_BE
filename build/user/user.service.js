@@ -32,6 +32,7 @@ const user_constants_1 = require("../common/constants/user.constants");
 const user_repository_1 = __importDefault(require("./user.repository"));
 const not_found_exception_1 = require("../common/exceptions/not-found.exception");
 const invalid_exception_1 = require("../common/exceptions/invalid.exception");
+const centralizedContainer_1 = require("../common/centralizedContainer/centralizedContainer");
 let UserService = class UserService {
     constructor(userRepository) {
         this.userRepository = userRepository;
@@ -45,8 +46,8 @@ let UserService = class UserService {
     deleteUser(id) {
         return this.userRepository.deleteUser(id);
     }
-    getAllUsers() {
-        return this.userRepository.getAllUsers();
+    getAllUsers(isBanned = false) {
+        return this.userRepository.getAllUsers(isBanned);
     }
     getUserById(id) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -121,6 +122,30 @@ let UserService = class UserService {
             yield this.userRepository.saveUser(user1);
             yield this.userRepository.saveUser(user2);
             return this.userRepository.getUserById(contactId);
+        });
+    }
+    banUser(userId, banned) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield this.userRepository.getUserById(userId);
+            if (!user) {
+                throw new not_found_exception_1.NotFoundException('User not found');
+            }
+            const notAllowed = false;
+            if (banned && notAllowed) {
+                const postService = centralizedContainer_1.centralizedContainer.get(inversifyConstants_1.POST_INV.PostService);
+                const commentService = centralizedContainer_1.centralizedContainer.get(inversifyConstants_1.COMMENT_INV.CommentService);
+                const likeService = centralizedContainer_1.centralizedContainer.get(inversifyConstants_1.LIKE_INV.LikeService);
+                const jobApplicationService = centralizedContainer_1.centralizedContainer.get(inversifyConstants_1.JOB_APPLICATION_INV.JobApplicationService);
+                const roomService = centralizedContainer_1.centralizedContainer.get(inversifyConstants_1.ROOM_INV.RoomService);
+                yield postService.removePostsByUserId(user.id);
+                yield commentService.removeCommentsByUserId(user.id);
+                yield likeService.removeLikesByUserId(user.id);
+                yield jobApplicationService.removeApplicationsByUserId(user.id);
+                yield roomService.removeRoomsByUserId(user.id);
+            }
+            const emailService = centralizedContainer_1.centralizedContainer.get(inversifyConstants_1.AWS_SES_INV.SESService);
+            yield emailService.sendAccountPermissionChangedEmail(user.id, banned, true, false);
+            return this.userRepository.updateUser(userId, { isBanned: banned });
         });
     }
     addRecSysUsers() {

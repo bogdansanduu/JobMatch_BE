@@ -14,10 +14,10 @@ export class Room extends BaseEntity {
   @Column({ nullable: true })
   name: string;
 
-  @OneToMany(() => UserToRoom, (userToRoom) => userToRoom.room)
+  @OneToMany(() => UserToRoom, (userToRoom) => userToRoom.room, { onDelete: 'CASCADE' })
   userToRooms: UserToRoom[];
 
-  @OneToMany(() => Message, (message) => message.room)
+  @OneToMany(() => Message, (message) => message.room, { onDelete: 'CASCADE' })
   messages: Message[];
 
   @Column({ default: false })

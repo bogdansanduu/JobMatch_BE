@@ -13,6 +13,7 @@ exports.LoginValidation = void 0;
 const class_validator_1 = require("class-validator");
 class LoginValidation {
 }
+exports.LoginValidation = LoginValidation;
 __decorate([
     (0, class_validator_1.IsDefined)(),
     (0, class_validator_1.IsEmail)(),
@@ -25,5 +26,4 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], LoginValidation.prototype, "password", void 0);
-exports.LoginValidation = LoginValidation;
 //# sourceMappingURL=login.validation.js.map

@@ -2,6 +2,7 @@ export enum SocketEventsClient {
   GET_ALL_ROOMS_FOR_USER = 'getAllRoomsForUser',
   CREATE_ONE_ON_ONE_ROOM = 'createOneOnOneRoom',
   JOIN_ROOM = 'joinRoom',
+  LEAVE_ROOM = 'leaveRoom',
   GET_ALL_MESSAGES_FOR_ROOM = 'getAllMessagesRoom',
   SEND_MESSAGE_ROOM = 'sendMessageRoom',
 }

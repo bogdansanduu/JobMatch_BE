@@ -6,9 +6,10 @@ var SocketEventsClient;
     SocketEventsClient["GET_ALL_ROOMS_FOR_USER"] = "getAllRoomsForUser";
     SocketEventsClient["CREATE_ONE_ON_ONE_ROOM"] = "createOneOnOneRoom";
     SocketEventsClient["JOIN_ROOM"] = "joinRoom";
+    SocketEventsClient["LEAVE_ROOM"] = "leaveRoom";
     SocketEventsClient["GET_ALL_MESSAGES_FOR_ROOM"] = "getAllMessagesRoom";
     SocketEventsClient["SEND_MESSAGE_ROOM"] = "sendMessageRoom";
-})(SocketEventsClient = exports.SocketEventsClient || (exports.SocketEventsClient = {}));
+})(SocketEventsClient || (exports.SocketEventsClient = SocketEventsClient = {}));
 var SocketEventsServer;
 (function (SocketEventsServer) {
     SocketEventsServer["ALL_ROOMS_FOR_USER"] = "allRoomsForUser";
@@ -16,5 +17,5 @@ var SocketEventsServer;
     SocketEventsServer["MESSAGE_ROOM"] = "messageRoom";
     SocketEventsServer["CREATED_ONE_ON_ONE_ROOM"] = "createdOneOnOneRoom";
     SocketEventsServer["JOINED_ROOM"] = "joinedRoom";
-})(SocketEventsServer = exports.SocketEventsServer || (exports.SocketEventsServer = {}));
+})(SocketEventsServer || (exports.SocketEventsServer = SocketEventsServer = {}));
 //# sourceMappingURL=socket.constants.js.map

@@ -13,11 +13,11 @@ exports.CreateCommentValidation = void 0;
 const class_validator_1 = require("class-validator");
 class CreateCommentValidation {
 }
+exports.CreateCommentValidation = CreateCommentValidation;
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsDefined)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateCommentValidation.prototype, "content", void 0);
-exports.CreateCommentValidation = CreateCommentValidation;
 //# sourceMappingURL=create-comment.validation.js.map

@@ -61,6 +61,14 @@ export class JobService {
     });
   }
 
+  async deleteByCompanyId(companyId: number) {
+    return this.jobRepository.deleteByCompanyId(companyId);
+  }
+
+  async removeJob(jobId: number) {
+    return this.jobRepository.delete(jobId);
+  }
+
   //---RecSys---
 
   async addRecSysJobs() {

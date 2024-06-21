@@ -41,8 +41,11 @@ let UserRepository = class UserRepository {
     deleteUser(id) {
         return this.userRepo.delete(id);
     }
-    getAllUsers() {
+    getAllUsers(isBanned = false) {
         return this.userRepo.find({
+            where: {
+                isBanned,
+            },
             relations: {
                 followers: true,
                 following: true,
@@ -52,6 +55,7 @@ let UserRepository = class UserRepository {
                 jobsSaved: {
                     job: true,
                 },
+                company: true,
             },
         });
     }
@@ -95,9 +99,9 @@ let UserRepository = class UserRepository {
         return __awaiter(this, void 0, void 0, function* () {
             const whereConditions = searchTerms.map((searchTerm) => ({
                 where: [
-                    { firstName: (0, typeorm_1.ILike)(`%${searchTerm}%`) },
-                    { lastName: (0, typeorm_1.ILike)(`%${searchTerm}%`) },
-                    { email: (0, typeorm_1.ILike)(`%${searchTerm}%`) },
+                    { firstName: (0, typeorm_1.ILike)(`%${searchTerm}%`), isBanned: false },
+                    { lastName: (0, typeorm_1.ILike)(`%${searchTerm}%`), isBanned: false },
+                    { email: (0, typeorm_1.ILike)(`%${searchTerm}%`), isBanned: false },
                 ],
             }));
             const combinedConditions = whereConditions.reduce((acc, condition) => {
@@ -116,10 +120,10 @@ let UserRepository = class UserRepository {
         });
     }
 };
-UserRepository = __decorate([
+exports.UserRepository = UserRepository;
+exports.UserRepository = UserRepository = __decorate([
     (0, inversify_1.injectable)(),
     __metadata("design:paramtypes", [])
 ], UserRepository);
-exports.UserRepository = UserRepository;
 exports.default = UserRepository;
 //# sourceMappingURL=user.repository.js.map

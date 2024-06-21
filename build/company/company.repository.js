@@ -38,10 +38,14 @@ let CompanyRepository = class CompanyRepository {
             },
         });
     }
-    findAll() {
+    findAll(isBanned = false) {
         return this.companyRepo.find({
+            where: {
+                isBanned,
+            },
             relations: {
                 owner: true,
+                posts: true,
             },
         });
     }
@@ -52,6 +56,7 @@ let CompanyRepository = class CompanyRepository {
             },
             relations: {
                 owner: true,
+                posts: true,
             },
         });
     }
@@ -62,12 +67,19 @@ let CompanyRepository = class CompanyRepository {
             },
             relations: {
                 owner: true,
+                posts: true,
             },
         });
     }
     createCompany(companyData) {
         const company = this.companyRepo.create(companyData);
         return this.companyRepo.save(company);
+    }
+    updateCompany(id, companyData) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.companyRepo.update(id, companyData);
+            return this.getCompanyById(id);
+        });
     }
     searchByNameAndEmail(searchTerms) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -84,9 +96,9 @@ let CompanyRepository = class CompanyRepository {
         });
     }
 };
-CompanyRepository = __decorate([
+exports.CompanyRepository = CompanyRepository;
+exports.CompanyRepository = CompanyRepository = __decorate([
     (0, inversify_1.injectable)(),
     __metadata("design:paramtypes", [])
 ], CompanyRepository);
-exports.CompanyRepository = CompanyRepository;
 //# sourceMappingURL=company.repository.js.map

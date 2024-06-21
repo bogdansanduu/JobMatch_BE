@@ -48,15 +48,8 @@ export class User extends BaseEntity {
   @Column({ type: 'longtext' })
   profilePicture: string;
 
-  //TODO add these in register flow
-  // @Column({ nullable: false, type: 'varchar' })
-  // title: string;
-  //
-  // @Column({ nullable: false, type: 'varchar' })
-  // currentPosition: string;
-  //
-  // @Column({ nullable: false, type: 'varchar' })
-  // industry: string;
+  @Column({ nullable: true, type: 'varchar' })
+  currentPosition: string;
 
   @Column({ nullable: false, type: 'varchar' })
   country: string;

@@ -27,12 +27,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.RecommendationService = void 0;
 const inversify_1 = require("inversify");
 const axios_1 = __importDefault(require("axios"));
-const process_1 = __importDefault(require("process"));
 const user_service_1 = __importDefault(require("../user/user.service"));
 const company_service_1 = require("../company/company.service");
 const job_service_1 = require("../job/job.service");
 const inversifyConstants_1 = require("../common/utils/inversifyConstants");
 const http_exception_1 = require("../common/exceptions/http.exception");
+const envConfig_1 = require("../common/utils/envConfig");
 let RecommendationService = class RecommendationService {
     constructor(userService, companyService, jobService) {
         this.userService = userService;
@@ -48,8 +48,9 @@ let RecommendationService = class RecommendationService {
     }
     getRecommendations(recommendationInfo) {
         return __awaiter(this, void 0, void 0, function* () {
-            const url = `${process_1.default.env.FASTAPI_SERVER_URL}/getRecommendations` || 'http://localhost:8000/getRecommendations';
-            const secretKey = process_1.default.env.SECRET_FASTAPI_SERVER || 'secret';
+            const fastApiUrl = (0, envConfig_1.getEnvVar)('FASTAPI_SERVER_URL', 'string');
+            const url = `${fastApiUrl}/getRecommendations` || 'http://localhost:8000/getRecommendations';
+            const secretKey = (0, envConfig_1.getEnvVar)('SECRET_FASTAPI_SERVER', 'string');
             try {
                 const { data } = yield axios_1.default.get(url, {
                     headers: {
@@ -73,7 +74,8 @@ let RecommendationService = class RecommendationService {
         });
     }
 };
-RecommendationService = __decorate([
+exports.RecommendationService = RecommendationService;
+exports.RecommendationService = RecommendationService = __decorate([
     (0, inversify_1.injectable)(),
     __param(0, (0, inversify_1.inject)(inversifyConstants_1.USER_INV.UserService)),
     __param(1, (0, inversify_1.inject)(inversifyConstants_1.COMPANY_INV.CompanyService)),
@@ -82,5 +84,4 @@ RecommendationService = __decorate([
         company_service_1.CompanyService,
         job_service_1.JobService])
 ], RecommendationService);
-exports.RecommendationService = RecommendationService;
 //# sourceMappingURL=recommendation.service.js.map

@@ -99,8 +99,18 @@ let JobService = class JobService {
             return this.jobRepository.createJob(Object.assign(Object.assign({}, job), { company }));
         });
     }
+    deleteByCompanyId(companyId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.jobRepository.deleteByCompanyId(companyId);
+        });
+    }
+    removeJob(jobId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.jobRepository.delete(jobId);
+        });
+    }
     addRecSysJobs() {
-        var e_1, _a;
+        var _a, e_1, _b, _c;
         return __awaiter(this, void 0, void 0, function* () {
             const jobs = [];
             const parser = fs.createReadStream(`${__dirname}../../../assets/modified_job_skills_cleaned.csv`).pipe((0, csv_parse_1.parse)({
@@ -110,8 +120,10 @@ let JobService = class JobService {
                 skip_empty_lines: true,
             }));
             try {
-                for (var parser_1 = __asyncValues(parser), parser_1_1; parser_1_1 = yield parser_1.next(), !parser_1_1.done;) {
-                    const jobData = parser_1_1.value;
+                for (var _d = true, parser_1 = __asyncValues(parser), parser_1_1; parser_1_1 = yield parser_1.next(), _a = parser_1_1.done, !_a; _d = true) {
+                    _c = parser_1_1.value;
+                    _d = false;
+                    const jobData = _c;
                     const companyName = jobData.Company;
                     const company = yield this.companyService.getCompanyByName(companyName);
                     if (!company) {
@@ -160,7 +172,7 @@ let JobService = class JobService {
             catch (e_1_1) { e_1 = { error: e_1_1 }; }
             finally {
                 try {
-                    if (parser_1_1 && !parser_1_1.done && (_a = parser_1.return)) yield _a.call(parser_1);
+                    if (!_d && !_a && (_b = parser_1.return)) yield _b.call(parser_1);
                 }
                 finally { if (e_1) throw e_1.error; }
             }
@@ -168,12 +180,12 @@ let JobService = class JobService {
         });
     }
 };
-JobService = __decorate([
+exports.JobService = JobService;
+exports.JobService = JobService = __decorate([
     (0, inversify_1.injectable)(),
     __param(0, (0, inversify_1.inject)(inversifyConstants_1.JOB_INV.JobRepository)),
     __param(1, (0, inversify_1.inject)(inversifyConstants_1.COMPANY_INV.CompanyService)),
     __metadata("design:paramtypes", [job_repository_1.JobRepository,
         company_service_1.CompanyService])
 ], JobService);
-exports.JobService = JobService;
 //# sourceMappingURL=job.service.js.map

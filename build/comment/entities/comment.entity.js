@@ -17,6 +17,7 @@ const like_entity_1 = require("../../like/entities/like.entity");
 const company_entity_1 = require("../../company/entities/company.entity");
 let Comment = class Comment extends typeorm_1.BaseEntity {
 };
+exports.Comment = Comment;
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
@@ -34,15 +35,14 @@ __decorate([
     __metadata("design:type", Array)
 ], Comment.prototype, "likes", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => user_entity_1.User, (user) => user.posts, { onDelete: 'CASCADE' }),
+    (0, typeorm_1.ManyToOne)(() => user_entity_1.User, (user) => user.posts),
     __metadata("design:type", user_entity_1.User)
 ], Comment.prototype, "author", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => company_entity_1.Company, (company) => company.posts, { onDelete: 'CASCADE' }),
+    (0, typeorm_1.ManyToOne)(() => company_entity_1.Company, (company) => company.posts),
     __metadata("design:type", company_entity_1.Company)
 ], Comment.prototype, "company", void 0);
-Comment = __decorate([
+exports.Comment = Comment = __decorate([
     (0, typeorm_1.Entity)()
 ], Comment);
-exports.Comment = Comment;
 //# sourceMappingURL=comment.entity.js.map

@@ -26,14 +26,12 @@ export class Post extends BaseEntity {
   @Column({ type: 'longtext' })
   content: string;
 
-  @Column({ nullable: true, type: 'longtext' })
-  picture: string;
-
-  @ManyToOne(() => User, (user) => user.posts, { onDelete: 'CASCADE' })
+  @ManyToOne(() => User, (user) => user.posts, { nullable: true })
   @JoinColumn()
   author: User;
 
   @ManyToOne(() => Company, (company) => company.posts, { nullable: true })
+  @JoinColumn()
   company: Company;
 
   @OneToMany(() => Like, (like) => like.post, { onDelete: 'CASCADE' })

@@ -8,6 +8,10 @@ import { plainToInstance } from 'class-transformer';
 import { JobResponseDto } from './dtos/job-response.dto';
 import { validateBody } from '../common/utils/validateBody';
 import { CreateJobValidation } from './dtos/create-job.validation';
+import { NotFoundException } from '../common/exceptions/not-found.exception';
+import { JwtAuth } from '../common/decorators/jwt-auth.decorator';
+import { RequiresRoles } from '../common/decorators/requires-roles.decorator';
+import { Roles } from '../common/constants/user.constants';
 
 @injectable()
 export class JobController {
@@ -20,6 +24,8 @@ export class JobController {
     this.jobService = jobService;
   }
 
+  @JwtAuth()
+  @RequiresRoles([Roles.ADMIN, Roles.USER, Roles.COMPANY, Roles.COMPANY_OWNER])
   async getAllJobs(req: Request, res: Response, next: NextFunction) {
     const data = await this.jobService.getAllJobs();
 
@@ -30,6 +36,8 @@ export class JobController {
     return res.status(StatusCodes.OK).json(responseData);
   }
 
+  @JwtAuth()
+  @RequiresRoles([Roles.ADMIN, Roles.USER, Roles.COMPANY, Roles.COMPANY_OWNER])
   async getJobById(req: Request, res: Response, next: NextFunction) {
     const jobId = Number(req.params.jobId);
 
@@ -42,6 +50,8 @@ export class JobController {
     return res.status(StatusCodes.OK).json(responseData);
   }
 
+  @JwtAuth()
+  @RequiresRoles([Roles.ADMIN, Roles.USER, Roles.COMPANY, Roles.COMPANY_OWNER])
   async getAllJobsByCompany(req: Request, res: Response, next: NextFunction) {
     const companyId = Number(req.params.companyId);
 
@@ -54,6 +64,8 @@ export class JobController {
     return res.status(StatusCodes.OK).json(responseData);
   }
 
+  @JwtAuth()
+  @RequiresRoles([Roles.ADMIN, Roles.USER, Roles.COMPANY, Roles.COMPANY_OWNER])
   async getAllJobsPaginated(req: Request, res: Response, next: NextFunction) {
     //extract page and limit
     const page = Number(req.query.page) || 1;
@@ -72,6 +84,8 @@ export class JobController {
     });
   }
 
+  @JwtAuth()
+  @RequiresRoles([Roles.COMPANY])
   async createJob(req: Request, res: Response, next: NextFunction) {
     const body = req.body;
 
@@ -88,8 +102,26 @@ export class JobController {
     return res.status(StatusCodes.CREATED).json(responseData);
   }
 
+  @JwtAuth()
+  @RequiresRoles([Roles.ADMIN])
+  async removeJob(req: Request, res: Response, next: NextFunction) {
+    const jobId = Number(req.params.jobId);
+
+    //validate logic
+
+    if (!jobId) {
+      throw new NotFoundException('Job not found');
+    }
+
+    await this.jobService.removeJob(jobId);
+
+    return res.status(StatusCodes.OK).json({ message: 'Job removed successfully' });
+  }
+
   //---RecSys---
 
+  @JwtAuth()
+  @RequiresRoles([Roles.ADMIN])
   async addRecSysJobs(req: Request, res: Response, next: NextFunction) {
     const data = await this.jobService.addRecSysJobs();
 

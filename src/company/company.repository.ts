@@ -23,10 +23,15 @@ export class CompanyRepository {
     });
   }
 
-  findAll() {
+  findAll(isBanned = false) {
     return this.companyRepo.find({
+      where: {
+        isBanned,
+      },
+
       relations: {
         owner: true,
+        posts: true,
       },
     });
   }
@@ -38,6 +43,7 @@ export class CompanyRepository {
       },
       relations: {
         owner: true,
+        posts: true,
       },
     });
   }
@@ -49,6 +55,7 @@ export class CompanyRepository {
       },
       relations: {
         owner: true,
+        posts: true,
       },
     });
   }
@@ -57,6 +64,12 @@ export class CompanyRepository {
     const company = this.companyRepo.create(companyData);
 
     return this.companyRepo.save(company);
+  }
+
+  async updateCompany(id: number, companyData: Partial<Company>) {
+    await this.companyRepo.update(id, companyData);
+
+    return this.getCompanyById(id);
   }
 
   async searchByNameAndEmail(searchTerms: string[]): Promise<Company[]> {

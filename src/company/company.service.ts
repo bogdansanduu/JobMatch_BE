@@ -4,18 +4,31 @@ import * as fs from 'fs';
 import { parse } from 'csv-parse';
 
 import { CompanyRepository } from './company.repository';
-import { COMPANY_INV, USER_INV } from '../common/utils/inversifyConstants';
+import {
+  AWS_SES_INV,
+  COMMENT_INV,
+  COMPANY_INV,
+  JOB_INV,
+  LIKE_INV,
+  POST_INV,
+  USER_INV,
+} from '../common/utils/inversifyConstants';
 import { CreateCompanyValidation } from './dtos/create-company.validation';
 import UserService from '../user/user.service';
 import { NotFoundException } from '../common/exceptions/not-found.exception';
 import { DEFUALT_PROFILE_PICTURE } from '../common/constants/user.constants';
 import { User } from '../user/entities/user.entity';
 import { Company } from './entities/company.entity';
+import { centralizedContainer } from '../common/centralizedContainer/centralizedContainer';
+import { PostService } from '../posts/post.service';
+import { CommentService } from '../comment/comment.service';
+import { LikeService } from '../like/like.service';
+import { JobService } from '../job/job.service';
+import { SESService } from '../email/ses.service';
 
 @injectable()
 export class CompanyService {
   private readonly companyRepository: CompanyRepository;
-
   private readonly userService: UserService;
 
   constructor(
@@ -38,8 +51,8 @@ export class CompanyService {
     return company;
   }
 
-  async getAllCompanies() {
-    return this.companyRepository.findAll();
+  async getAllCompanies(isBanned = false) {
+    return this.companyRepository.findAll(isBanned);
   }
 
   async getCompanyByEmail(email: string) {
@@ -69,6 +82,34 @@ export class CompanyService {
     const companies = await this.companyRepository.searchByNameAndEmail(searchTerms);
 
     return companies.slice(0, 5);
+  }
+
+  async banCompany(companyId: number, banned: boolean) {
+    const company = await this.companyRepository.getCompanyById(companyId);
+
+    if (!company) {
+      throw new NotFoundException('Company not found');
+    }
+
+    const notAllowed = false;
+
+    if (banned && notAllowed) {
+      const postService = centralizedContainer.get<PostService>(POST_INV.PostService);
+      const commentService = centralizedContainer.get<CommentService>(COMMENT_INV.CommentService);
+      const likeService = centralizedContainer.get<LikeService>(LIKE_INV.LikeService);
+      const jobService = centralizedContainer.get<JobService>(JOB_INV.JobService);
+
+      await postService.removePostsByCompanyId(companyId);
+      await commentService.removeCommentsByCompanyId(companyId);
+      await likeService.removeLikesByCompanyId(companyId);
+      await jobService.deleteByCompanyId(companyId);
+    }
+
+    const emailService = centralizedContainer.get<SESService>(AWS_SES_INV.SESService);
+
+    await emailService.sendAccountPermissionChangedEmail(company.id, banned, false, true);
+
+    return this.companyRepository.updateCompany(companyId, { isBanned: banned });
   }
 
   //---RecSys---
@@ -136,6 +177,8 @@ export class CompanyService {
           country,
           industry,
           ownerId: ownerId,
+          description:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut facilisis aliquam dictum. Suspendisse potenti. Phasellus gravida vel purus eu imperdiet. Phasellus interdum, nisl et aliquam tempus, turpis risus tempus dui, sit amet tincidunt magna metus ac turpis. Vestibulum quis est ac eros sagittis sodales. Cras consequat nulla fringilla, pellentesque velit vitae, porttitor nunc. Cras ornare massa nec turpis eleifend, blandit sodales ipsum tristique. Cras blandit pellentesque ipsum, id feugiat sapien ultrices quis. Proin tincidunt, arcu eu euismod cursus, ipsum elit congue ligula, vitae tristique ex justo eu massa. Morbi sodales non nulla non faucibus. Proin ac ex turpis. Vestibulum faucibus sagittis lacus, vitae commodo elit euismod at. Quisque est orci, blandit non imperdiet nec, elementum eu tellus. Aliquam rutrum, magna ac lobortis suscipit, ipsum dolor porttitor eros, in rutrum nunc augue sed risus. Donec facilisis maximus justo et vehicula. Nulla facilisi.',
         });
 
         console.log(`Created company: ${companyName}`);

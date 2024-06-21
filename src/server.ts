@@ -6,8 +6,9 @@ import dotenv from 'dotenv';
 import './auth/passport';
 import cookieParser from 'cookie-parser';
 import cors, { CorsOptions } from 'cors';
-import './common/s3/s3';
+import helmet from 'helmet';
 
+import './common/s3/s3';
 import './chat/message/message.gateway';
 import './chat/room/room.gateway';
 
@@ -44,6 +45,8 @@ dataSource
 
 //create express app
 const app: Express = express();
+
+app.use(helmet());
 
 //allow cors
 const corsOptions: CorsOptions = {

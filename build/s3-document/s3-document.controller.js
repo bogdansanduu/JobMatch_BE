@@ -25,6 +25,9 @@ exports.S3DocumentController = void 0;
 const inversify_1 = require("inversify");
 const s3_document_service_1 = require("./s3-document.service");
 const inversifyConstants_1 = require("../common/utils/inversifyConstants");
+const jwt_auth_decorator_1 = require("../common/decorators/jwt-auth.decorator");
+const requires_roles_decorator_1 = require("../common/decorators/requires-roles.decorator");
+const user_constants_1 = require("../common/constants/user.constants");
 let S3DocumentController = class S3DocumentController {
     constructor(S3DocumentService) {
         this.S3DocumentService = S3DocumentService;
@@ -58,10 +61,38 @@ let S3DocumentController = class S3DocumentController {
         });
     }
 };
-S3DocumentController = __decorate([
+exports.S3DocumentController = S3DocumentController;
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.ADMIN, user_constants_1.Roles.USER, user_constants_1.Roles.COMPANY, user_constants_1.Roles.COMPANY_OWNER]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], S3DocumentController.prototype, "generatePreSignedPutUrl", null);
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.ADMIN, user_constants_1.Roles.USER, user_constants_1.Roles.COMPANY, user_constants_1.Roles.COMPANY_OWNER]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], S3DocumentController.prototype, "generatePreSignedGetUrl", null);
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.ADMIN, user_constants_1.Roles.USER, user_constants_1.Roles.COMPANY, user_constants_1.Roles.COMPANY_OWNER]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], S3DocumentController.prototype, "generateShortPreSignedGetUrl", null);
+__decorate([
+    (0, jwt_auth_decorator_1.JwtAuth)(),
+    (0, requires_roles_decorator_1.RequiresRoles)([user_constants_1.Roles.ADMIN, user_constants_1.Roles.USER, user_constants_1.Roles.COMPANY, user_constants_1.Roles.COMPANY_OWNER]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Function]),
+    __metadata("design:returntype", Promise)
+], S3DocumentController.prototype, "deleteDocument", null);
+exports.S3DocumentController = S3DocumentController = __decorate([
     (0, inversify_1.injectable)(),
     __param(0, (0, inversify_1.inject)(inversifyConstants_1.AWS_S3_DOCUMENT_INV.S3DocumentService)),
     __metadata("design:paramtypes", [s3_document_service_1.S3DocumentService])
 ], S3DocumentController);
-exports.S3DocumentController = S3DocumentController;
 //# sourceMappingURL=s3-document.controller.js.map

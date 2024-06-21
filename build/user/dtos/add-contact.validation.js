@@ -13,6 +13,7 @@ exports.AddContactValidation = void 0;
 const class_validator_1 = require("class-validator");
 class AddContactValidation {
 }
+exports.AddContactValidation = AddContactValidation;
 __decorate([
     (0, class_validator_1.IsDefined)(),
     (0, class_validator_1.IsNumber)(),
@@ -23,5 +24,4 @@ __decorate([
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
 ], AddContactValidation.prototype, "contactId", void 0);
-exports.AddContactValidation = AddContactValidation;
 //# sourceMappingURL=add-contact.validation.js.map

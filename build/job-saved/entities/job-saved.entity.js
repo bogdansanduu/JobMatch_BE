@@ -15,12 +15,13 @@ const job_entity_1 = require("../../job/entities/job.entity");
 const user_entity_1 = require("../../user/entities/user.entity");
 let JobSaved = class JobSaved {
 };
+exports.JobSaved = JobSaved;
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
 ], JobSaved.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => job_entity_1.Job, (job) => job.saved),
+    (0, typeorm_1.ManyToOne)(() => job_entity_1.Job, (job) => job.saved, { onDelete: 'CASCADE' }),
     __metadata("design:type", job_entity_1.Job)
 ], JobSaved.prototype, "job", void 0);
 __decorate([
@@ -31,8 +32,7 @@ __decorate([
     (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", Date)
 ], JobSaved.prototype, "savedAt", void 0);
-JobSaved = __decorate([
+exports.JobSaved = JobSaved = __decorate([
     (0, typeorm_1.Entity)()
 ], JobSaved);
-exports.JobSaved = JobSaved;
 //# sourceMappingURL=job-saved.entity.js.map

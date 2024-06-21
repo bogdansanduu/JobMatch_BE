@@ -24,10 +24,11 @@ const http_status_codes_1 = require("http-status-codes");
 const s3_request_presigner_1 = require("@aws-sdk/s3-request-presigner");
 const inversify_1 = require("inversify");
 const http_exception_1 = require("../common/exceptions/http.exception");
-const bucketRegion = process.env.BUCKET_REGION || 'test';
-const bucketName = process.env.BUCKET_NAME || 'test';
-const accessKey = process.env.ACCESS_KEY || 'test';
-const secretAccessKey = process.env.SECRET_ACCESS_KEY || 'test';
+const envConfig_1 = require("../common/utils/envConfig");
+const bucketRegion = (0, envConfig_1.getEnvVar)('BUCKET_REGION', 'string');
+const bucketName = (0, envConfig_1.getEnvVar)('BUCKET_NAME', 'string');
+const accessKey = (0, envConfig_1.getEnvVar)('ACCESS_KEY', 'string');
+const secretAccessKey = (0, envConfig_1.getEnvVar)('SECRET_ACCESS_KEY', 'string');
 const expiresIn = 3600;
 let S3DocumentService = class S3DocumentService {
     constructor() {
@@ -102,9 +103,9 @@ let S3DocumentService = class S3DocumentService {
         });
     }
 };
-S3DocumentService = __decorate([
+exports.S3DocumentService = S3DocumentService;
+exports.S3DocumentService = S3DocumentService = __decorate([
     (0, inversify_1.injectable)(),
     __metadata("design:paramtypes", [])
 ], S3DocumentService);
-exports.S3DocumentService = S3DocumentService;
 //# sourceMappingURL=s3-document.service.js.map

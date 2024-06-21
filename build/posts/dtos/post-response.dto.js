@@ -17,6 +17,7 @@ const comment_response_dto_1 = require("../../comment/dtos/comment-response.dto"
 const company_response_dto_1 = require("../../company/dtos/company-response.dto");
 let PostSimpleResponseDto = class PostSimpleResponseDto {
 };
+exports.PostSimpleResponseDto = PostSimpleResponseDto;
 __decorate([
     (0, class_transformer_1.Expose)(),
     __metadata("design:type", Number)
@@ -26,12 +27,17 @@ __decorate([
     (0, class_transformer_1.Type)(() => user_response_dto_1.UserSimpleResponseDto),
     __metadata("design:type", user_response_dto_1.UserSimpleResponseDto)
 ], PostSimpleResponseDto.prototype, "author", void 0);
-PostSimpleResponseDto = __decorate([
+__decorate([
+    (0, class_transformer_1.Expose)(),
+    (0, class_transformer_1.Type)(() => company_response_dto_1.CompanySimpleResponseDto),
+    __metadata("design:type", company_response_dto_1.CompanySimpleResponseDto)
+], PostSimpleResponseDto.prototype, "company", void 0);
+exports.PostSimpleResponseDto = PostSimpleResponseDto = __decorate([
     (0, class_transformer_1.Exclude)()
 ], PostSimpleResponseDto);
-exports.PostSimpleResponseDto = PostSimpleResponseDto;
 let PostResponseDto = class PostResponseDto {
 };
+exports.PostResponseDto = PostResponseDto;
 __decorate([
     (0, class_transformer_1.Expose)(),
     __metadata("design:type", Number)
@@ -44,10 +50,6 @@ __decorate([
     (0, class_transformer_1.Expose)(),
     __metadata("design:type", String)
 ], PostResponseDto.prototype, "content", void 0);
-__decorate([
-    (0, class_transformer_1.Expose)(),
-    __metadata("design:type", String)
-], PostResponseDto.prototype, "picture", void 0);
 __decorate([
     (0, class_transformer_1.Expose)(),
     (0, class_transformer_1.Type)(() => user_response_dto_1.UserResponseDto),
@@ -76,8 +78,7 @@ __decorate([
     (0, class_transformer_1.Expose)(),
     __metadata("design:type", Date)
 ], PostResponseDto.prototype, "updatedAt", void 0);
-PostResponseDto = __decorate([
+exports.PostResponseDto = PostResponseDto = __decorate([
     (0, class_transformer_1.Exclude)()
 ], PostResponseDto);
-exports.PostResponseDto = PostResponseDto;
 //# sourceMappingURL=post-response.dto.js.map

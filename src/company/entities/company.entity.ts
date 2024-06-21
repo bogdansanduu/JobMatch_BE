@@ -21,6 +21,9 @@ export class Company extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ type: 'boolean', default: false })
+  isBanned: boolean;
+
   @Column({ unique: true })
   email: string;
 

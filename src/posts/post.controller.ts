@@ -26,7 +26,7 @@ export class PostController {
   }
 
   @JwtAuth()
-  @RequiresRoles([Roles.USER, Roles.COMPANY, Roles.COMPANY_OWNER])
+  @RequiresRoles([Roles.ADMIN, Roles.USER, Roles.COMPANY, Roles.COMPANY_OWNER])
   async getAllPosts(req: Request, res: Response, next: NextFunction) {
     const data = await this.postService.getAllPosts();
 
@@ -35,6 +35,8 @@ export class PostController {
     return res.status(StatusCodes.OK).json(responseData);
   }
 
+  @JwtAuth()
+  @RequiresRoles([Roles.ADMIN, Roles.USER, Roles.COMPANY, Roles.COMPANY_OWNER])
   async getAllPostByCompany(req: Request, res: Response, next: NextFunction) {
     const companyId = Number(req.params.companyId);
 
@@ -49,6 +51,24 @@ export class PostController {
     return res.status(StatusCodes.OK).json(responseData);
   }
 
+  @JwtAuth()
+  @RequiresRoles([Roles.ADMIN, Roles.USER, Roles.COMPANY, Roles.COMPANY_OWNER])
+  async getAllPostsByUser(req: Request, res: Response, next: NextFunction) {
+    const userId = Number(req.params.userId);
+
+    //validate logic
+
+    const data = await this.postService.getAllPostsByUserId(userId);
+
+    //response logic
+
+    const responseData = plainToInstance(PostResponseDto, data, { excludeExtraneousValues: true });
+
+    return res.status(StatusCodes.OK).json(responseData);
+  }
+
+  @JwtAuth()
+  @RequiresRoles([Roles.ADMIN, Roles.USER, Roles.COMPANY, Roles.COMPANY_OWNER])
   async getMostRecentCompanyPosts(req: Request, res: Response, next: NextFunction) {
     const companyId = Number(req.params.companyId);
     const limit = Number(req.query.limit);
@@ -64,6 +84,8 @@ export class PostController {
     return res.status(StatusCodes.OK).json(responseData);
   }
 
+  @JwtAuth()
+  @RequiresRoles([Roles.ADMIN, Roles.USER, Roles.COMPANY, Roles.COMPANY_OWNER])
   async getMostRecentUserPosts(req: Request, res: Response, next: NextFunction) {
     const userId = Number(req.params.userId);
     const limit = Number(req.query.limit);
@@ -79,6 +101,8 @@ export class PostController {
     return res.status(StatusCodes.OK).json(responseData);
   }
 
+  @JwtAuth()
+  @RequiresRoles([Roles.USER, Roles.COMPANY_OWNER])
   async createPost(req: Request, res: Response, next: NextFunction) {
     const body = req.body;
     const userId = Number(req.params.userId);
@@ -98,6 +122,8 @@ export class PostController {
     return res.status(StatusCodes.CREATED).json(responseData);
   }
 
+  @JwtAuth()
+  @RequiresRoles([Roles.COMPANY])
   async createPostCompany(req: Request, res: Response, next: NextFunction) {
     const body = req.body;
     const companyId = Number(req.params.companyId);
@@ -117,6 +143,8 @@ export class PostController {
     return res.status(StatusCodes.CREATED).json(responseData);
   }
 
+  @JwtAuth()
+  @RequiresRoles([Roles.USER, Roles.COMPANY_OWNER])
   async likePost(req: Request, res: Response, next: NextFunction) {
     const postId = Number(req.params.postId);
     const userId = Number(req.params.userId);
@@ -132,6 +160,8 @@ export class PostController {
     return res.status(StatusCodes.OK).json(responseData);
   }
 
+  @JwtAuth()
+  @RequiresRoles([Roles.COMPANY])
   async likePostCompany(req: Request, res: Response, next: NextFunction) {
     const postId = Number(req.params.postId);
     const companyId = Number(req.params.companyId);
@@ -147,6 +177,8 @@ export class PostController {
     return res.status(StatusCodes.OK).json(responseData);
   }
 
+  @JwtAuth()
+  @RequiresRoles([Roles.USER, Roles.COMPANY_OWNER])
   async unlikePost(req: Request, res: Response, next: NextFunction) {
     const postId = Number(req.params.postId);
     const userId = Number(req.params.userId);
@@ -162,6 +194,8 @@ export class PostController {
     return res.status(StatusCodes.OK).json(responseData);
   }
 
+  @JwtAuth()
+  @RequiresRoles([Roles.COMPANY])
   async unlikePostCompany(req: Request, res: Response, next: NextFunction) {
     const postId = Number(req.params.postId);
     const companyId = Number(req.params.companyId);
@@ -177,6 +211,8 @@ export class PostController {
     return res.status(StatusCodes.OK).json(responseData);
   }
 
+  @JwtAuth()
+  @RequiresRoles([Roles.USER, Roles.COMPANY_OWNER])
   async commentPost(req: Request, res: Response, next: NextFunction) {
     const body = req.body;
     const userId = Number(req.params.userId);
@@ -199,6 +235,8 @@ export class PostController {
     return res.status(StatusCodes.OK).json(responseData);
   }
 
+  @JwtAuth()
+  @RequiresRoles([Roles.COMPANY])
   async commentPostCompany(req: Request, res: Response, next: NextFunction) {
     const body = req.body;
     const companyId = Number(req.params.companyId);
@@ -219,5 +257,19 @@ export class PostController {
     const responseData = plainToInstance(PostResponseDto, data, { excludeExtraneousValues: true });
 
     return res.status(StatusCodes.OK).json(responseData);
+  }
+
+  @JwtAuth()
+  @RequiresRoles([Roles.ADMIN])
+  async removePost(req: Request, res: Response, next: NextFunction) {
+    const postId = Number(req.params.postId);
+
+    if (!postId) {
+      throw new NotFoundException('Post not found');
+    }
+
+    await this.postService.removePost(postId);
+
+    return res.status(StatusCodes.OK).json({ message: 'Post removed successfully' });
   }
 }

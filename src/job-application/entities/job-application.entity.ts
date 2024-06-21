@@ -17,7 +17,7 @@ export class JobApplication extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Job, (job) => job.applications)
+  @ManyToOne(() => Job, (job) => job.applications, { onDelete: 'CASCADE' })
   job: Job;
 
   @ManyToOne(() => User, (user) => user.jobApplications)

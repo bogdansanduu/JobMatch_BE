@@ -13,6 +13,7 @@ exports.UploadResumeValidation = void 0;
 const class_validator_1 = require("class-validator");
 class UploadResumeValidation {
 }
+exports.UploadResumeValidation = UploadResumeValidation;
 __decorate([
     (0, class_validator_1.IsDefined)(),
     (0, class_validator_1.IsString)(),
@@ -25,5 +26,4 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], UploadResumeValidation.prototype, "fileKey", void 0);
-exports.UploadResumeValidation = UploadResumeValidation;
 //# sourceMappingURL=upload-resume.validation.js.map

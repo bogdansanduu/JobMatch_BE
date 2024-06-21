@@ -48,4 +48,20 @@ export class CommentRepository {
 
     return this.commentRepo.save(comment);
   }
+
+  deleteByUserId(userId: number) {
+    return this.commentRepo.delete({
+      author: {
+        id: userId,
+      },
+    });
+  }
+
+  deleteByCompanyId(companyId: number) {
+    return this.commentRepo.delete({
+      company: {
+        id: companyId,
+      },
+    });
+  }
 }

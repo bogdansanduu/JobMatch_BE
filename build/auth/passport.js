@@ -18,13 +18,14 @@ require("dotenv");
 const dataSource_1 = require("../database/dataSource");
 const user_entity_1 = require("../user/entities/user.entity");
 const company_entity_1 = require("../company/entities/company.entity");
+const envConfig_1 = require("../common/utils/envConfig");
 const Strategy = passport_jwt_1.default.Strategy;
 const ExtractJwt = passport_jwt_1.default.ExtractJwt;
 const userRepo = dataSource_1.dataSource.getRepository(user_entity_1.User);
 const companyRepo = dataSource_1.dataSource.getRepository(company_entity_1.Company);
 passport_1.default.use(new Strategy({
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey: process.env.ACCESS_TOKEN_SECRET || 'access',
+    secretOrKey: (0, envConfig_1.getEnvVar)('ACCESS_TOKEN_SECRET', 'string'),
 }, (payload, done) => __awaiter(void 0, void 0, void 0, function* () {
     let user = null;
     let company = null;

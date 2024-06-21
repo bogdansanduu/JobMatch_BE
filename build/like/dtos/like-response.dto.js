@@ -15,6 +15,7 @@ const user_response_dto_1 = require("../../user/dtos/user-response.dto");
 const company_response_dto_1 = require("../../company/dtos/company-response.dto");
 let LikeResponseDto = class LikeResponseDto {
 };
+exports.LikeResponseDto = LikeResponseDto;
 __decorate([
     (0, class_transformer_1.Expose)(),
     __metadata("design:type", Number)
@@ -29,8 +30,7 @@ __decorate([
     (0, class_transformer_1.Type)(() => user_response_dto_1.UserSimpleResponseDto),
     __metadata("design:type", user_response_dto_1.UserSimpleResponseDto)
 ], LikeResponseDto.prototype, "author", void 0);
-LikeResponseDto = __decorate([
+exports.LikeResponseDto = LikeResponseDto = __decorate([
     (0, class_transformer_1.Expose)()
 ], LikeResponseDto);
-exports.LikeResponseDto = LikeResponseDto;
 //# sourceMappingURL=like-response.dto.js.map

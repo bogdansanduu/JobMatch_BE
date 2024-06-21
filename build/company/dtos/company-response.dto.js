@@ -14,10 +14,15 @@ const class_transformer_1 = require("class-transformer");
 const user_response_dto_1 = require("../../user/dtos/user-response.dto");
 let CompanyResponseDto = class CompanyResponseDto {
 };
+exports.CompanyResponseDto = CompanyResponseDto;
 __decorate([
     (0, class_transformer_1.Expose)(),
     __metadata("design:type", Number)
 ], CompanyResponseDto.prototype, "id", void 0);
+__decorate([
+    (0, class_transformer_1.Expose)(),
+    __metadata("design:type", Boolean)
+], CompanyResponseDto.prototype, "isBanned", void 0);
 __decorate([
     (0, class_transformer_1.Expose)(),
     __metadata("design:type", String)
@@ -63,16 +68,20 @@ __decorate([
     (0, class_transformer_1.Expose)(),
     __metadata("design:type", Date)
 ], CompanyResponseDto.prototype, "updatedAt", void 0);
-CompanyResponseDto = __decorate([
+exports.CompanyResponseDto = CompanyResponseDto = __decorate([
     (0, class_transformer_1.Exclude)()
 ], CompanyResponseDto);
-exports.CompanyResponseDto = CompanyResponseDto;
 let CompanySimpleResponseDto = class CompanySimpleResponseDto {
 };
+exports.CompanySimpleResponseDto = CompanySimpleResponseDto;
 __decorate([
     (0, class_transformer_1.Expose)(),
     __metadata("design:type", Number)
 ], CompanySimpleResponseDto.prototype, "id", void 0);
+__decorate([
+    (0, class_transformer_1.Expose)(),
+    __metadata("design:type", Boolean)
+], CompanySimpleResponseDto.prototype, "isBanned", void 0);
 __decorate([
     (0, class_transformer_1.Expose)(),
     __metadata("design:type", String)
@@ -81,8 +90,7 @@ __decorate([
     (0, class_transformer_1.Expose)(),
     __metadata("design:type", String)
 ], CompanySimpleResponseDto.prototype, "name", void 0);
-CompanySimpleResponseDto = __decorate([
+exports.CompanySimpleResponseDto = CompanySimpleResponseDto = __decorate([
     (0, class_transformer_1.Exclude)()
 ], CompanySimpleResponseDto);
-exports.CompanySimpleResponseDto = CompanySimpleResponseDto;
 //# sourceMappingURL=company-response.dto.js.map

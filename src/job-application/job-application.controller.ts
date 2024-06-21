@@ -8,6 +8,9 @@ import { JOB_APPLICATION_INV } from '../common/utils/inversifyConstants';
 import { JobApplicationResponseDto } from './dtos/job-application-response.dto';
 import { validateBody } from '../common/utils/validateBody';
 import { ReviewApplicationValidation } from './dtos/review-application.validation';
+import { JwtAuth } from '../common/decorators/jwt-auth.decorator';
+import { RequiresRoles } from '../common/decorators/requires-roles.decorator';
+import { Roles } from '../common/constants/user.constants';
 
 @injectable()
 export class JobApplicationController {
@@ -20,6 +23,8 @@ export class JobApplicationController {
     this.jobApplicationService = jobApplicationService;
   }
 
+  @JwtAuth()
+  @RequiresRoles([Roles.ADMIN, Roles.USER, Roles.COMPANY, Roles.COMPANY_OWNER])
   async getAllJobApplications(req: Request, res: Response, next: NextFunction) {
     const data = await this.jobApplicationService.getAllJobApplications();
 
@@ -30,6 +35,8 @@ export class JobApplicationController {
     return res.status(StatusCodes.OK).json(responseData);
   }
 
+  @JwtAuth()
+  @RequiresRoles([Roles.ADMIN, Roles.USER, Roles.COMPANY, Roles.COMPANY_OWNER])
   async getJobApplicationById(req: Request, res: Response, next: NextFunction) {
     const id = Number(req.params.id);
 
@@ -42,6 +49,8 @@ export class JobApplicationController {
     return res.status(StatusCodes.OK).json(responseData);
   }
 
+  @JwtAuth()
+  @RequiresRoles([Roles.ADMIN, Roles.USER, Roles.COMPANY, Roles.COMPANY_OWNER])
   async getAllJobApplicationsForUser(req: Request, res: Response, next: NextFunction) {
     const userId = Number(req.params.userId);
 
@@ -54,6 +63,8 @@ export class JobApplicationController {
     return res.status(StatusCodes.OK).json(responseData);
   }
 
+  @JwtAuth()
+  @RequiresRoles([Roles.ADMIN, Roles.USER, Roles.COMPANY, Roles.COMPANY_OWNER])
   async getAllJobApplicationsForJob(req: Request, res: Response, next: NextFunction) {
     const jobId = Number(req.params.jobId);
 
@@ -66,6 +77,8 @@ export class JobApplicationController {
     return res.status(StatusCodes.OK).json(responseData);
   }
 
+  @JwtAuth()
+  @RequiresRoles([Roles.USER, Roles.COMPANY_OWNER])
   async applyForJob(req: Request, res: Response, next: NextFunction) {
     const userId = Number(req.params.userId);
     const jobId = Number(req.params.jobId);
@@ -79,6 +92,8 @@ export class JobApplicationController {
     return res.status(StatusCodes.CREATED).json(responseData);
   }
 
+  @JwtAuth()
+  @RequiresRoles([Roles.COMPANY])
   async reviewApplication(req: Request, res: Response, next: NextFunction) {
     const id = Number(req.params.id);
     const body = req.body;
