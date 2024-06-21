@@ -27,6 +27,7 @@ import { jobApplicationRouter } from './job-application/job-application.router';
 import { jobSavedRouter } from './job-saved/job-saved.router';
 import { s3DocumentRouter } from './s3-document/s3-document.router';
 import { sesRouter } from './email/ses.router';
+import { getEnvVar } from './common/utils/envConfig';
 
 const logger = pino({ name: 'server start' });
 
@@ -50,7 +51,7 @@ app.use(helmet());
 
 //allow cors
 const corsOptions: CorsOptions = {
-  origin: 'http://localhost:3000',
+  origin: getEnvVar<string>('APP_URL', 'string'),
   credentials: true, //access-control-allow-credentials:true
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   optionsSuccessStatus: 200,
