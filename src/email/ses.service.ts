@@ -48,9 +48,7 @@ export class SESService {
     const applicant = jobApplication.applicant;
     const job = jobApplication.job;
     const company = job.company;
-    const redirectLink = `http://localhost:3000/user/application-review/${jobApplication.id}`;
-
-    // Source: `JobMatch <${sesSenderEmail}>`,
+    const redirectLink = `${getEnvVar<string>('APP_URL', 'string')}/user/application-review/${jobApplication.id}`;
 
     const params: SendTemplatedEmailCommandInput = {
       Source: `JobMatch <${sesSenderEmail}>`,
