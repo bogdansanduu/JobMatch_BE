@@ -27,6 +27,7 @@ import { jobApplicationRouter } from './job-application/job-application.router';
 import { jobSavedRouter } from './job-saved/job-saved.router';
 import { s3DocumentRouter } from './s3-document/s3-document.router';
 import { sesRouter } from './email/ses.router';
+import { getEnvVar } from './common/utils/envConfig';
 
 const logger = pino({ name: 'server start' });
 
@@ -50,12 +51,19 @@ app.use(helmet());
 
 // //allow cors
 const corsOptions: CorsOptions = {
-  origin: '*',
-  credentials: true, //access-control-allow-credentials:true
+  origin: getEnvVar<string>('CORS_ORIGIN', 'string'), // Allow your React app's origin
+  credentials: true, // Access-Control-Allow-Credentials: true
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  optionsSuccessStatus: 200,
+  allowedHeaders: ['Authorization', 'Content-Type'], // Allow Authorization and Content-Type headers
+  optionsSuccessStatus: 200, // Some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // Preflight response for all routes
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+});
 
 //UNCOMMENT IN CASE NOT READING LOG PASSPORT STRATEGY
 // app.use(bodyParser.urlencoded({ extended: false })); // parse application/x-www-form-urlencoded
