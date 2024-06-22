@@ -20,8 +20,6 @@ ioSocket.on('connection', (socket) => {
       throw new NotFoundException('Room not found');
     }
 
-    console.log(room.name);
-
     ioSocket.to(room.name).emit(SocketEventsServer.MESSAGE_ROOM, message);
   });
 
