@@ -51,7 +51,7 @@ app.use(helmet());
 
 // //allow cors
 const corsOptions: CorsOptions = {
-  origin: getEnvVar<string>('CORS_ORIGIN', 'string'), // Allow your React app's origin
+  origin: [getEnvVar<string>('CORS_ORIGIN', 'string'), 'http://localhost:8000'], // Allow your React app's origin
   // credentials: true, // Access-Control-Allow-Credentials: true (if you need to send cookies or HTTP authentication)
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
   // allowedHeaders: ['Authorization', 'Content-Type'],
