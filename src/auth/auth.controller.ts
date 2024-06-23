@@ -136,7 +136,6 @@ export class AuthController {
     });
   }
 
-  @JwtAuth()
   async logout(req: Request, res: Response, next: NextFunction) {
     const { refreshToken } = req.cookies;
 
