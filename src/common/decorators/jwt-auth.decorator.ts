@@ -16,7 +16,7 @@ export function JwtAuth() {
         req.user = payload;
         req.company = payload;
 
-        return originalMethod.apply(this, arguments);
+        return originalMethod.apply(this, [req, res, next]).catch(next);
       })(req, res, next);
     };
 

@@ -23,7 +23,7 @@ export function RequiresRoles(roles: string[]) {
         return res.status(StatusCodes.FORBIDDEN).send('Forbidden: Insufficient role');
       }
 
-      return originalMethod.apply(this, arguments);
+      return originalMethod.apply(this, [req, res, next]).catch(next);
     };
 
     return descriptor;

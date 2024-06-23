@@ -65,7 +65,7 @@ export class AuthController {
   }
 
   @JwtAuth()
-  @RequiresRoles([Roles.ADMIN, Roles.USER])
+  @RequiresRoles([Roles.USER])
   async registerCompany(req: Request, res: Response, next: NextFunction) {
     const body = req.body;
 
