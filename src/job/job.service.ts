@@ -37,6 +37,21 @@ export class JobService {
     return this.jobRepository.findAllByCompany(companyId);
   }
 
+  async getAllJobsByCompanyPaginated(companyId: number, page: number, limit: number) {
+    if (!companyId) {
+      throw new InvalidException('Company ID is invalid.');
+    }
+
+    const data = await this.jobRepository.findAllByCompanyPaginated(companyId, page, limit);
+    const totalItems = await this.jobRepository.countByCompany(companyId);
+
+    return {
+      data,
+      totalItems,
+      currentPage: page,
+    };
+  }
+
   async getAllJobsPaginated(page: number, limit: number, searchTerm?: string) {
     const data = await this.jobRepository.findAllPaginated(page, limit, searchTerm);
     const totalItems = await this.jobRepository.count();

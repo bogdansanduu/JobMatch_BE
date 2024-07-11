@@ -27,4 +27,10 @@ export class CommentResponseDto {
   @Expose()
   @Type(() => UserSimpleResponseDto)
   author: UserSimpleResponseDto;
+
+  @Expose()
+  createdAt: Date;
+
+  @Expose()
+  updatedAt: Date;
 }

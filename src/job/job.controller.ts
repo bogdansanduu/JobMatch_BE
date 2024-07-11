@@ -66,6 +66,26 @@ export class JobController {
 
   @JwtAuth()
   @RequiresRoles([Roles.ADMIN, Roles.USER, Roles.COMPANY, Roles.COMPANY_OWNER])
+  async getAllJobsByCompanyPaginated(req: Request, res: Response, next: NextFunction) {
+    //extract page and limit
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+    const companyId = Number(req.params.companyId);
+
+    const jobsPaginated = await this.jobService.getAllJobsByCompanyPaginated(companyId, page, limit);
+
+    //response logic
+
+    const responseData = plainToInstance(JobResponseDto, jobsPaginated.data, { excludeExtraneousValues: true });
+
+    return res.status(StatusCodes.OK).json({
+      ...jobsPaginated,
+      data: responseData,
+    });
+  }
+
+  @JwtAuth()
+  @RequiresRoles([Roles.ADMIN, Roles.USER, Roles.COMPANY, Roles.COMPANY_OWNER])
   async getAllJobsPaginated(req: Request, res: Response, next: NextFunction) {
     //extract page and limit
     const page = Number(req.query.page) || 1;

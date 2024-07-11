@@ -20,7 +20,7 @@ import { BannedException } from '../common/exceptions/banned.exception';
 import { getEnvVar } from '../common/utils/envConfig';
 
 //seconds
-const EXPIRES_IN_ACCESS = 60 * 15;
+const EXPIRES_IN_ACCESS = 60 * 60;
 const EXPIRES_IN_REFRESH = 60 * 60 * 24;
 
 const refreshTokenSecret = getEnvVar<string>('REFRESH_TOKEN_SECRET', 'string');

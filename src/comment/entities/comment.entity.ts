@@ -1,4 +1,13 @@
-import { BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 import { Post } from '../../posts/entities/post.entity';
 import { User } from '../../user/entities/user.entity';
@@ -24,4 +33,10 @@ export class Comment extends BaseEntity {
 
   @ManyToOne(() => Company, (company) => company.posts)
   company: Company;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

@@ -47,6 +47,36 @@ export class JobRepository {
     return this.jobRepo.count();
   }
 
+  countByCompany(companyId: number) {
+    return this.jobRepo.count({
+      where: {
+        company: {
+          id: companyId,
+        },
+      },
+    });
+  }
+
+  findAllByCompanyPaginated(companyId: number, page: number, limit: number) {
+    return this.jobRepo.find({
+      where: {
+        company: {
+          id: companyId,
+        },
+      },
+      relations: {
+        company: true,
+        applications: {
+          job: true,
+          applicant: true,
+        },
+        saved: true,
+      },
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+  }
+
   findAllPaginated(page: number, limit: number, searchTerm?: string) {
     const query: FindManyOptions<Job> = {
       relations: {

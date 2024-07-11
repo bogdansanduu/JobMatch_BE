@@ -12,6 +12,10 @@ const controller = centralizedContainer.get<JobController>(JOB_INV.JobController
 jobRouter.get('/all', catchErrors(controller.getAllJobs.bind(controller)));
 jobRouter.get('/all-paginated', catchErrors(controller.getAllJobsPaginated.bind(controller)));
 jobRouter.get('/all-company/:companyId', catchErrors(controller.getAllJobsByCompany.bind(controller)));
+jobRouter.get(
+  '/all-company-paginated/:companyId',
+  catchErrors(controller.getAllJobsByCompanyPaginated.bind(controller))
+);
 jobRouter.get('/:jobId', catchErrors(controller.getJobById.bind(controller)));
 
 jobRouter.post('/', catchErrors(controller.createJob.bind(controller)));
