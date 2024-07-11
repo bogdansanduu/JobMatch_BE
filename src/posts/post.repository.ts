@@ -25,6 +25,7 @@ export class PostRepository implements PostRepositoryInterface {
         },
         comments: {
           author: true,
+          company: true,
           likes: {
             author: true,
             company: true,
